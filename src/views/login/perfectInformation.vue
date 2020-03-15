@@ -133,18 +133,13 @@
           <img 
             alt="" 
             class="imgWrap"
-            v-for="(ele, index2) in ruleForm.businessLicense"
+            v-for="(ele, index2) in PhotoList"
             :key="index2+ele"
             :src="ele.url" 
             @click="handlePreviewImg(ele.url)">
           <span 
             class="btn"
             @click="handleUploadModal(PhotoList,2)">&nbsp;&nbsp;点击上传&nbsp;&nbsp;</span>
-          <!-- <span 
-              class="btn"
-              v-for="(ele, index2) in PhotoList"
-              :key="index2+ele"
-              @click="handlePreviewImg(ele.url)">法人证照{{index2+1}}</span> -->
         </el-form-item>
       </el-form>
     </div>
@@ -198,6 +193,7 @@
 </template>
 
 <script>
+import OSS from 'ali-oss';
 import * as Api from '@/api/perfectInformation'
 import imgUrl from '@/assets/null.png'
 import { setTimeout } from 'timers';
@@ -209,7 +205,6 @@ export default {
   data() {
     
     const validateAddress = (rule, value, callback) => {
-      
       if(!this.ruleForm.provinceId || !this.ruleForm.cityId){
         callback(new Error('请选择省市区不能为空'))
       }else if(!this.ruleForm.addr){
@@ -325,16 +320,16 @@ export default {
           // }
         ],
         
-        
-
-        
        
       },
-      // 下面是要替换的 监听事件绑定
-      // 地址
-      address:[],
-      // 法人证照 img  PhotoList
-      PhotoList:[],
+      
+      // 法人证照 要替换的 监听事件绑定   身份证正面照 facePhoto:''  身份证反面照  backPhoto:'',
+      PhotoList:[
+        {
+          name:'1',
+          url:imgUrl
+        }
+      ],
 
       rules: {
         // 企业营业执照
@@ -449,19 +444,6 @@ export default {
   },
   watch:{},
 
-  // beforeRouteLeave (to, from, next) {
-  //   // 查看订单详情
-  //   let oldData = {
-  //     // 上传照片地址数组
-  //     contractFileURLs:[],
-  //     ruleForm:this.ruleForm,
-  //   }
-  //   sessionStorage.setItem('siw_perfectInformation',JSON.stringify(oldData))
-  //   next()
-  // },
-
-  
-
   created() {
     let date = sessionStorage.getItem('siw_registerInfor')
     if(date){
@@ -471,6 +453,27 @@ export default {
     }
     // 获取公用列表
     this.init()
+    // console.log(OSS,'OSS')
+    
+    // Api.fileUploadBase64(param).then(res => {
+    //   let  {code, name , url} = res
+    //   if(code ==200){
+        
+    //     _this.contractFileURLs.push({
+    //       "name":name,
+    //       "url":url
+    //     })
+    //   }
+    
+    // }).catch( error => {
+    //   _this.$message({
+    //     message: '照片上传失败！',
+    //     type: 'error'
+    //   });
+    //   loading.close();
+    //   // 请求错误时 应该删除
+    //   _this.removeUplodFileList(content.file.name);
+    // })
   },
 
   methods: {
@@ -486,39 +489,41 @@ export default {
 
     },
     // 阿里云上传服务端签名接口
-    handleGetAliyunOssSign(param){
-      console.log(param,'上传图片信息')
-      Api.getDictionaryList1().then(res => {
-        let  {code, data , msg, total} = res
-        if(code == 200) {
-          this.aliyunOssSign = data
-          // 上传图片
-          Api.fileUploadBase64(param).then(res => {
-            let  {code, name , url} = res
-            if(code ==200){
-              
-              _this.contractFileURLs.push({
-                "name":name,
-                "url":url
-              })
-              // _this.contractFileURLs.push(url)
+    handleGetAliyunOssSign(file){
+      console.log(file,'上传图片信息')
+      Api.getAliyunOssSign().then(res => {
+        // let {accessid, policy, signature, dir, host, expire } = res.data
+        let {accessKeySecret, assessKeyId, bucket, path, region, stsToken } = res.data
+        let client = new OSS.Wrapper({
+          accessKeyId: assessKeyId,
+          accessKeySecret: accessKeySecret,
+          stsToken: stsToken,
+          region,
+          bucket,
+          secure:true
+        });
+        // 上传到阿里云
+        let name = new Date().getTime() + '';
+        let suffix = file.name.substr(file.name.lastIndexOf(".") + 1); 
+        // console.log(`${path}/${name}.${suffix}`)   
+        client.multipartUpload(`${path}/${name}.${suffix}`, file, {
+            progress: function* (percentage) {}
+        })
+          .then(res => {
+            let imgUrl = `https://${bucket}.${region}.aliyuncs.com/${res.name}`;
+            console.log(imgUrl,'wwwww')
 
-              // _this.contractFileURLs[0]={
-              //   "name":name,
-              //   "url":url
-              // }
-            }
-          
-          }).catch( error => {
-            _this.$message({
-              message: '照片上传失败！',
-              type: 'error'
-            });
-            loading.close();
-            // 请求错误时 应该删除
-            _this.removeUplodFileList(content.file.name);
+            // let imgUrl = `${host}/${dir}/${res.name}`;
+            // this.uploadUrlList.push(imgUrl);
+
+            console.log(res,'wwwww')
+              // 上传到本地服务器
+            
           })
-        }
+          .catch(err => {
+            console.log(err)
+        });
+        
       }).catch( error => { 
       })
 
@@ -735,8 +740,29 @@ export default {
                         base64Data:data64,
                         name:content.file.name
                     };
-                    // 獲取阿里云上传服务端签名接口
-                    this.handleGetAliyunOssSign(param)
+
+                    // 获取阿里云上传服务端签名接口
+                    _this.handleGetAliyunOssSign(content.file)
+                    // 上传图片
+                    // Api.fileUploadBase64(param).then(res => {
+                    //   let  {code, name , url} = res
+                    //   if(code ==200){
+                        
+                    //     _this.contractFileURLs.push({
+                    //       "name":name,
+                    //       "url":url
+                    //     })
+                    //   }
+                    
+                    // }).catch( error => {
+                    //   _this.$message({
+                    //     message: '照片上传失败！',
+                    //     type: 'error'
+                    //   });
+                    //   loading.close();
+                    //   // 请求错误时 应该删除
+                    //   _this.removeUplodFileList(content.file.name);
+                    // })
                   
                 }
             }

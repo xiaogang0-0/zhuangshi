@@ -61,7 +61,8 @@ export function getDictionaryList4(data) {
 // 阿里云上传服务端签名接口  
 export function getAliyunOssSign(data) {
   return request({
-    url: '/admin/a/user/aliyun/oss/sign',
+    // url: '/admin/a/user/aliyun/oss/sign',
+    url: '/admin/a/user/aliyun/oss/sign-client',
     method: 'get',
     params: data
   })
