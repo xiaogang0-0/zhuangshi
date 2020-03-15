@@ -11,7 +11,7 @@ const env = process.env.NODE_ENV === 'development'
       : 'production'
 
 console.log(env, '运行环境env{production:线上;test:测试;development:本地;}')
-const baseURL = env === 'production' ? 'http://platform.hlwl.com:9300' : (env === 'test' ? 'http://hlwl.ddky.com:9300' : 'http://hlwl.ddky.com:9300')
+const baseURL = env === 'production' ? 'http://baidu.hlwl.com:9300' : (env === 'test' ? 'http://47.111.9.187:8008/' : 'http://47.111.9.187:8008/')
 
 // 创建AXIOS实例
 const service = axios.create({
@@ -32,12 +32,22 @@ service.interceptors.request.use(
     //   config.headers['X-Token'] = getToken()
     // }
     // 统一携带tooken
-    if (getToken()) {
+
+    // 本地备用admin token  
+    let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY3Nzk2MjksInVzZXJfbmFtZSI6ImFkbWlufCIsImF1dGhvcml0aWVzIjpbIlJPTEVfTUFOQUdFUiJdLCJqdGkiOiJjYjQ2MDBiYS05OGYyLTQ1ZDQtYmZiYy03ZmM0MDQ2YjBkZTIiLCJjbGllbnRfaWQiOiJobGwtcGxhdGZvcm0tYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.gRSUGdu53ctIvt2Ogx6KOPsENQgFjQwbloMvovsRRVc'
+    if (token) {
       config.headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
+        'Authorization': 'Bearer ' + token
       }
     }
+    // 正常线上的
+    // if (getToken()) {
+    //   config.headers = {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'Bearer ' + getToken()
+    //   }
+    // }
 
     return config
   },

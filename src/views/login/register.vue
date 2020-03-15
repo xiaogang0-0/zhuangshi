@@ -1,12 +1,7 @@
 // 企业注册
 <template>
   <div class="login-container">
-
-    <div class="login-head">
-     
-    </div>
-
-
+    <div class="login-head"></div>
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
@@ -16,30 +11,28 @@
               <h3 class="title">仅限住宅装饰企业注册</h3>
             </div>
             <p class="pd60">企业全称</p>
-            <el-form-item prop="username">
+            <el-form-item prop="customerName">
               <el-input
-                ref="username"
-                v-model="loginForm.username"
+                ref="customerName"
+                v-model="loginForm.customerName"
                 type="text"
                 placeholder="输入您公司全称"
-                name="username"
+                name="customerName"
                 tabindex="2"
-                @keyup.enter.native="handleLogin"
               />
             </el-form-item>
-            <p class="pd60">设置密码</p>
 
-            <el-form-item prop="password">
+            <p class="pd60">设置密码</p>
+            <el-form-item prop="password1">
               <el-input
                 :key="passwordType"
                 ref="password1"
-                v-model="loginForm.password"
+                v-model="loginForm.password1"
                 :type="passwordType"
                 placeholder="输入新密码"
-                name="password"
+                name="password1"
                 tabindex="2"
                 autocomplete="on"
-                @keyup.enter.native="handleLogin"
               />
               <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -47,51 +40,45 @@
             </el-form-item>
 
             <p class="pd60">确认密码</p>
-            <el-form-item prop="password1">
+            <el-form-item prop="password">
               <el-input
                 :key="passwordType"
                 ref="password"
-                v-model="loginForm.password1"
+                v-model="loginForm.password"
                 :type="passwordType"
                 placeholder="输入密码"
                 name="password"
                 tabindex="2"
                 autocomplete="on"
-                @keyup.enter.native="handleLogin"
               />
               <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span>
             </el-form-item>
+            
             <p class="pd60">手机号</p>
-            <el-form-item prop="tel">
+            <el-form-item prop="mobile">
                <el-input
-                ref="username"
-                v-model="loginForm.tel"
+                ref="mobile"
+                v-model.number="loginForm.mobile"
                 placeholder="请输入手机号"
-                name="username"
+                name="mobile"
                 type="text"
                 tabindex="1"
               />
             </el-form-item>
 
             <p class="pd60">验证码</p>
-           
             <el-form-item prop="code" class="verificationCode">
-              
              <el-input
-                
-                ref="verificationCode"
+                ref="code"
                 v-model="loginForm.code"
                 placeholder="请输入验证码"
                 name="verificationCode"
                 type="text"
               />
-              
               <span class="cblue cursor">获取验证码</span>
             </el-form-item>
-
-
 
             <el-button :loading="loading" type="primary" 
               style="
@@ -112,16 +99,16 @@
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import componentsRouter from '@/router/modules/components.js'
-// import constantRoutes from '@/router/index.js'
 import routerIndex from '@/router/index.js'
-
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
+import { Settings } from '../../layout/components'
 
 
 export default {
   name: 'Login',
   data() {
+
     const validateUsername = (rule, value, callback) => {
       if (!value.length ){
         callback(new Error('企业全称不能为空'))
@@ -129,8 +116,17 @@ export default {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      
+
+    const validatePhoneNumber = (rule, value, callback) => {
+      let reg = /^1[3456789]\d{9}$/;
+      if (!reg.test(value)) {
+        callback(new Error('手机号码有误，请重填'))
+      } else {
+        callback()
+      }
+    }
+
+    const validatePassword1 = (rule, value, callback) => {
       let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
       if (value.length < 8 || !reg.test(value) ){
         callback(new Error('使用大小写英文字母与数字组合，不低于8位数'))
@@ -138,8 +134,7 @@ export default {
         callback()
       }
     }
-    const validatePassword1 = (rule, value, callback) => {
-      
+    const validatePassword = (rule, value, callback) => {
       let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
       if (this.loginForm.password1 != this.loginForm.password ){
         callback(new Error('两次密码不一致'))
@@ -147,46 +142,38 @@ export default {
         callback()
       }
     }
-    const validateTel = (rule, value, callback) => {
-      
-      if (!value.length ){
-        callback(new Error('手机号不能为空'))
-      } else {
-        callback()
-      }
-    }
-    const validateCode = (rule, value, callback) => {
-      
-      if (!value.length ){
-        callback(new Error('手验证码不能为空'))
-      } else {
-        callback()
-      }
-    }
+    
+    // const validateCode = (rule, value, callback) => {
+    //   if (!value.length ){
+    //     callback(new Error('验证码不能为空'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       loginForm: {
-        username: '',
-        password: '',
-        password1: '',
-        tel:'',
-        code:''
-
+        // 企业id
+        customerId:'',
+        // 企业名称
+        customerName:'',
+        // 第一次输入的密码
+        password1:'',
+        // 密码, 已清空
+        password:'',
+        // 手机号
+        mobile:'',
+        // 验证码
+        code:'',
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername}],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        password1: [{ required: true, trigger: 'blur', validator: validatePassword1}],
-        tel: [{ required: true, trigger: 'blur', validator: validateTel}],
-        code: [{ required: true, trigger: 'blur', validator: validateCode}]
+        customerName: [{ required: true, trigger: 'blur', validator: validateUsername}],
+        password1: [{ required: true, trigger: 'blur', validator: validatePassword1 }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword}],
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber}],
+        // code: [{ required: true, trigger: 'blur', message: '验证码不能为空'}]
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined,
-
-
-
-      capsTooltip: false,
-      otherQuery: {}
     }
   },
   watch: {},
@@ -198,10 +185,16 @@ export default {
     ]),
   },
   mounted() {
-    if (this.loginForm.password === '') {
-      this.$refs.password.focus()
+    if (this.loginForm.customerName == '') {
+      this.$refs.customerName.focus()
     } else if (this.loginForm.password1 === '') {
       this.$refs.password1.focus()
+    }else if (this.loginForm.password === '') {
+      this.$refs.password.focus()
+    }else if (this.loginForm.mobile === '') {
+      this.$refs.mobile.focus()
+    }else if (this.loginForm.code === '') {
+      this.$refs.code.focus()
     }
   },
   methods: {
@@ -215,84 +208,38 @@ export default {
         this.$refs.password.focus()
       })
     },
-    // // 忘记密码
-    // handleForgetPassword(){
-    //   this.$router.push({
-    //     name:'forgetPassword'
-    //   })
-    // },
+    // 注 册
     handleLogin() {
-      
-
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          return this.$router.push({
-                  name:'perfectInformation'
-                })
           this.loading = true
-          var param = {
-            "username": this.loginForm.username,
-            "password": this.loginForm.password,
-            "moduleId":5,
-          };
-          return this.$router.push({
-                  name:'forgetPassword'
-                })
-          Api.loginInit(param).then(res => {
+          var param = Object.assign({},this.loginForm) 
+          delete param.password1
+          delete param.code
+          
+          Api.registerSub(param).then(res => {
             this.loading = false;
             if(res.code == 200) {
-              // 本地存储token
-              setToken(res.data.access_token)
-              
-              localStorage.setItem ('Siw-userInfo',JSON.stringify(res.data))
-              // 后台获取路由
-              Api.getMenu().then(res => {
-                let {code,data,msg,total} = res
-                
-                if(code == 200){
-                  // 后台获取回來的路由
-                  let menuList = data;
-                  localStorage.setItem ('Siw-menuList',JSON.stringify(data))
-                  window.location.reload()
-                  
-                
-                      
-            
-                }else{
-                  localStorage.removeItem('Siw-menuList')
-                }
-              }).catch( error => {
-                localStorage.removeItem('Siw-menuList')
+              sessionStorage.setItem('siw_registerInfor',JSON.stringify(res.data))
+              // 跳转完善页面
+              this.$router.push({
+                name:'perfectInformation',
               })
-
-              // this.$router.push({path:'/'})
-
-    
             }
 
           }).catch( error => {
-            localStorage.removeItem('Siw_userInfo');
-            localStorage.removeItem('Siw-menuList')
             this.loading = false
           })
-            
-            
         } else {
-          // console.log('请输入账号密码')
           return false
         }
       })
     },
-    
-    
-    
   }
 }
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
 $light_gray:#fff;
@@ -308,7 +255,6 @@ $cursor: #fff;
 .login-container {
   .el-input {
     display: inline-block;
-    height: 47px;
     width: 85%;
 
     input {
@@ -316,9 +262,8 @@ $cursor: #fff;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
-      padding: 12px 5px 12px 15px;
+      // padding: 12px 5px 12px 15px;
       color: #000;
-      height: 47px;
       
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -342,7 +287,8 @@ $cursor: #fff;
 $bg:#2E74D1;
 $dark_gray:#889aa4;
 $light_gray:#eee;
-.pd60 {padding: 0 60px; color: #669999; font-size:16px;line-height: 32px;padding-top:16px;margin:0;}
+.pd60 {padding: 0 60px; color: #669999; font-size:16px;line-height: 32px;padding-top:10px;margin:0;}
+
 .pdt0 {padding-top: 0;}
 .cblue{ color: #1890ff;}
 .cursor{cursor:pointer;}
@@ -378,7 +324,7 @@ $light_gray:#eee;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
-    padding: 22vh 0 0 0;
+    padding: 11vh 0 0 0;
 }
   .content { 
    
@@ -400,7 +346,6 @@ $light_gray:#eee;
   }
   .login-form {
     position: relative;
-    top:-114px;
     width: 400px;
     max-width: 100%;
     float: right;
@@ -477,7 +422,7 @@ $light_gray:#eee;
   .show-pwd {
     position: absolute;
     right: 10px;
-    top: 7px;
+    top: 0;
     font-size: 16px;
     color: $dark_gray;
     cursor: pointer;

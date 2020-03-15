@@ -1,6 +1,6 @@
 // 忘记密码
 <template>
-  <div class="login-container">
+  <div class="login-container logginWrapCss">
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
@@ -9,45 +9,50 @@
             <div class="title-container">
               <h3 class="title">忘记密码</h3>
             </div>
-            <!-- <p class="pd60">企业名称</p>
-            <el-form-item prop="username">
-              <el-input
-                ref="username"
-                v-model="loginForm.username"
-                placeholder="请输入用户名"
-                name="username"
-                type="text"
-                tabindex="1"
-              />
-            </el-form-item> -->
 
+            <div v-show="userType == 1">
+              <p class="pd60">企业名称</p>
+              <el-form-item prop="customerName">
+                <el-input
+                  ref="customerName"
+                  v-model="loginForm.customerName"
+                  placeholder="请输入企业名称"
+                  name="customerName"
+                  type="text"
+                  tabindex="1"
+                />
+              </el-form-item>
+            </div>
 
             <p class="pd60">手机号</p>
-            <el-form-item prop="password">
+            <el-form-item prop="mobile">
                <el-input
-                ref="username"
-                v-model="loginForm.password"
+                ref="mobile"
+                v-model="loginForm.mobile"
                 placeholder="请输入手机号"
-                name="username"
+                name="mobile"
                 type="text"
                 tabindex="1"
               />
             </el-form-item>
 
             <p class="pd60">验证码</p>
-           
-            <el-form-item prop="verificationCode" class="verificationCode">
-              
+            <el-form-item prop="verifyCode" class="verificationCode">
              <el-input
-                
-                ref="verificationCode"
-                v-model="loginForm.verificationCode"
+                ref="verifyCode"
+                v-model="loginForm.verifyCode"
                 placeholder="请输入验证码"
-                name="verificationCode"
+                name="verifyCode"
                 type="text"
               />
               
-              <span class="cblue cursor">获取验证码</span>
+              <span 
+                v-show="!isActive"
+                class="cblue cursor"
+                @click="handleTime">获取验证码</span>
+              <span 
+                v-show="isActive"
+                class="cblue">{{num ? num + 's': ''}}</span>
             </el-form-item>
 
             <el-button :loading="loading" type="primary" 
@@ -68,74 +73,161 @@
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import componentsRouter from '@/router/modules/components.js'
-// import constantRoutes from '@/router/index.js'
 import routerIndex from '@/router/index.js'
-
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
-
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!value.length) {
-        callback(new Error('用户名不能为空'))
+    const validatePhoneNumber = (rule, value, callback) => {
+      let reg = /^1[3456789]\d{9}$/;
+      if (!reg.test(value)) {
+        callback(new Error('手机号码有误，请重填'))
       } else {
         callback()
       }
     }
 
-    const validatePassword = (rule, value, callback) => {
+    const validateVerifyCode = (rule, value, callback) => {
       let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
-      if (value.length < 8 || !reg.test(value)) {
-        callback(new Error('使用大小写英文字母与数字组合，不低于8位数'))
-
+      if (!value) {
+        callback(new Error('验证码不能为空'))
       } else {
         callback()
       }
     }
     return {
+      // 1是系统用户, 0是企业用户
+      userType:'0',
+      // 是否进行了点击操作
+      isActive:false,
+      num:59,
       loginForm: {
-        username: '',
-        password: ''
+        // 注册时(register), 登录时(login), 找回密码时(update-password), 修改资料时(update-customer)
+        sendType:'update-password',
+        //企业名称
+        customerName:'',
+        mobile: '',
+        // 验证码
+        verifyCode:'',
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername}],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      loginRules: { 
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber}],
+        // verifyCode: [{ required: true, trigger: 'blur', validator: validateVerifyCode }]
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined,
-
-
-
-      capsTooltip: false,
-      otherQuery: {}
     }
   },
   watch: {},
   created() {
+    this.userType = this.$route.query.userType;
   },
-  computed: {
-    ...mapGetters([
-      'permission_routes',
-    ]),
-  },
+  computed: {},
   mounted() {
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
-    } else if (this.loginForm.password === '') {
-      this.$refs.password.focus()
+    if (this.loginForm.customerName === '' && this.userType == 1) {
+      this.$refs.customerName.focus()
+    }else if (this.loginForm.mobile === '') {
+      this.$refs.mobile.focus()
+    } else if (this.loginForm.verifyCode === '') {
+      this.$refs.verifyCode.focus()
     }
   },
   methods: {
- 
-    handleLogin() {
-     this.$router.push({
-        name:'changePassword'
+    // 倒计时
+    handleTime(){
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          if(this.userType == 1 && !this.loginForm.customerName){
+            return this.$message({
+              message: '企业名称不能为空',
+              type: 'warning'
+            });
+          }
+
+          this.isActive = true;
+          // 获取验证码
+          this.handeleGetVerifyCode();
+          let timer = setInterval(()=>{
+            if(this.num < 1){
+              this.isActive = false;
+              this.num =59
+              clearInterval(timer)
+            }
+            this.num--
+          },1000)
+        } else {
+          // console.log('请输入账号密码')
+          return false
+        }
       })
-     
+    },
+
+    // 获取验证码
+    handeleGetVerifyCode(){
+      let param = {
+        sendType:this.loginForm.sendType,
+        mobile:this.loginForm.mobile
+      };
+      // 平台用户带参数
+      let param1 ={customerName:''}
+      if(this.userType == 1){
+        param1.customerName = this.loginForm.customerName
+      }
+      Api.getSendVerifyCode(param,param1).then(res => {
+        if(res.code == 200) {
+          this.$message({
+            message: '验证码已发送至'+ this.loginForm.mobile +'上请注意查收',
+            type: 'success'
+          });
+        }
+      }).catch( error => {
+      })
+    },
+
+    // 提交
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          if(this.userType == 1 && !this.loginForm.customerName){
+            return this.$message({
+              message: '企业名称不能为空',
+              type: 'warning'
+            });
+          }
+          if(!this.loginForm.verifyCode){
+            return this.$message({
+              message: '验证码不能为空',
+              type: 'warning'
+            });
+          }
+          
+          let param = {
+            mobile:this.loginForm.mobile,
+            verifyCode:this.loginForm.verifyCode
+          };
+          this.loading = true
+          Api.getVerifyCode(param).then(res => {
+            this.loading = false;
+            if(res.code == 200) {
+              let username = this.userType == 0 ? this.loginForm.mobile :
+                             this.userType == 1 ? this.loginForm.customerName : ''
+              this.$router.push({
+                name:'changePassword',
+                // 用户名, 企业用户为手机号, 系统用户为用户名
+                query:{userType:this.userType,
+                      username:username}
+              })
+            }
+
+          }).catch( error => {
+            this.loading = false
+          })
+        } else {
+          return false
+        }
+      })
     },
 
     
@@ -159,7 +251,6 @@ $cursor: #fff;
 .login-container {
   .el-input {
     display: inline-block;
-    height: 47px;
     width: 85%;
 
     input {
@@ -167,9 +258,8 @@ $cursor: #fff;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
-      padding: 12px 5px 12px 15px;
+      // padding: 12px 5px 12px 15px;
       color: #000;
-      height: 47px;
       
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -198,7 +288,7 @@ $light_gray:#eee;
 .verificationCode .el-input{
   width: 190px;
 }
-.pd60 {padding: 0 60px; color: #669999; font-size:16px;line-height: 32px;padding-top:20px;margin:0;}
+.pd60 {padding: 0 60px; color: #669999; font-size:16px;line-height: 32px;padding-top:10px;margin:0;}
 .pdt0 {padding-top: 0;}
 .cblue{ color: #1890ff;}
 .cursor{cursor:pointer;}
@@ -230,7 +320,7 @@ $light_gray:#eee;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
-    padding: 22vh 0 0 0;
+    padding: 11vh 0 0 0;
 }
   .content { 
    

@@ -4,6 +4,10 @@
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
+        <h2 class="title">上海装饰一网通系统 &nbsp;&nbsp; 
+          <span>企业管理平台</span>
+          <span>后台管理</span>
+        </h2>
         <navbar />
         <!-- 显示历史窗口 -->
         <tags-view v-if="needTagsView" />
@@ -62,7 +66,14 @@ export default {
 <style lang="scss" scoped>
   @import "~@/styles/mixin.scss";
   @import "~@/styles/variables.scss";
-
+  .title {
+    // line-height: 56px;
+    line-height: 50px;
+    width: 100%;
+    text-align: center;
+    background-color: #f90;
+    color: #fff;
+    }
   .app-wrapper {
     @include clearfix;
     position: relative;

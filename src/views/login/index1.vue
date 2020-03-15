@@ -1,4 +1,4 @@
-//用户登录页
+// 后台登录
 <template>
   <div class="login-container logginWrapCss">
 
@@ -27,28 +27,16 @@
               <h3 class="title">登录系统</h3>
             </div>
 
-            <p class="pd60">手机号</p>
-            <el-form-item prop="phoneNumber">
+            <p class="pd60">用户名</p>
+            <el-form-item prop="username">
               <el-input
-                ref="phoneNumber"
-                v-model.number="loginForm.phoneNumber"
-                placeholder="请输入手机号"
-                name="phoneNumber"
+                ref="username"
+                v-model.number="loginForm.username"
+                placeholder="请输入用户名"
+                name="username"
                 type="text"
                 tabindex="1"
               />
-            </el-form-item>
-
-            <p class="pd60">企业名称</p>
-            <el-form-item prop="customerName" class="customerName">
-              <el-select v-model="loginForm.customerName" ref="customerName" placeholder="请选择登录的企业">
-                <el-option
-                  v-for="item in enterpriseData"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name">
-                </el-option>
-              </el-select>
             </el-form-item>
 
             <p class="pd60">登录密码</p>
@@ -78,7 +66,6 @@
                 name="verificationCode"
                 type="text"
               />
-              
               <span class="cblue cursor">获取验证码</span>
             </el-form-item> -->
 
@@ -90,15 +77,6 @@
                 width:72%;background:#2E74D1; 
                 border-color:#2E74D1;" 
                 @click.native.prevent="handleLogin">登 录</el-button>
-            
-            <p 
-              class="pd60" 
-              style="text-align: center;margin: -45px 0 20px;cursor: pointer; color:#1890ff;"
-              @click="handleRegister">
-              企业注册
-            </p>
-
-           
           </el-form>
         </div>
     </div>
@@ -111,7 +89,6 @@ import store from '@/store'
 import componentsRouter from '@/router/modules/components.js'
 // import constantRoutes from '@/router/index.js'
 import routerIndex from '@/router/index.js'
-
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
 
@@ -130,45 +107,30 @@ export default {
       }
     }
     const validatePhoneNumber = (rule, value, callback) => {
-      let reg = /^1[3456789]\d{9}$/;
-      if (!reg.test(value)) {
-        callback(new Error('手机号码有误，请重填'))
+      if (!value) {
+        callback(new Error('用户名不能为空'))
       } else {
         callback()
-        this.handleGetListByMobile()
       }
     }
     return {
       // 1是系统用户, 0是企业用户
-      userType:'0',
+      userType:'1',
       loginForm: {
-        phoneNumber:'17601001098',
+        username:'admin',
         customerName: '',
-        password: 'K1111111',
+        password: 'admin123',
         // verifyCode:''
       },
-      // 企业列表
-      enterpriseData:[
-        // {
-        //   name:'',
-        //   status:''
-        // }
-      ],
 
       loginRules: {
-        phoneNumber: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }],
-        customerName: [{ required: true, trigger: 'change', message: '请选择登录的企业'}],
+        username: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }],
+        // customerName: [{ required: true, trigger: 'change', message: '请选择登录的企业'}],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
         // verifyCode: [{ required: true, trigger: 'blur', message: '请输入验证码'}],
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined,
-
-
-
-      capsTooltip: false,
-      otherQuery: {}
     }
   },
   watch: {},
@@ -180,38 +142,19 @@ export default {
     ]),
   },
   mounted() {
-    
-    if (this.loginForm.phoneNumber === '') {
-      this.$refs.phoneNumber.focus()
-    } else if (this.loginForm.customerName === '') {
-      this.$refs.customerName.focus()
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }
   },
   methods: {
-    // 根据手机号获取企业列表
-    handleGetListByMobile(){
-      let param = this.loginForm.phoneNumber
-      Api.getListByMobile(param).then(res => {
-        let {code, data, msg, total} = res
-        this.enterpriseData = data
-      }).catch( error => {
-        this.enterpriseData = []
-      })
-    },
+
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          var param = {
-            username:this.loginForm.phoneNumber,
-            // 企业名称, 平台登录时不需要此参数
-            customerName:this.loginForm.customerName,
-            password: this.loginForm.password,
-            // "phoneNumber":this.loginForm.phoneNumber,
-            
-          };
+          let param = Object.assign({},this.loginForm)
           Api.loginInit(param).then(res => {
             this.loading = false;
             if(res.code == 200) {
@@ -220,7 +163,6 @@ export default {
               localStorage.setItem ('Siw_userInfo',JSON.stringify(res.data))
                this.$router.push({path: '/'})
             }
-
           }).catch( error => {
             localStorage.removeItem('Siw_userInfo');
             localStorage.removeItem('Siw_menuList')
@@ -243,6 +185,7 @@ export default {
         this.$refs.password.focus()
       })
     },
+
     // 忘记密码
     handleForgetPassword(){
       this.$router.push({
@@ -250,31 +193,9 @@ export default {
         query:{userType:this.userType}
       })
     },
-    // 企业注册
-    handleRegister(){
-      this.$router.push({
-        name:'register'
-      })
-    },
+   
     
-    handleLogin1() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
+    
     
     
   }

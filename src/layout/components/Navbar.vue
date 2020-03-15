@@ -1,15 +1,15 @@
 <template>
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    <h2 class="fl title">上海装饰一网通系统 &nbsp;&nbsp; 
+    <!-- <h2 class="fl title">上海装饰一网通系统 &nbsp;&nbsp; 
       <span>企业管理平台</span>
       <span>后台管理</span>
-    </h2>
+    </h2> -->
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     
     <div class="right-menu">
       
-      <span class="userName el-breadcrumb app-breadcrumb breadcrumb-container">{{userName ? userName + '首页' : ''}}</span>
+      <span class="userName el-breadcrumb app-breadcrumb breadcrumb-container">{{userName ? userName : ''}}</span>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -95,7 +95,7 @@ export default {
     ])
   },
   created(){
-    this.userName = JSON.parse(localStorage.getItem('Siw-userInfo')) ? JSON.parse(localStorage.getItem('Siw-userInfo')).username : '';
+    this.userName = JSON.parse(localStorage.getItem('Siw_userInfo')) ? JSON.parse(localStorage.getItem('Siw_userInfo')).username : '';
   },
   methods: {
     toggleSideBar() {
@@ -109,22 +109,59 @@ export default {
 
     // 退出登陆
     logout() {
+      let userType = JSON.parse(localStorage.getItem('Siw_userInfo')).userType
+
+      removeToken();
+      localStorage.removeItem('Siw_userInfo')
+      localStorage.removeItem('Siw_menuList')
+
+
+      if(this.userType == 0){
+        setTimeout(()=>{
+          this.$router.push({path: '/login' })
+        },200)
+        // this.$router.push({
+        //   name:'login'
+        // })
+      }
+
+      if(this.userType == 1){
+        setTimeout(()=>{
+          this.$router.push({path: '/llogin' })
+        },200)
+        // this.$router.push({
+        //   name:'llogin'
+        // })
+        // this.$router.push({path: '/llogin' })
+      }
+
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      return
+      
+      // sessionStorage.removeItem('Siw_menuList')
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      
+      
+
+
+      return
+
       Api.landingExit('').then(res=>{
         // console.log(res)
         if(res.code == 200){
         //   console.log(res.data.msg);
            removeToken();
-           localStorage.removeItem('Siw-userInfo')
-           localStorage.removeItem('Siw-menuList')
+           localStorage.removeItem('Siw_userInfo')
+           localStorage.removeItem('Siw_menuList')
            // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
            this.$router.push({path: '/login' })
         }
       }).catch(err => {
         // console.log(err);
         removeToken();
-        localStorage.removeItem('Siw-userInfo')
-        localStorage.removeItem('Siw-menuList')
-        // sessionStorage.removeItem('Siw-menuList')
+        localStorage.removeItem('Siw_userInfo')
+        localStorage.removeItem('Siw_menuList')
+        // sessionStorage.removeItem('Siw_menuList')
         // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
         this.$router.push({path: '/login' })
       })
@@ -200,7 +237,7 @@ export default {
 
 <style lang="scss" scoped>
 .title {
-  line-height: 50px;;
+  line-height: 50px;
 }
 .userName{
   // margin-right: 30px;

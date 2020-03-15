@@ -1,7 +1,10 @@
+// 首页
 <template>
   <div class="dashboard-editor-container">
 
-    <div class="dashboard-text"><img class="welcomeImg" :src='img'/></div>
+    <div class="dashboard-text">
+      <!-- <img class="welcomeImg" :src='img'/> -->
+    </div>
     
    
   </div>
@@ -59,17 +62,17 @@ export default {
     }
   },
   mounted() {
-    // this.isShow = localStorage.getItem ('Siw-userInfo',JSON.stringify(res.data)) ? localStorage.getItem ('Siw-userInfo',JSON.stringify(res.data)) : 'user'
-    // this.isShow = localStorage.getItem ('Siw-userInfo',JSON.stringify(res.data)) ? localStorage.getItem ('Siw-userInfo',JSON.stringify(res.data)) : 'admin'
-    // 显示哪个首页  user 为客户端   admin 为后台登录
-    if(this.isShow == 'user'){
-        console.log(111)
+    // 0是企业用户 1是系统用户,
+    this.isShow = localStorage.getItem ('Siw_userInfo') ? JSON.parse(localStorage.getItem('Siw_userInfo')).userType : ''
+    // 显示哪个首页  0 为客户端   1 为后台登录
+    if(this.isShow == '0'){
+        // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
         this.$router.push({
         name:'registrationInforMange'
       })
     }
-    if(this.isShow == 'admin'){
-        console.log(222)
+    if(this.isShow == '1'){
+        // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
         this.$router.push({
         name:'companyManagement'
       })

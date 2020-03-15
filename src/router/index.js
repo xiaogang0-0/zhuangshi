@@ -47,11 +47,21 @@ export const constantRoutes = [
       }
     ]
   },
+  // 客户端登录
   {
     path: '/login',
     component: () => import('@/views/login/index'),
+    name:'login',
     hidden: true
   },
+  // 后台登录
+  {
+    path: '/llogin',
+    component: () => import('@/views/login/index1'),
+    name:'llogin',
+    hidden: true
+  },
+
   // 忘记密码 未登录状态可查看
   {
     path: '/forgetPassword',

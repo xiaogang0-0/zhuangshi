@@ -17,38 +17,33 @@
       </div> -->
     </div>
 
-
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
           <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-
             <div class="title-container">
               <h3 class="title">修改密码</h3>
             </div>
+
             <p class="pd60">新密码</p>
             <el-form-item prop="password1">
               <el-input
                 :key="passwordType"
-                ref="password"
+                ref="password1"
                 v-model="loginForm.password1"
                 :type="passwordType"
                 placeholder="请输入新密码"
                 name="password"
                 tabindex="2"
                 autocomplete="on"
-                @keyup.enter.native="handleLogin"
               />
               <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span>
             </el-form-item>
-            <p class="pd60">再次输入</p>
 
+            <p class="pd60">再次输入</p>
             <el-form-item prop="password">
-              <!-- <span class="svg-container">
-                <svg-icon icon-class="password" />
-              </span> -->
               <el-input
                 :key="passwordType"
                 ref="password"
@@ -58,12 +53,12 @@
                 name="password"
                 tabindex="2"
                 autocomplete="on"
-                @keyup.enter.native="handleLogin"
               />
               <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span>
             </el-form-item>
+
             <el-button :loading="loading" type="primary" 
               style="
                 display:block;
@@ -72,7 +67,6 @@
                 border-color:#2E74D1;" 
                 @click.native.prevent="handleLogin">完 成</el-button>
 
-           
           </el-form>
         </div>
     </div>
@@ -83,9 +77,7 @@
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import componentsRouter from '@/router/modules/components.js'
-// import constantRoutes from '@/router/index.js'
 import routerIndex from '@/router/index.js'
-
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
 
@@ -111,9 +103,15 @@ export default {
       }
     }
     return {
+      // 1是系统用户, 0是企业用户
+      userType:'',
       loginForm: {
+        // 用户名, 企业用户为手机号, 系统用户为用户名
+        username:'',
+        // 新密码
+        password:'',
+
         password1: '',
-        password: ''
       },
       loginRules: {
         password1: [{ required: true, trigger: 'blur', validator: validateUsername}],
@@ -121,26 +119,18 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined,
-
-
-
-      capsTooltip: false,
-      otherQuery: {}
     }
   },
   watch: {},
   created() {
+    this.userType = this.$route.query.userType;
+    this.loginForm.username = this.$route.query.username;
   },
-  computed: {
-    ...mapGetters([
-      'permission_routes',
-    ]),
-  },
+  computed: {},
   mounted() {
-    if (this.loginForm.password1 === '') {
+    if (this.loginForm.password1 == '') {
       this.$refs.password1.focus()
-    } else if (this.loginForm.password === '') {
+    } else if (this.loginForm.password == '') {
       this.$refs.password.focus()
     }
   },
@@ -155,98 +145,37 @@ export default {
         this.$refs.password.focus()
       })
     },
-    // 忘记密码
-    handleForgetPassword(){
-      this.$router.push({
-        name:'forgetPassword'
-      })
-    },
+   
+    // 修改密码
     handleLogin() {
-      this.$router.push({
-        name:'login'
-      })
-      return
-
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           var param = {
-            "username": this.loginForm.password1,
+            "username": this.loginForm.username,
             "password": this.loginForm.password,
-            "moduleId":5,
           };
-          Api.loginInit(param).then(res => {
+          console.log(param)
+          Api.changePassword(param).then(res => {
             this.loading = false;
             if(res.code == 200) {
-              // 本地存储token
-              setToken(res.data.access_token)
-              
-              localStorage.setItem ('Siw-userInfo',JSON.stringify(res.data))
-              // 后台获取路由
-              Api.getMenu().then(res => {
-                let {code,data,msg,total} = res
-                
-                if(code == 200){
-                  // 后台获取回來的路由
-                  let menuList = data;
-                  localStorage.setItem ('Siw-menuList',JSON.stringify(data))
-                  window.location.reload()
-                  // console.log(componentsRouter,'本地的目录')
-                  return 
-                  // 循环后台的权限
-                  // menuList.forEach(item => {
-                  //   console.log(item,'item后台权限')
-                  //   // 循环本地的目录
-                  //   componentsRouter.forEach(ele => {
-                  //     // 一级导航选中项
-                  //     if(item.name == ele.name ){
-                  //       // 一级路由设定
-                  //       ele.hidden = false;
-                  //       item.children.forEach(child => {
-                  //         // 循环本地对比
-                  //         ele.children.forEach(chd => {
-                  //           if(child.name == chd.name ){
-                  //             console.log(child,'child.name ')
-                  //             chd.hidden = false;
-                  //           }else{
-                  //             chd.hidden = true;
-                  //           }
-                  //         });
-                  //       });
-                  //     }else{
-                  //        ele.hidden = true;
-                  //     }
-                  //   });
-                  //   // this.$store.commit('permission/SET_ROUTES', componentsRouter)
-                  //   // this.$router.addRoutes(componentsRouter)
-                  //   // this.$router.push({path: '/'})
-                  //   window.location.reload()
-                  // });
-
-                  
-                 
-                  
-                    
-                      
-            
-                }else{
-                  localStorage.removeItem('Siw-menuList')
+              setTimeout(()=>{
+                if(this.userType == 0){
+                  this.$router.push({
+                    name:'login'
+                  })
                 }
-              }).catch( error => {
-                localStorage.removeItem('Siw-menuList')
-              })
 
-              // this.$router.push({path:'/'})
-
-    
+                if(this.userType == 1){
+                  this.$router.push({
+                    name:'llogin'
+                  })
+                }
+              },1000)
             }
-
           }).catch( error => {
-            localStorage.removeItem('Siw_userInfo');
-            localStorage.removeItem('Siw-menuList')
             this.loading = false
           })
-            
             
         } else {
           // console.log('请输入账号密码')
@@ -254,9 +183,6 @@ export default {
         }
       })
     },
-    
-    
-    
   }
 }
 </script>
@@ -279,7 +205,6 @@ $cursor: #fff;
 .login-container {
   .el-input {
     display: inline-block;
-    height: 47px;
     width: 85%;
 
     input {
@@ -287,10 +212,7 @@ $cursor: #fff;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
-      padding: 12px 5px 12px 15px;
       color: #000;
-      height: 47px;
-      
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
@@ -313,7 +235,7 @@ $cursor: #fff;
 $bg:#2E74D1;
 $dark_gray:#889aa4;
 $light_gray:#eee;
-.pd60 {padding: 0 60px; color: #669999; font-size:16px;line-height: 32px;padding-top:20px;margin:0;}
+.pd60 {padding: 0 60px; color: #669999; font-size:16px;line-height: 32px;padding-top:10px;margin:0;}
 .pdt0 {padding-top: 0;}
 
 .login-container {
@@ -344,7 +266,7 @@ $light_gray:#eee;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
-    padding: 22vh 0 0 0;
+    padding: 11vh 0 0 0;
 }
   .content { 
    
@@ -442,7 +364,7 @@ $light_gray:#eee;
   .show-pwd {
     position: absolute;
     right: 10px;
-    top: 7px;
+    top: 0;
     font-size: 16px;
     color: $dark_gray;
     cursor: pointer;
