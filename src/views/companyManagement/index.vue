@@ -1,25 +1,24 @@
 // 公司管理
 <template>
   <div class="contentWrap companyManagementList">
-    <el-form :inline="true" :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form size="mini" :inline="true" :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       
-      <el-form-item label="公司全称:" prop="serialNumber">
+      <el-form-item label="公司全称:" prop="name">
         <el-input 
-          v-model="ruleForm.serialNumber"
+          v-model="ruleForm.name"
           placeholder="公司全称"
         ></el-input>
       </el-form-item>
-
       
       <el-form-item>
         <el-button type="primary" @click="handleSearch('ruleForm')">查询</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
 
-      <el-form-item label="状态:" label-width="100px" style="width: 100%; margin-bottom:0;" prop="connectStatus" class="orderStatus">
+      <el-form-item label="状态:" style="width: 100%; margin-bottom:0;" prop="statusArray" class="orderStatus">
           <el-checkbox-group 
-            v-model="ruleForm.connectStatus">
-            <el-checkbox v-for="city in connectStatusData" :label="city.id" :key="city.id">{{city.name}}</el-checkbox>
+            v-model="ruleForm.statusArray">
+            <el-checkbox v-for="city in statusArrayData" :label="city.id" :key="city.id">{{city.name}}</el-checkbox>
           </el-checkbox-group>
       </el-form-item>
 
@@ -27,6 +26,7 @@
 
    
     <el-table
+      size="mini" 
       v-loading="loading"
       style="width:100%;"
       border
@@ -36,13 +36,12 @@
       <el-table-column
         type="index"
         label="序号"
-        fixed="left"
         align="center"
         width="50">
       </el-table-column>
 
       <el-table-column
-        prop="serialNumber"
+        prop="name"
         label="公司全称"
         align="center"
         min-width="150">
@@ -51,63 +50,77 @@
             @click.native.prevent="handeLookDetails(scope.row)"
             type="text"
             size="small">
-            {{scope.row.serialNumber}}
+            {{scope.row.name}}
           </el-button>
         </template> -->
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="paymentAmount"
+        prop="registerPhone"
         min-width="120"
         label="注册手机号">
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="businessTypeName"
-        min-width="120"
+        prop="creditCode"
+        min-width="130"
         label="统一社会信用代码">
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="customer"
-        min-width="150"
+        prop="legalPerson"
+        min-width="70"
         label="法人代表">
       </el-table-column>
-      <!-- <el-table-column
+      
+      <el-table-column
         align="center"
-        prop="customer"
-        min-width="150"
+        prop="contactTel"
+        min-width="115"
         label="企业联系电话">
-      </el-table-column> -->
+      </el-table-column>
 
       <el-table-column
         align="center"
-        prop="businessType"
-        min-width="120"
+        prop="status"
+        min-width="100"
         label="状态">
         <template slot-scope="scope">
-          <span>{{scope.row.businessType ==1 ? '待审核' : 
-                  scope.row.businessType ==2 ? '已审核' : ''}}
+          <!-- / 状态：1(待审核),2(已审核通过),3(审核不通过) -->
+          <span>{{scope.row.status ==1 ? '待审核' : 
+                  scope.row.status ==2 ? '已审核通过' : 
+                  scope.row.status ==3 ? '审核不通过' : ''}}
           </span>
         </template>
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="paymentTime"
+        prop="createTime"
         label="创建时间"
-        min-width="100">
+        min-width="120">
+        <template slot-scope="scope">
+          <!-- / 状态：1(待审核),2(已审核通过),3(审核不通过) -->
+          <span>{{scope.row.createTime.substring(0,16)}}
+          </span>
+        </template>
       </el-table-column>
 
-      <!-- <el-table-column
+      <el-table-column
         align="center"
-        prop="createUser"
+        prop="isDemoSite"
         min-width="100"
-        label="创建人">
-      </el-table-column> -->
+        label="示范工地资格">
+        <template slot-scope="scope">
+          <!-- / 示范工地资格：1是，0否-->
+          <span>{{scope.row.isDemoSite ==1 ? '是' : 
+                  scope.row.isDemoSite ==0 ? '否' : ''}}
+          </span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column
         fixed="right"
@@ -120,6 +133,12 @@
             @click="handeLookDetails(scope.row)"
             type="text"
             size="small">基本信息</el-button>
+          <div>
+            <el-button
+              @click="handleQualifications(scope.row)"
+              type="text"
+              size="small">示范资格</el-button>
+          </div>
            
         </template>
       </el-table-column>
@@ -133,12 +152,36 @@
       :count="total"
       @change="changePage"
     ></paging>
+
+    <!-- 示范资格变更弹窗 -->
+    <el-dialog
+      title="示范资格变更"
+      center
+      :visible.sync="dialogQualifications"
+      width="335px"
+      class="">
+      <div class="refuse overflow">
+        <!-- <span class="fl lineH30">有示范工地资格</span> -->
+        <div class="fl w300">
+          <el-checkbox-group v-model="form.isDemoSite">
+            <el-checkbox label="1" name="isDemoSite">有示范工地资格</el-checkbox>
+            <!-- <el-checkbox label="0" name="isDemoSite">无示范工地资格</el-checkbox> -->
+          </el-checkbox-group>
+         
+        </div>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogQualifications = false">取 消</el-button>
+        <el-button type="primary" @click="handleQualificationsSubmit">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import paging from "@/components/pages/pagination.vue";
-import * as Api from '@/api/registrationInforMange'
+import * as Api from '@/api/companyManagement'
 import { setToken } from '@/utils/auth'
 
 export default {
@@ -150,25 +193,33 @@ export default {
       loading:false,
       ruleForm: {
         // 公司全称
-        serialNumber:'',
-        // 状态：0待审核，1审核通过，2审核不通过
-        connectStatus: [],
-        
+        name:'',
+        // 状态：1(待审核),2(已审核通过),3(审核不通过)
+        statusArray: [],
       },
       // 状态数据
-      connectStatusData:[{
+      statusArrayData:[{
           name:'待审核',
-          id:'0'
+          id:1
         },{
           name:'审核通过',
-          id:'1'
+          id:2
         },{
           name:'审核不通过',
-          id:'2'
+          id:3
         }],
       tableList: [],
+      form:{
+        // 记录id
+        customerId:'', 
+        // 示范工地资格：1是，0否
+        isDemoSite:[]
+      },
+      
       
       oldForm:{},
+      // 示范资格-弹窗
+      dialogQualifications:false,
       // 页码
       paging: {
         pageNum: 1,
@@ -191,27 +242,27 @@ export default {
     // 搜索
     handleSearch(formName) {
       this.paging.pageNum =1;
-      let connectStatus = this.ruleForm.connectStatus.join(',');
-      let param =Object.assign({},this.ruleForm,
-                               {connectStatus:connectStatus},
-                               this.paging);
+      let param =Object.assign({},this.ruleForm, this.paging);
+      // let param =Object.assign({},this.ruleForm,);
       this.oldForm = Object.assign({}, param);
       this.handleGetlist(this.oldForm);
     },
+
     // 重置
     resetForm(formName) {
       this.ruleForm = {
         // 公司全称
-        serialNumber:'',
+        name:'',
         // 状态：0待审核，1审核通过，2审核不通过
-        connectStatus: [],
+        statusArray: [],
       },
       this.handleSearch();
     },
+
     // 请求数据列表
     handleGetlist(param){
       this.loading = true;
-      Api.financeManage_search(param).then(res => {
+      Api.getUserCustomerSearch(param).then(res => {
         this.loading = false;
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -224,13 +275,52 @@ export default {
       })
     },
 
+    // 示范资格
+    handleQualifications(item){
+      this.form.customerId = item.customerId
+      
+      if(item.isDemoSite == 1){
+        this.form.isDemoSite.push('1')
+      }else{
+        this.form.isDemoSite=[]
+      }    // 示范资格-弹窗
+      this.dialogQualifications = true
+    },
+
+    // 弹窗示范资格提交
+    handleQualificationsSubmit(){
+      let param = Object.assign({},JSON.parse(JSON.stringify(this.form))) 
+      if(param.isDemoSite.length){
+        param.isDemoSite = 1
+      }else{
+        param.isDemoSite = 0
+      }
+      Api.setUpdateCustomerDemoSite(param).then(res => {
+        this.dialogQualifications = false
+        let  {code, data , msg, total} = res
+        if(code == 200) {
+          this.$message({
+            message: msg,
+            type: 'success'
+          });
+          setTimeout(()=>{
+            this.handleGetlist(this.oldForm);
+          },200)
+          
+        }
+      }).catch( error => {
+        this.dialogQualifications = false
+      })
+    },
    
     // 查看基本信息
     handeLookDetails(item){
       this.$router.push({
         name:'companyManagement_auditDetails',
         query:{
-          paymentId:item.paymentId,
+          customerId:item.customerId,
+          // status 1 是 查看详情 2 是审核
+          // status:'1'
         }
       })
     },

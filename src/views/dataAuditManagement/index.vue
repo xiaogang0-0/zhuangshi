@@ -1,25 +1,24 @@
 // 注册资料审核
 <template>
-  <div class="contentWrap dataAuditManagement">
-    <el-form :inline="true" :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+  <div class="contentWrap companyManagementList">
+    <el-form size="mini" :inline="true" :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
       
-      <el-form-item label="公司全称:" prop="serialNumber">
+      <el-form-item label="公司全称:" prop="name">
         <el-input 
-          v-model="ruleForm.serialNumber"
+          v-model="ruleForm.name"
           placeholder="公司全称"
         ></el-input>
       </el-form-item>
-
       
       <el-form-item>
         <el-button type="primary" @click="handleSearch('ruleForm')">查询</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
 
-      <el-form-item label="状态:" label-width="100px" style="width: 100%; margin-bottom:0;" prop="connectStatus" class="orderStatus">
+      <el-form-item label="状态:" style="width: 100%; margin-bottom:0;" prop="recordStatusArray" class="orderStatus">
           <el-checkbox-group 
-            v-model="ruleForm.connectStatus">
-            <el-checkbox v-for="city in connectStatusData" :label="city.id" :key="city.id">{{city.name}}</el-checkbox>
+            v-model="ruleForm.recordStatusArray">
+            <el-checkbox v-for="city in recordStatusArrayData" :label="city.id" :key="city.id">{{city.name}}</el-checkbox>
           </el-checkbox-group>
       </el-form-item>
 
@@ -27,6 +26,7 @@
 
    
     <el-table
+      size="mini" 
       v-loading="loading"
       style="width:100%;"
       border
@@ -36,13 +36,12 @@
       <el-table-column
         type="index"
         label="序号"
-        fixed="left"
         align="center"
         width="50">
       </el-table-column>
 
       <el-table-column
-        prop="serialNumber"
+        prop="name"
         label="公司全称"
         align="center"
         min-width="150">
@@ -51,63 +50,71 @@
             @click.native.prevent="handeLookDetails(scope.row)"
             type="text"
             size="small">
-            {{scope.row.serialNumber}}
+            {{scope.row.name}}
           </el-button>
         </template> -->
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="paymentAmount"
+        prop="registerPhone"
         min-width="120"
         label="注册手机号">
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="businessTypeName"
-        min-width="120"
+        prop="creditCode"
+        min-width="130"
         label="统一社会信用代码">
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="customer"
-        min-width="150"
+        prop="legalPerson"
+        min-width="70"
         label="法人代表">
       </el-table-column>
-      <!-- <el-table-column
+      
+      <el-table-column
         align="center"
-        prop="customer"
-        min-width="150"
+        prop="contactTel"
+        min-width="115"
         label="企业联系电话">
-      </el-table-column> -->
+      </el-table-column>
 
       <el-table-column
         align="center"
-        prop="businessType"
-        min-width="120"
+        prop="status"
+        min-width="100"
         label="状态">
         <template slot-scope="scope">
-          <span>{{scope.row.businessType ==1 ? '待审核' : 
-                  scope.row.businessType ==2 ? '已审核' : ''}}
+          <!-- / 状态：1(待审核),2(已审核通过),3(审核不通过) -->
+          <span>{{scope.row.status ==1 ? '待审核' : 
+                  scope.row.status ==2 ? '已审核通过' : 
+                  scope.row.status ==3 ? '审核不通过' : ''}}
           </span>
         </template>
       </el-table-column>
 
       <el-table-column
         align="center"
-        prop="paymentTime"
+        prop="createTime"
         label="创建时间"
-        min-width="100">
+        min-width="120">
+        <template slot-scope="scope">
+          <!-- / 状态：1(待审核),2(已审核通过),3(审核不通过) -->
+          <span>{{scope.row.createTime.substring(0,16)}}
+          </span>
+        </template>
       </el-table-column>
 
-      <!-- <el-table-column
+      <el-table-column
         align="center"
         prop="createUser"
         min-width="100"
         label="创建人">
-      </el-table-column> -->
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column
         fixed="right"
@@ -120,6 +127,7 @@
             @click="handeLookDetails(scope.row)"
             type="text"
             size="small">审核</el-button>
+          
            
         </template>
       </el-table-column>
@@ -133,12 +141,13 @@
       :count="total"
       @change="changePage"
     ></paging>
+   
   </div>
 </template>
 
 <script>
 import paging from "@/components/pages/pagination.vue";
-import * as Api from '@/api/registrationInforMange'
+import * as Api from '@/api/companyManagement'
 import { setToken } from '@/utils/auth'
 
 export default {
@@ -150,25 +159,33 @@ export default {
       loading:false,
       ruleForm: {
         // 公司全称
-        serialNumber:'',
-        // 状态：0待审核，1审核通过，2审核不通过
-        connectStatus: [],
-        
+        name:'',
+        // 状态：1(待审核),2(已审核通过),3(审核不通过)
+        recordStatusArray: [],
       },
       // 状态数据
-      connectStatusData:[{
+      recordStatusArrayData:[{
           name:'待审核',
-          id:'0'
+          id:1
         },{
           name:'审核通过',
-          id:'1'
+          id:2
         },{
           name:'审核不通过',
-          id:'2'
+          id:3
         }],
       tableList: [],
+      form:{
+        // 记录id
+        customerId:'', 
+        // 示范工地资格：1是，0否
+        isDemoSite:[]
+      },
+      
       
       oldForm:{},
+      // 示范资格-弹窗
+      dialogQualifications:false,
       // 页码
       paging: {
         pageNum: 1,
@@ -191,27 +208,27 @@ export default {
     // 搜索
     handleSearch(formName) {
       this.paging.pageNum =1;
-      let connectStatus = this.ruleForm.connectStatus.join(',');
-      let param =Object.assign({},this.ruleForm,
-                               {connectStatus:connectStatus},
-                               this.paging);
+      let param =Object.assign({},this.ruleForm, this.paging);
+      // let param =Object.assign({},this.ruleForm,);
       this.oldForm = Object.assign({}, param);
       this.handleGetlist(this.oldForm);
     },
+
     // 重置
     resetForm(formName) {
       this.ruleForm = {
         // 公司全称
-        serialNumber:'',
+        name:'',
         // 状态：0待审核，1审核通过，2审核不通过
-        connectStatus: [],
+        recordStatusArray: [],
       },
       this.handleSearch();
     },
+
     // 请求数据列表
     handleGetlist(param){
       this.loading = true;
-      Api.financeManage_search(param).then(res => {
+      Api.getCustomerUpdateRecordSearch(param).then(res => {
         this.loading = false;
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -225,12 +242,13 @@ export default {
     },
 
    
-    // 查看基本信息
+    // 审核点击
     handeLookDetails(item){
       this.$router.push({
         name:'dataAuditManagement_auditDetails',
         query:{
-          paymentId:item.paymentId,
+          customerId:item.customerId,
+          id:item.id,
         }
       })
     },
@@ -252,14 +270,14 @@ export default {
 </script>
 
 <style lang="scss" >
-.dataAuditManagement {
+.companyManagementList {
   .el-date-editor .el-range-separator{
     width: auto;
   }
 }
 </style>
 <style lang="scss" scoped>
-.dataAuditManagement {
+.companyManagementList {
   padding: 20px;
 
   .w100.el-select{width:100px;}

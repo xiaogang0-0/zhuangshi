@@ -1,5 +1,98 @@
 // 编辑注册资料
 import request from '@/utils/request'
+// 公司管理列表  
+export function getUserCustomerSearch(data) {
+  return request({
+    url: '/admin/a/user/customer/search',
+    method: 'post',
+    data
+  })
+}
+
+
+// 修改示范工地接口 /admin/a/user/customer/updateCustomerDemoSite
+export function setUpdateCustomerDemoSite(data) {
+  return request({
+    url: '/admin/a/user/customer/updateCustomerDemoSite',
+    method: 'post',
+    data
+  })
+}
+
+// 注册资料审核列表 /admin/a/manager/customer_update_record/search
+export function getCustomerUpdateRecordSearch(data) {
+  return request({
+    url: '/admin/a/manager/customer_update_record/search',
+    method: 'post',
+    data
+  })
+}
+
+
+// 公司管理-获取基本信息   /admin/a/manager/customer/get-by-id/{customerId}
+export function getCustomerGetById(data) {
+  return request({
+    url: '/admin/a/manager/customer/get-by-id/'+data,
+    method: 'get',
+    // params: data
+  })
+}
+
+// 注册信息审核不通过原因接口  /admin/a/user/dictionary/list/typeid/4
+export function getListTypeid4() {
+  return request({
+    url: '/admin/a/user/dictionary/list/typeid/4',
+    method: 'get',
+    // params: data
+  })
+}
+
+// 公司信息审核接口 
+export function subCustomerAudit(data) {
+  return request({
+    url: '/admin/a/user/customer/audit',
+    method: 'post',
+    data
+  })
+}
+
+
+// 注册资料审核-获取详情页接口  /admin/a/manager/customer_update_record/detail
+export function getCustomerUpdateRecordDetail(data) {
+  return request({
+    url: '/admin/a/manager/customer_update_record/detail',
+    method: 'post',
+    data
+  })
+}
+
+// 注册资料审核接口  /admin/a/manager/customer_update_record/audit
+export function subCustomerUpdateRecordAudit(data) {
+  return request({
+    url: '/admin/a/manager/customer_update_record/audit',
+    method: 'post',
+    data
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 阿里云上传服务端签名接口  
 export function getAliyunOssSign(data) {
@@ -12,14 +105,7 @@ export function getAliyunOssSign(data) {
 }
 
 
-// 获取企业信息   根据当前登录用户获取企业信息, 只适用于已登录用户 
-export function getCustomerDetailByLoginUser(data) {
-  return request({
-    url: '/admin/a/user/customer/detail-by-login-user',
-    method: 'get',
-    data
-  })
-}
+
 
 // 按层级获取行政区域省市接口 /admin/a/user/area/list-by-level/{level}
 // 根据层级获取行政区域, 0为省级, 1为市级

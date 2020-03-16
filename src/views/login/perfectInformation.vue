@@ -1,4 +1,4 @@
-// 完善注册信息 perfectInformation
+// 完善注册信息 perfectInformation  
 <template>
   <div class="contentWrap perfectInformation">
     <div class="contWrap" >
@@ -10,7 +10,7 @@
             alt="" 
             class="imgWrap"
             v-for="(ele, index2) in ruleForm.businessLicense"
-            :key="index2+ele"
+            :key="index2+ele.url"
             :src="ele.url" 
             @click="handlePreviewImg(ele.url)">
           <span 
@@ -19,8 +19,8 @@
            
         </el-form-item>
 
-        <el-form-item label-width="150px" label="统一信用代码:" prop="creditCode">
-          <el-input v-model.trim="ruleForm.creditCode" clearable placeholder="请输入统一信用代码"></el-input>
+        <el-form-item label-width="150px" label="统一社会信用代码:" prop="creditCode">
+          <el-input v-model.trim="ruleForm.creditCode" clearable placeholder="请输入统一社会信用代码"></el-input>
         </el-form-item>
 
         <el-form-item label-width="150px" label="企业联系电话:" prop="contactTel">
@@ -66,7 +66,7 @@
             alt="" 
             class="imgWrap"
             v-for="(ele, index2) in ruleForm.qualificationPhoto"
-            :key="index2+ele"
+            :key="index2+ele.url"
             :src="ele.url" 
             @click="handlePreviewImg(ele.url)">
           <span 
@@ -89,7 +89,6 @@
         </el-form-item>
 
         <el-form-item label-width="150px" label="施工资质或施工能力等级评价:" prop="qualificationGrade">
-          
           <el-select 
             v-model="ruleForm.qualificationGrade" 
             placeholder="请选择">
@@ -107,18 +106,20 @@
         </el-form-item>
 
          <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
-          <!-- <el-date-picker
-            type="date"
-            format="yyyy 年 MM 月"
-            value-format="yyyy-MM-dd">
-          </el-date-picker> -->
           <el-date-picker
+            v-model="ruleForm.qualificationEffectEnddate"
+            type="date"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择证书有效期">
+          </el-date-picker>
+          <!-- <el-date-picker
             v-model="ruleForm.qualificationEffectEnddate"
             type="month"
             format="yyyy 年 MM 月"
             value-format="yyyy-MM"
             placeholder="请选择证书有效期">
-          </el-date-picker>
+          </el-date-picker> -->
         </el-form-item>
 
         <el-form-item label-width="150px" label="企业法人:" prop="legalPerson">
@@ -129,24 +130,35 @@
           <el-input v-model.trim="ruleForm.idNum" clearable placeholder="请输入法人身份证号"></el-input>
         </el-form-item>
         
-        <el-form-item label-width="150px" label="法人证照:" prop="PhotoList" style="border:none">
+        <el-form-item label-width="150px" label="法人证照:" prop="PhotoList" class="w100" style="border:none">
           <img 
             alt="" 
             class="imgWrap"
-            v-for="(ele, index2) in PhotoList"
-            :key="index2+ele"
+            v-for="(ele, index2) in ruleForm.facePhoto"
+            :key="index2+ele.url"
             :src="ele.url" 
             @click="handlePreviewImg(ele.url)">
           <span 
             class="btn"
-            @click="handleUploadModal(PhotoList,2)">&nbsp;&nbsp;点击上传&nbsp;&nbsp;</span>
+            @click="handleUploadModal(ruleForm.facePhoto,1)">&nbsp;身份证正面&nbsp;</span>
+          <!-- 身份证反面 -->
+          <img 
+            alt="" 
+            class="imgWrap"
+            v-for="(ele, index2) in ruleForm.backPhoto"
+            :key="index2+ele.url"
+            :src="ele.url" 
+            @click="handlePreviewImg(ele.url)">
+          <span 
+            class="btn"
+            @click="handleUploadModal(ruleForm.backPhoto,1)">&nbsp;身份证反面照&nbsp;</span>
         </el-form-item>
       </el-form>
     </div>
 
     <div class="footerBtn">
-      <span class="btn" style="margin-right:20px" @click="handleGoBack">返 回</span>
-      <span class="btn" @click="handleConfirmButtonClick">注 册</span>
+      <span class="btn" style="margin-right:20px padding: 8px 26px;font-size: 16px;" @click="handleGoBack">返 回</span>
+      <span class="btn" style="padding: 8px 26px;font-size: 16px;" @click="handleConfirmButtonClick">注 册</span>
       <p class="center lineHeight30 padTop22 cRed">审核通过后发送短信或电话通知，请留意信息与接听</p>
     </div>
 
@@ -264,9 +276,11 @@ export default {
       oldInfor:{},
       loading:false,
       ruleForm:{
+        // 企业名称
+        name:'',
         // 企业id
         customerId:'',
-        // 统一信用代码
+        // 统一社会信用代码
         creditCode:'',
         // 联系电话
         contactTel:'',
@@ -297,48 +311,45 @@ export default {
         // 法人身份证号
         idNum:'',
         
-        
-
-        // +++++  需要拆分合并的++++++++
-        // 身份证正面照
-        facePhoto:'',
-        // 身份证反面照
-        backPhoto:'',
-        
-
         // ++++++++++++   数据类型转换的++++++++++
         // 营业执照
-        businessLicense:[ {
-            name:'1',
-            url:imgUrl
-        }],
-        // 施工资质证书url
-        qualificationPhoto:[
+        businessLicense:[ 
           // {
           //   name:'1',
           //   url:imgUrl
           // }
         ],
-        
-       
-      },
-      
-      // 法人证照 要替换的 监听事件绑定   身份证正面照 facePhoto:''  身份证反面照  backPhoto:'',
-      PhotoList:[
-        {
-          name:'1',
-          url:imgUrl
-        }
-      ],
+        // 身份证正面照
+        facePhoto:[ 
+          // {
+          //   name:'1',
+          //   url:imgUrl
+          // }
+        ],
+        // 身份证反面照
+        backPhoto:[ 
+          // {
+          //   name:'1',
+          //   url:imgUrl
+          // }
+        ],
+        // 施工资质证书url
+        qualificationPhoto:[ 
+          // {
+          //   name:'1',
+          //   url:imgUrl
+          // }
+        ],
+      }, 
 
       rules: {
         // 企业营业执照
         businessLicense:[
           { required: true, message: '请上传企业营业执照图片', trigger: 'change' },
         ],
-        // 统一信用代码
+        // 统一社会信用代码
         creditCode:[
-          { required: true, message: '请输入统一信用代码', trigger: 'change' },
+          { required: true, message: '请输入统一社会信用代码', trigger: 'change' },
         ],
         // 电话
         contactTel:[
@@ -411,8 +422,6 @@ export default {
       qualificationUnitData:[],
       // 施工资质或施工能力等级评价列表
       qualificationGradeData:[],
-     
-     
       // 预览弹窗
       dialogTablePreview: false,
       // 确定注册弹窗
@@ -438,10 +447,7 @@ export default {
     };
   },
 
-  mounted() {
-    
-    
-  },
+  mounted() {},
   watch:{},
 
   created() {
@@ -449,48 +455,49 @@ export default {
     if(date){
       this.oldInfor = JSON.parse(date)
       this.ruleForm.customerId = this.oldInfor.customerId ? this.oldInfor.customerId : ''
+      this.ruleForm.name = this.oldInfor.customerName
       this.ruleForm.contactPhone = this.oldInfor.mobile
     }
     // 获取公用列表
     this.init()
-    // console.log(OSS,'OSS')
-    
-    // Api.fileUploadBase64(param).then(res => {
-    //   let  {code, name , url} = res
-    //   if(code ==200){
-        
-    //     _this.contractFileURLs.push({
-    //       "name":name,
-    //       "url":url
-    //     })
-    //   }
-    
-    // }).catch( error => {
-    //   _this.$message({
-    //     message: '照片上传失败！',
-    //     type: 'error'
-    //   });
-    //   loading.close();
-    //   // 请求错误时 应该删除
-    //   _this.removeUplodFileList(content.file.name);
-    // })
   },
 
   methods: {
     init(){
+      // 获取企业信息, 未登录时
+      this.handeGetCustomerDetailByLoginUser()
       // 根据层级获取行政区域, 0为省级, 1为市级
       this.handleGetListByLevel(0)
       // 施工资质发放单位接口
       this.handleGetDictionaryList1()
       // 施工资质证书等级接口 
       this.handleGetDictionaryList2()
-
-
-
     },
+
+    // 获取企业信息, 未登录时
+    handeGetCustomerDetailByLoginUser(){
+      let param = {
+        customerName:this.ruleForm.name
+      }
+      Api.getCustomerDetailByName(param).then(res => {
+        let  {code, data , msg, total} = res
+        if(code == 200) {
+          // 企业id
+          ruleForm.customerId = data.customerId
+        }
+      }).catch( error => { 
+      })
+    },
+    
+    // 上传照片 点击弹窗
+    handleUploadModal(row,maxNum){
+      this.maxNum = maxNum;
+      this.contractFileURLs = row
+      this.dialogUploadModal = true;
+    },
+
     // 阿里云上传服务端签名接口
     handleGetAliyunOssSign(file){
-      console.log(file,'上传图片信息')
       Api.getAliyunOssSign().then(res => {
         // let {accessid, policy, signature, dir, host, expire } = res.data
         let {accessKeySecret, assessKeyId, bucket, path, region, stsToken } = res.data
@@ -504,24 +511,24 @@ export default {
         });
         // 上传到阿里云
         let name = new Date().getTime() + '';
-        let suffix = file.name.substr(file.name.lastIndexOf(".") + 1); 
-        // console.log(`${path}/${name}.${suffix}`)   
+        let suffix = file.name.substr(file.name.lastIndexOf(".") + 1);  
         client.multipartUpload(`${path}/${name}.${suffix}`, file, {
             progress: function* (percentage) {}
         })
           .then(res => {
             let imgUrl = `https://${bucket}.${region}.aliyuncs.com/${res.name}`;
-            console.log(imgUrl,'wwwww')
-
-            // let imgUrl = `${host}/${dir}/${res.name}`;
-            // this.uploadUrlList.push(imgUrl);
-
-            console.log(res,'wwwww')
-              // 上传到本地服务器
-            
+            this.contractFileURLs.push({
+              "name":name,
+              "url":imgUrl
+            })
           })
           .catch(err => {
-            console.log(err)
+            this.$message({
+              message: '照片上传失败！',
+              type: 'error'
+            });
+            // 请求错误时 应该删除
+            this.removeUplodFileList(file.name);
         });
         
       }).catch( error => { 
@@ -587,8 +594,15 @@ export default {
       this.ruleForm.cityName = item.name 
     },
 
-
-
+    // 确定注册点击事件 
+    handleConfirmButtonClick(){
+      // 提交验证函数
+      if(!this.handleSubmitValidation()){
+        return
+      }
+      // 确认注册弹窗显示
+      this.dialogSubmitModal = true
+    },
 
     // 提交验证函数
     handleSubmitValidation(){
@@ -608,44 +622,30 @@ export default {
       return onOff
     },
 
-    // 确定注册点击事件 
-    handleConfirmButtonClick(){
-      // 提交验证函数
-      if(!this.handleSubmitValidation()){
-        return
-      }
-      // 确认注册弹窗显示
-      this.dialogSubmitModal = true
-    },
 
     // 弹窗确定点击提交
     handleSubmit(){
       let param = Object.assign({},JSON.parse(JSON.stringify(this.ruleForm))) 
       // console.log(param,'param')
       this.loading = true;
-      // return
-      Api.invoicerrManager_saveInvoice(param).then(res => {
+      param.backPhoto = param.backPhoto.length ? param.backPhoto[0].url :''
+      param.facePhoto = param.facePhoto.length ? param.facePhoto[0].url :''
+      param.businessLicense = param.businessLicense.length ? param.businessLicense[0].url :''
+      param.qualificationPhoto = param.qualificationPhoto.length ? param.qualificationPhoto[0].url :''
+      
+      // return  
+      Api.subUserCustomerComplete(param).then(res => {
         this.loading = false;
         this.dialogSubmitModal = false
         let  {code, data , msg, total} = res
         if(code == 200) {
           this.$message({
-            message: msg,
+            message: '注册成功请耐心等待平台审核',
             type: 'success'
           });
-          setTimeout(() => {
-            this.handleGoBack()
-          }, 1500);
-          // 清空数据
-          // this.$refs['ruleForm'].resetFields();
-          // this.contractFileURLs = []
-        }else{
-          this.loading = false;
-          this.dialogSubmitModal = false,
-          this.$message({
-            message: msg ? msg : '提交失败！',
-            type: 'error'
-          });
+          // setTimeout(() => {
+          //   this.handleGoBack()
+          // }, 1500);
         }
       }).catch( error => {
         this.loading = false;
@@ -654,17 +654,13 @@ export default {
         
       })
     },
-
-  
-    
    
     // 返回
     handleGoBack(){
-      // this.$router.push({
-      //   name:'query',
-      // })
-      // this.$router.go(-1)
-      this.$router.back(-1)
+      this.$router.push({
+        name:'login',
+      })
+      // this.$router.back(-1)
     },
 
     // 图片预览
@@ -672,18 +668,7 @@ export default {
       this.PreviewImgUrl = imgUrl.url || imgUrl ;
       this.dialogTablePreview = true
     },
-    // 上传照片 点击弹窗
-    handleUploadModal(row,maxNum){
-      this.maxNum = maxNum;
-      // console.log(row,'上传照片 点击弹窗')
-      this.contractFileURLs =  row
-      // setTimeout(()=>{
-      //   this.dialogUploadModal = true;
-      // },300)
-      this.dialogUploadModal = true;
-      
-      
-    },
+
 
     // 上传时再次校验数据 限制类型、大小
     onBeforeUpload(file){
@@ -712,7 +697,6 @@ export default {
           });
     },
 
-    
     // 自定义上传
     myUpload(content) {
       let _this =this;
@@ -796,6 +780,7 @@ export default {
 </script>
 <style lang="scss">
 .perfectInformation{
+  
   width:975px;
   margin: 0 auto;
   .el-form--inline .el-form-item{width: 100%; min-width: 300px;}
@@ -808,6 +793,10 @@ export default {
       max-width: 600px;
       line-height: 36px;
       vertical-align: bottom;
+  }
+  .el-form-item--medium.w100 .el-form-item__content {
+      width: 100%;
+      max-width: 100;
   }
   .el-select.w40 {
     width: 110px;
@@ -850,6 +839,7 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+
   @import './perfectInformation.scss';
   .el-upload-list--picture-card .el-upload-list__item-actions {
     transition:0;
@@ -861,5 +851,6 @@ export default {
     padding-bottom: 20px;
     margin: 0;
     min-width: 300px;
+    
   }
 </style>

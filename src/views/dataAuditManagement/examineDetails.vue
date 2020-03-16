@@ -1,4 +1,4 @@
-// 公司详情 companyManagementdetails  
+// 注册资料审核/编辑注册资料详情 companyManagementdetails  
 <template>
   <div class="contentWrap companyManagementdetails" v-loading="loading">
     <div class="contWrap">
@@ -6,10 +6,10 @@
         <div class="borderbot1">
           <el-form-item label-width="150px" label="状态:" class="relative w100">
             <span class="btns btn10 left160" @click="handleGoBack">返回</span>
-            <span class="cRed mrLeeft30">{{ruleForm.status ==0 ? '新注册，等待完善资料' : 
-                                           ruleForm.status ==1 ? '待审核' :
-                                           ruleForm.status ==2 ? '已审核通过' :
-                                           ruleForm.status ==3 ? '审核不通过' : ''}}</span>
+            <span class="cRed mrLeeft30">{{newForm.status ==0 ? '新注册，等待完善资料' : 
+                                           newForm.status ==1 ? '待审核' :
+                                           newForm.status ==2 ? '已审核通过' :
+                                           newForm.status ==3 ? '审核不通过' : ''}}</span>
 
           </el-form-item>
         </div>
@@ -26,15 +26,15 @@
         
 
         <!-- 分状态显示 -->
-        <div class="borderbot1">
+        <!-- <div class="borderbot1">
           <el-form-item label-width="150px" label="注册手机号:">
             <span class="inlineBlock">{{ruleForm.registerPhone}}</span>
           </el-form-item>
-          <!-- 更新后的 -->
+          更新后的 
           <el-form-item v-show="newForm.registerPhone" label-width="150px" label="注册手机号:">
             <span class="inlineBlock cRed">{{newForm.registerPhone}}</span>
           </el-form-item>
-        </div>
+        </div> -->
         
         <div class="borderbot1">
           <el-form-item label-width="150px" label="统一社会信用代码:">
@@ -140,22 +140,22 @@
           </el-form-item>
         </div>
 
-        <!-- <div class="borderbot1">
+        <div class="borderbot1">
           <el-form-item label-width="150px" label="上海市装饰装修行业协会会员证书号:">
             <span class="inlineBlock">{{ruleForm.certificateNum}}</span>
           </el-form-item>
-          // 更新后的 
-          <el-form-item label-width="150px" :label="newForm.certificateNum ? '上海市装饰装修行业协会会员证书号:' : ''">
+          <!-- 更新后的  -->
+          <el-form-item v-show="newForm.certificateNum" label-width="150px" label="上海市装饰装修行业协会会员证书号:">
             <span class="inlineBlock cRed">{{newForm.certificateNum}}</span>
           </el-form-item>
-        </div> -->
+        </div>
 
         <div class="borderbot1">
           <el-form-item label-width="150px" label="施工资质发放单位:">
             <span class="inlineBlock">{{ruleForm.qualificationUnit}}</span>
           </el-form-item>
           <!-- 更新后的 -->
-          <el-form-item v-show="newForm.qualificationUnit" label-width="150px" label="'施工资质发放单位:">
+          <el-form-item v-show="newForm.qualificationUnit" label-width="150px" label="施工资质发放单位:">
             <span class="inlineBlock cRed">{{newForm.qualificationUnit}}</span>
           </el-form-item>
         </div>
@@ -190,6 +190,8 @@
           </el-form-item>
         </div>
 
+        
+
         <div :class="(ruleForm.status == 3 || ruleForm.status == 1 )? 'borderbot1' : ''">
           <el-form-item label-width="150px" label="施工资质证书:">
             <img 
@@ -211,27 +213,19 @@
 
         
         <!-- 审核不通过时候显示 -->
-        <div v-if="ruleForm.status == 3" class="borderbot1">
+        <div v-if="newForm.status == 3" class="borderbot1">
           <el-form-item  label-width="150px" label="审核意见:">
-            <span class="inlineBlock">{{ruleForm.refuseType}}</span>
-            <p>{{ruleForm.refuseReason}}</p>
+            <span class="inlineBlock">{{newForm.refuseType}}</span>
+            <p>{{newForm.refuseReason}}</p>
           </el-form-item>
         </div>
 
-        <div v-if="ruleForm.status == 1" class="borderbot1">
-          <el-form-item  label-width="150px" label=" ">
-            <el-checkbox-group v-model="form.isDemoSite">
-              <el-checkbox label="1" name="isDemoSite">有示范工地资格</el-checkbox>
-              <!-- <el-checkbox label="0" name="isDemoSite">无示范工地资格</el-checkbox> -->
-            </el-checkbox-group>
-          </el-form-item>
-        </div>
        
       </el-form>
       
     </div>
 
-    <div class="footerBtn" v-if="ruleForm.status == 1">
+    <div class="footerBtn" v-if="newForm.status == 1">
       <span class="btns btn10" style="margin-right:20px" @click="handleAuditPassBtnClick">审核通过</span>
       <span class="btns btn10"  @click="handleRefuseToPassBtnClick">审核不通过</span>
       <!-- <p class="center lineHeight30 padTop22 cRed">审核通过后发送短信或电话通知，请留意信息与接听</p> -->
@@ -269,7 +263,7 @@
         <div class="fl w300">
           <el-select v-model="form.refuseType" placeholder="请选择">
             <el-option
-              v-for="(item,index) in rejectList"
+              v-for="item in rejectList"
               :key="item.dictionaryId"
               :label="item.name"
               :value="item.name">
@@ -319,14 +313,14 @@ export default {
       form:{
         // 企业id
         customerId:'',
+
+        id:'',
         // 拒绝下拉框，审核通过时可不传
         refuseType:'',
         // 拒绝原因，审核通过时可不传
         refuseReason:'',
         // 状态：2(已审核通过),3(审核不通过)
         status:'',
-        // 是否示范工地：1是，0否
-        isDemoSite:[]
       },
       
      
@@ -348,6 +342,7 @@ export default {
   created() {
     // 企业id 
     this.form.customerId = this.$route.query.customerId;
+    this.form.id = this.$route.query.id;
     this.init();
   },
 
@@ -362,12 +357,30 @@ export default {
 
     // 获取详情
     handleGetDetail(){
-      let param = this.form.customerId;
-      Api.getCustomerGetById(param).then(res => {
+      let param = {
+        customerId: this.form.customerId,
+        id: this.form.id,
+      }
+      Api.getCustomerUpdateRecordDetail(param).then(res => {
         let  {code, data , msg, total} = res
         if(code == 200) {
-          this.ruleForm = data
-          // this.newForm = Object.assign({},JSON.parse(JSON.stringify(data)))
+          // 没修改的
+          this.ruleForm = data.customer
+          // 修改的
+          this.newForm = data.customerUpdate  
+          // this.newForm = {
+          //   status:'1',
+          //   "registerPhone": "13877777777",
+          //   "businessLicense": "111",
+          //   "name": "修改名称",
+          //   "creditCode": "修改统一信用代码",
+          //   "legalPerson": "修改法人",
+          //   "idNum": "1111111111",
+          //   "facePhoto": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584386750839&di=a6c7f0c9e0ab80632153843eaa1a599f&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg",
+          //   "backPhoto": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584386750839&di=e0098794ee6fe736c35ac2e8c48c09e4&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F14%2F75%2F01300000164186121366756803686.jpg",
+          //   "contactTel": "",
+          //   "contactPhone": ""
+          // }
         }
       }).catch( error => {
         
@@ -403,18 +416,12 @@ export default {
     // 弹窗审核通过提交
     handleSubmit(){
       let param = {
-        customerId:this.form.customerId,
+        id:this.form.id,
         // 状态：2(已审核通过),3(审核不通过)
         status:2,
-        isDemoSite:''
       }
-      if(this.form.isDemoSite.length){
-        param.isDemoSite = 1
-      }else{
-        param.isDemoSite = 0
-      }
-      // console.log(param)
-      Api.subCustomerAudit(param).then(res => {
+      // return console.log(param)
+      Api.subCustomerUpdateRecordAudit(param).then(res => {
         this.dialogSubmitModal = false
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -433,7 +440,7 @@ export default {
     // 弹窗拒绝提交
     handleRefuseToPassSubmit(){
       let param = {
-        customerId:this.form.customerId,
+        id:this.form.id,
         // 状态：2(已审核通过),3(审核不通过)
         status:3,
         refuseType:this.form.refuseType,
@@ -452,7 +459,8 @@ export default {
             type: 'warning'
           });
       }
-      Api.subCustomerAudit(param).then(res => {
+      // return console.log(param)
+      Api.subCustomerUpdateRecordAudit(param).then(res => {
         this.dialogRefuseToPassModal = false
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -479,6 +487,8 @@ export default {
       this.PreviewImgUrl = imgUrl.url || imgUrl ;
       this.dialogTablePreview = true
     },
+    
+    
   },
   computed: {}
 }
@@ -488,10 +498,7 @@ export default {
   min-width:900px;
   margin: 0 auto;
 
-  .el-form--inline .el-form-item{
-    width: 49%; 
-    width: 95%;
-    margin: 0; min-width: 300px;}
+  .el-form--inline .el-form-item{width: 49%; margin: 0;; min-width: 300px;}
   .el-form--inline .el-form-item.w100{
     width: 100%;
   }
@@ -508,15 +515,12 @@ export default {
       line-height: 36px;
       // vertical-align: bottom;
   }
- 
-  
-  
 }
 
 </style>
 
 <style lang="scss" scoped>
-  @import './companyManagement.scss';
+  @import '../companyManagement/companyManagement.scss';
   .companyManagementdetails{
     .el-form--inline .el-form-item{
       // border-bottom: 1px dashed #ccc;

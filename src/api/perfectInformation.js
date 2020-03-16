@@ -68,6 +68,14 @@ export function getAliyunOssSign(data) {
   })
 }
 // ++++++++++++++++客户公司端+++++++++++++++++++++ 
+// 获取企业信息, 未登录时  /admin/a/user/customer/detail-by-name
+export function getCustomerDetailByName(data) {
+  return request({
+    url: '/admin/a/user/customer/detail-by-name',
+    method: 'post',
+    data
+  })
+}
 
 // 完善资料-提交  
 export function subUserCustomerComplete(data) {

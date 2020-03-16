@@ -34,20 +34,20 @@ service.interceptors.request.use(
     // 统一携带tooken
 
     // 本地备用admin token  
-    let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY3Nzk2MjksInVzZXJfbmFtZSI6ImFkbWlufCIsImF1dGhvcml0aWVzIjpbIlJPTEVfTUFOQUdFUiJdLCJqdGkiOiJjYjQ2MDBiYS05OGYyLTQ1ZDQtYmZiYy03ZmM0MDQ2YjBkZTIiLCJjbGllbnRfaWQiOiJobGwtcGxhdGZvcm0tYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.gRSUGdu53ctIvt2Ogx6KOPsENQgFjQwbloMvovsRRVc'
-    if (token) {
-      config.headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      }
-    }
-    // 正常线上的
-    // if (getToken()) {
+    // let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY3Nzk2MjksInVzZXJfbmFtZSI6ImFkbWlufCIsImF1dGhvcml0aWVzIjpbIlJPTEVfTUFOQUdFUiJdLCJqdGkiOiJjYjQ2MDBiYS05OGYyLTQ1ZDQtYmZiYy03ZmM0MDQ2YjBkZTIiLCJjbGllbnRfaWQiOiJobGwtcGxhdGZvcm0tYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.gRSUGdu53ctIvt2Ogx6KOPsENQgFjQwbloMvovsRRVc'
+    // if (token) {
     //   config.headers = {
     //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer ' + getToken()
+    //     'Authorization': 'Bearer ' + token
     //   }
     // }
+    // 正常线上的
+    if (getToken()) {
+      config.headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + getToken()
+      }
+    }
 
     return config
   },
@@ -103,12 +103,20 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    let res = error.response.data;
+
     Message({
-      message: error.message || error.msg || '请求超时',
+      message: res.message || res.msg || "请求超时",
       type: 'error',
       duration: 3 * 1000
     })
+
+    // console.log('err.data' + error) // for debug
+    // Message({
+    //   message: error.message || error.msg || '请求超时',
+    //   type: 'error',
+    //   duration: 3 * 1000
+    // })
     return Promise.reject(error)
   }
 )

@@ -7,15 +7,15 @@ const componentsRouter = [
   // +++++++++++++++++++++++  客户端  ++++++++++++++++++++++++//
   // 编辑注册资料
   {
-    path: '/registrationInforMange',
+    path: '/registrationInforMangeList',
     component: Layout,
-    redirect: '/registrationInforMange/index', // 重定向
-    name: 'registrationInforMange',
+    redirect: '/registrationInforMange', // 重定向
+    name: 'registrationInforMangeList',
     meta: { title: '', icon: 'chart' },
     hidden: false,
     children: [
       {
-        path: '/registrationInforMange/index',
+        path: '/registrationInforMange',
         component: () => import('@/views/registrationInforMange/index'),
         // name: 'page',
         name: 'registrationInforMange',
@@ -30,15 +30,15 @@ const componentsRouter = [
   // ++++++++++++++++++++++++   后台登录  +++++++++++++++++++++++++++++//
   // 首页 - 公司管理
   {
-    path: '/companyManagement',
+    path: '/companyManagementList',
     component: Layout,
-    redirect: '/companyManagement/index', // 重定向
-    name: 'companyManagement',
+    redirect: '/companyManagement', // 重定向
+    name: 'companyManagementList',
     meta: { title: '公司管理', icon: 'chart' },
     hidden: false,
     children: [
       {
-        path: '/companyManagement/index',
+        path: '/companyManagement',
         component: () => import('@/views/companyManagement/index'),
         // name: 'page',
         name: 'companyManagement',
@@ -47,7 +47,7 @@ const componentsRouter = [
         // children: []
       },
       {
-        path: '/companyManagement/auditDetails',
+        path: '/companyManagement_auditDetails',
         component: () => import('@/views/companyManagement/auditDetails'),
         // name: 'page',
         name: 'companyManagement_auditDetails',
@@ -60,17 +60,16 @@ const componentsRouter = [
   },
   // 注册资料审核 dataAuditManagement
   {
-    path: '/dataAuditManagement',
+    path: '/dataAuditManagementList',
     component: Layout,
-    redirect: '/dataAuditManagement/index', // 重定向
-    name: 'dataAuditManagement',
+    redirect: '/dataAuditManagement', // 重定向
+    name: 'dataAuditManagementList',
     meta: { title: '注册资料审核', icon: 'chart' },
     hidden: false,
     children: [
       {
-        path: '/dataAuditManagement/index',
+        path: '/dataAuditManagement',
         component: () => import('@/views/dataAuditManagement/index'),
-        // name: 'page',
         name: 'dataAuditManagement',
         // meta: { title: '编辑注册资料审核' },
         meta: { title: '注册资料审核' },
@@ -78,11 +77,12 @@ const componentsRouter = [
         // children: []
       },
       {
-        path: '/dataAuditManagement/auditDetails',
-        component: () => import('@/views/companyManagement/auditDetails'),
+        path: '/dataAuditManagement_auditDetails',
+        component: () => import('@/views/dataAuditManagement/examineDetails'),
         // name: 'page',
         name: 'dataAuditManagement_auditDetails',
-        meta: { title: '编辑注册资料详情' },
+        meta: { title: '编辑注册资料详情',},
+        // meta: { title: '编辑注册资料详情', noCache: true, activeMenu: '/dataAuditManagementList' },
         hidden: true,
         // children: []
       },

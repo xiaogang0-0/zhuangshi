@@ -69,15 +69,22 @@
             </el-form-item>
 
             <p class="pd60">验证码</p>
-            <el-form-item prop="code" class="verificationCode">
+            <el-form-item prop="verifyCode" class="verificationCode">
              <el-input
-                ref="code"
-                v-model="loginForm.code"
+                ref="verifyCode"
+                v-model="loginForm.verifyCode"
                 placeholder="请输入验证码"
-                name="verificationCode"
+                name="verifyCode"
                 type="text"
               />
-              <span class="cblue cursor">获取验证码</span>
+              
+              <span 
+                v-show="!isActive"
+                class="cblue cursor"
+                @click="handleTime">获取验证码</span>
+              <span 
+                v-show="isActive"
+                class="cblue">{{num ? num + 's': ''}}</span>
             </el-form-item>
 
             <el-button :loading="loading" type="primary" 
@@ -134,6 +141,7 @@ export default {
         callback()
       }
     }
+
     const validatePassword = (rule, value, callback) => {
       let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
       if (this.loginForm.password1 != this.loginForm.password ){
@@ -143,15 +151,13 @@ export default {
       }
     }
     
-    // const validateCode = (rule, value, callback) => {
-    //   if (!value.length ){
-    //     callback(new Error('验证码不能为空'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     return {
+      // 是否进行了点击操作
+      isActive:false,
+      num:59,
       loginForm: {
+        // 注册时(register), 登录时(login), 找回密码时(update-password), 修改资料时(update-customer)
+        sendType:'register',
         // 企业id
         customerId:'',
         // 企业名称
@@ -163,14 +169,14 @@ export default {
         // 手机号
         mobile:'',
         // 验证码
-        code:'',
+        verifyCode:'',
       },
       loginRules: {
         customerName: [{ required: true, trigger: 'blur', validator: validateUsername}],
         password1: [{ required: true, trigger: 'blur', validator: validatePassword1 }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword}],
         mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber}],
-        // code: [{ required: true, trigger: 'blur', message: '验证码不能为空'}]
+        // verifyCode: [{ required: true, trigger: 'blur', message: '验证码不能为空'}]
       },
       loading: false,
       passwordType: 'password',
@@ -193,11 +199,55 @@ export default {
       this.$refs.password.focus()
     }else if (this.loginForm.mobile === '') {
       this.$refs.mobile.focus()
-    }else if (this.loginForm.code === '') {
-      this.$refs.code.focus()
+    }else if (this.loginForm.verifyCode === '') {
+      this.$refs.verifyCode.focus()
     }
   },
   methods: {
+    // 倒计时
+    handleTime(){
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.isActive = true;
+          // 获取验证码
+          this.handeleGetVerifyCode();
+          let timer = setInterval(()=>{
+            if(this.num < 1){
+              this.isActive = false;
+              this.num =59
+              clearInterval(timer)
+            }
+            this.num--
+          },1000)
+        } else {
+          // console.log('请输入账号密码')
+          return false
+        }
+      })
+    },
+
+    // 获取验证码
+    handeleGetVerifyCode(){
+      let param = {
+        sendType:this.loginForm.sendType,
+        mobile:this.loginForm.mobile
+      };
+      // 平台用户带参数
+      let param1 ={customerName:''}
+      // if(this.userType == 1){
+      //   param1.customerName = this.loginForm.customerName
+      // }
+      Api.getSendVerifyCode(param,param1).then(res => {
+        if(res.code == 200) {
+          this.$message({
+            message: '验证码已发送至'+ this.loginForm.mobile +'上请注意查收',
+            type: 'success'
+          });
+        }
+      }).catch( error => {
+      })
+    },
+
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -212,10 +262,17 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          if(!this.loginForm.verifyCode){
+            return this.$message({
+              message: '验证码不能为空!',
+              type: 'warning'
+            });
+          }
           this.loading = true
           var param = Object.assign({},this.loginForm) 
           delete param.password1
-          delete param.code
+          delete param.sendType
+          // delete param.verifyCode
           
           Api.registerSub(param).then(res => {
             this.loading = false;
@@ -291,7 +348,7 @@ $light_gray:#eee;
 
 .pdt0 {padding-top: 0;}
 .cblue{ color: #1890ff;}
-.cursor{cursor:pointer;}
+.cursor{cursor:pointer; display: inline-block;}
 
 .verificationCode .el-input{
   width: 190px;
