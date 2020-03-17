@@ -166,6 +166,7 @@ export default {
   },
   watch: {},
   created() {
+    console.log(17601001098,'快1111111')
   },
   computed: {
     ...mapGetters([

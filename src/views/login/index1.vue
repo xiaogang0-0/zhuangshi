@@ -126,7 +126,7 @@ export default {
   },
   watch: {},
   created() {
-    
+    console.log('admin','快1111111')
   },
   computed: {
     ...mapGetters([

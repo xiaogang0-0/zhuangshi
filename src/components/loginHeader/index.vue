@@ -3,11 +3,8 @@
   <div class="loginHeader">
     <h2 class="fl name">上海住宅装饰一网通</h2>
     <nav class="fr navList">
-      <!-- <a href="javascript:;">上海装饰首页</a> -->
-      
       <a href="javascript:;" @click="handleGoLogin">企业登录</a>
       <a href="javascript:;" @click="handleGoRegister">企业注册</a>
-      <!-- <a href="javascript:;">帮助</a> -->
     </nav>
     
   </div>
