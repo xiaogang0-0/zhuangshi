@@ -6,8 +6,9 @@
 
     <div class="contWrap" >
       <div class="contHead">完善注册信息</div>
-      <p class="center lineHeight30 padBot10 cRed">非上海市装饰装修行业协会会员的企业完善企业资料前，需要通过电话：021-52375377 办理入会成为会员，再在线提交完善企业资料信息。</p>
-      <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <p class="center lineHeight30 cRed">非上海市装饰装修行业协会会员的企业完善企业资料前，需要通过电话：021-52375377 办理入会成为会员，再在线提交完善企业资料信息。</p>
+      <el-form :model="ruleForm" sizi="mini" :inline="true" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+        <h2 class="itemTitle">企业基本资料：</h2>
         <el-form-item label-width="150px" label="企业营业执照:" prop="businessLicense" >
           <img 
             alt="" 
@@ -63,8 +64,9 @@
         <el-form-item label-width="150px" label="上海市装饰装修行业协会会员证书号:" prop="certificateNum">
           <el-input v-model.trim="ruleForm.certificateNum" clearable placeholder="输入证书编号" class="w113"></el-input>
         </el-form-item>
+        <h2 class="itemTitle">资质信息：</h2>
 
-         <el-form-item label-width="150px" label="上传施工资质证书:" prop="qualificationPhoto" >
+        <el-form-item label-width="150px" label="上传施工资质证书:" prop="qualificationPhoto" >
           <img 
             alt="" 
             class="imgWrap"
@@ -811,6 +813,14 @@ export default {
       margin-right: 12px;
     }
   }
+  .itemTitle {
+    font-size: 16px;
+    font-weight: 800;
+    padding: 8px;
+    color: #000;
+    color: #2E74D1;
+
+  }
   .loginHeader {
     background-color: #2E74D1;
     color: #fff;
@@ -880,10 +890,9 @@ export default {
   .perfectInformation .el-form--inline .el-form-item {
     width: 100%;
     border-bottom: 1px dashed #ccc;
-    padding: 12px 0;
+    padding: 8px 0;
     padding-bottom: 20px;
     margin: 0;
     min-width: 300px;
-    
   }
 </style>
