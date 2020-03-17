@@ -1,8 +1,6 @@
 // 编辑注册资料 registrationInforMange
 <template>
   <div class="contentWrap registrationInforMange">
-    
-    
     <div class="contWrap" >
       <!-- <p class="statusTit">状态：<span class="cRed">审核通过</span></p> -->
       <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="demo-ruleForm">
@@ -64,32 +62,43 @@
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status5')">编辑</span>
         </el-form-item>
         
-        <el-form-item label-width="150px" label="法人证照:" prop="PhotoList">
-           <img 
-            alt="" 
-            class="imgWrap"
-            v-for="(ele, index2) in ruleForm.facePhoto"
-            :key="index2+ele.url"
-            :src="ele.url" 
-            @click="handlePreviewImg(ele.url)">
-           <span 
-            v-if="editStatus.status6"
-            class="btn"
-            @click="handleUploadModal(ruleForm.facePhoto,1)">&nbsp;点击更换正面&nbsp;</span>
-            <!-- 身份证反面 -->
+        <el-form-item label-width="150px" label="法人证照:" prop="PhotoList" class="imgBtnWrap" >
+          <div class="imgItem">
             <img 
-            alt="" 
-            class="imgWrap"
-            v-for="(ele, index2) in ruleForm.backPhoto"
-            :key="index2+ele.url"
-            :src="ele.url" 
-            @click="handlePreviewImg(ele.url)">
-          <span 
-            v-if="editStatus.status6"
-            class="btn"
-            @click="handleUploadModal(ruleForm.backPhoto,1)">&nbsp;点击更换反面&nbsp;</span>
+              alt="" 
+              class="imgWrap"
+              v-for="(ele, index2) in ruleForm.facePhoto"
+              :key="index2+ele.url"
+              :src="ele.url" 
+              @click="handlePreviewImg(ele.url)">
+
+            <p>
+              <span 
+              v-if="editStatus.status6"
+              class="btn"
+              @click="handleUploadModal(ruleForm.facePhoto,1)">&nbsp;点击更换正面&nbsp;</span>
+            </p>
+          </div>
+          <!-- 身份证反面 -->
+          <div class="imgItem">
+            <img 
+              alt="" 
+              class="imgWrap"
+              v-for="(ele, index2) in ruleForm.backPhoto"
+              :key="index2+ele.url"
+              :src="ele.url" 
+              @click="handlePreviewImg(ele.url)">
+            <p>
+              <span 
+              v-if="editStatus.status6"
+              class="btn"
+              @click="handleUploadModal(ruleForm.backPhoto,1)">&nbsp;点击更换反面&nbsp;</span>
+              <span v-else class="inlineBlock"></span>
+            </p>
+          </div>
+            
           
-          <span v-else class="inlineBlock"></span>
+          
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status6')">编辑</span>
           
         </el-form-item>
@@ -169,7 +178,7 @@
         </el-form-item>
 
         <el-form-item label-width="150px" label="施工资质证书编号:" prop="qualificationNum">
-          <el-input v-if="editStatus.status11" v-model.trim="ruleForm.qualificationNum" clearable placeholder="上海市装饰装修行业协会会员证书号"></el-input>
+          <el-input v-if="editStatus.status11" v-model.trim="ruleForm.qualificationNum" clearable placeholder="输入证书编号"></el-input>
           <span v-else class="inlineBlock">{{ruleForm.qualificationNum}}</span>
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status11')">编辑</span>
         </el-form-item>
@@ -974,6 +983,16 @@ export default {
 .registrationInforMange{
   min-width:900px;
   margin: 0 auto;
+
+  .imgBtnWrap {
+    overflow: hidden;
+    .el-form-item__label {vertical-align: top;}
+    .imgItem {
+      float: left;
+      text-align: center;
+      margin-right: 12px;
+    }
+  }
   
   .el-form--inline .el-form-item{width: 100%; min-width: 300px;}
   .el-autocomplete{
@@ -991,7 +1010,7 @@ export default {
     width: 110px;
   }
   .el-form--inline .el-input.w30 {
-    width: calc(100% - 228px);
+    width: calc(100% - 230px);
   }
   .el-form--inline .el-input.w111 {
     width: 80px;

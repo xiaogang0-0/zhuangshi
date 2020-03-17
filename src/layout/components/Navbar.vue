@@ -3,7 +3,7 @@
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    <!-- <h2 class="fl title">上海装饰一网通系统 &nbsp;&nbsp; 
+    <!-- <h2 class="fl title">上海装饰一网通 &nbsp;&nbsp; 
       <span v-if="userType == 0">企业管理平台</span>
       <span v-else>后台管理</span>
     </h2> -->

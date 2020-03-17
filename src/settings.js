@@ -1,5 +1,5 @@
 module.exports = {
-  title: '上海装饰一网通系统',
+  title: '上海装饰一网通',
 
   /**
    * @type {boolean} true | false

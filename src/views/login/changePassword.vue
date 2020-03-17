@@ -3,21 +3,7 @@
   <div class="login-container">
     <!-- 公用表头 -->
     <loginHeader/>
-    <div class="login-head">
-      <!-- <div class="head-wrap">
-        <img src="../../assets/login/logo.png">
-      </div> -->
-      <!-- <div>
-        <span>上海装饰首页</span>
-        <h3>上海装饰一网通系统</h3>
-        <nav>
-          <a href="">企业登录</a>
-          <a href="">帮助</a>
-          <a href="">帮助</a>
-        </nav>
-      </div> -->
-    </div>
-
+    
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
@@ -38,9 +24,9 @@
                 tabindex="2"
                 autocomplete="on"
               />
-              <span class="show-pwd" @click="showPwd">
+              <!-- <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
+              </span> -->
             </el-form-item>
 
             <p class="pd60">再次输入</p>

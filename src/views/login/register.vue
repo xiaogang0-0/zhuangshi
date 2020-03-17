@@ -239,11 +239,11 @@ export default {
         mobile:this.loginForm.mobile
       };
       // 平台用户带参数
-      let param1 ={customerName:''}
+      // let param1 ={customerName:''}
       // if(this.userType == 1){
       //   param1.customerName = this.loginForm.customerName
       // }
-      Api.getSendVerifyCode(param,param1).then(res => {
+      Api.getSendVerifyCode(param,).then(res => {
         if(res.code == 200) {
           this.$message({
             message: '验证码已发送至'+ this.loginForm.mobile +'上请注意查收',

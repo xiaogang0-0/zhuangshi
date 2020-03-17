@@ -46,11 +46,11 @@ export function registerSub(data) {
 }
 
 // 发送短信验证码 /admin/send-verify-code/{sendType}/{mobile}
-export function getSendVerifyCode(data,data1) {
+export function getSendVerifyCode(data) {
   return request({
     url: '/admin/send-verify-code/'+data.sendType+'/'+data.mobile,
     method: 'get',
-    params: data1
+    // params: data1
   })
 }
 

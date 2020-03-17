@@ -105,7 +105,7 @@
         </el-form-item>
 
          <el-form-item label-width="150px" label="施工资质证书编号:" prop="qualificationNum">
-          <el-input v-model.trim="ruleForm.qualificationNum" clearable placeholder="上海市装饰装修行业协会会员证书号"></el-input>
+          <el-input v-model.trim="ruleForm.qualificationNum" clearable placeholder="施工资质证书编号"></el-input>
         </el-form-item>
 
          <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
@@ -133,34 +133,35 @@
           <el-input v-model.trim="ruleForm.idNum" clearable placeholder="请输入法人身份证号"></el-input>
         </el-form-item>
         
-        <el-form-item label-width="150px" label="法人证照:" prop="PhotoList" class="w100" style="border:none">
-          <img 
+        <el-form-item label-width="150px" label="法人证照:" prop="PhotoList" class="w100 imgBtnWrap" style="border:none">
+          <div class="imgItem">
+            <img 
             alt="" 
             class="imgWrap"
             v-for="(ele, index2) in ruleForm.facePhoto"
             :key="index2+ele.url"
             :src="ele.url" 
             @click="handlePreviewImg(ele.url)">
-          <span 
-            class="btn"
-            @click="handleUploadModal(ruleForm.facePhoto,1)">&nbsp;身份证正面&nbsp;</span>
+            <p><span class="btn" @click="handleUploadModal(ruleForm.facePhoto,1)">&nbsp;身份证正面&nbsp;</span></p>
+          </div>
           <!-- 身份证反面 -->
-          <img 
-            alt="" 
-            class="imgWrap"
-            v-for="(ele, index2) in ruleForm.backPhoto"
-            :key="index2+ele.url"
-            :src="ele.url" 
-            @click="handlePreviewImg(ele.url)">
-          <span 
-            class="btn"
-            @click="handleUploadModal(ruleForm.backPhoto,1)">&nbsp;身份证反面照&nbsp;</span>
+          <div class="imgItem">
+            <img 
+              alt="" 
+              class="imgWrap"
+              v-for="(ele, index2) in ruleForm.backPhoto"
+              :key="index2+ele.url"
+              :src="ele.url" 
+              @click="handlePreviewImg(ele.url)">
+            <p><span class="btn" @click="handleUploadModal(ruleForm.backPhoto,1)">&nbsp;身份证反面照&nbsp;</span></p>
+          </div>
+          
         </el-form-item>
       </el-form>
     </div>
 
     <div class="footerBtn">
-      <span class="btn" style="margin-right:20px padding: 8px 26px;font-size: 16px;" @click="handleGoBack">返 回</span>
+      <!-- <span class="btn" style="margin-right:20px padding: 8px 26px;font-size: 16px;" @click="handleGoBack">返 回</span> -->
       <span class="btn" style="padding: 8px 26px;font-size: 16px;" @click="handleConfirmButtonClick">注 册</span>
       <p class="center lineHeight30 padTop22 cRed">审核通过后发送短信或电话通知，请留意信息与接听</p>
     </div>
@@ -271,6 +272,16 @@ export default {
       // } else 
       if(value && !certificateNumlReg.test(value)){
         callback(new Error('证书编号格式不正确,正确格式大写C加9位数字'));
+      }else{
+        callback()
+      }
+    }
+    // 身份正验证
+    const validatePhotoList = (rule, value, callback) => {
+      if(this.ruleForm.facePhoto.length == 0){
+        callback(new Error('请上传身份证正面面照！！'))
+      }else if(this.ruleForm.backPhoto.length==0){
+        callback(new Error('请上传身份证反面照！！'))
       }else{
         callback()
       }
@@ -400,18 +411,19 @@ export default {
         // qualificationEffectEnddate:[
         //   { required: true, message: '请选择证书有效期', trigger: 'change' },
         // ],
-        // // 企业法人
-        // legalPerson:[
-        //   { required: true, message: '请输入企业法人', trigger: 'change' },
-        // ],
-        // // 法人身份证号
-        // idNum:[
-        //   { required: true, message: '请输入法人身份证号', trigger: 'change' },
-        // ],
-        // // 法人证照
-        // PhotoList:[
-        //   { required: true, message: '请上传法人证照', trigger: 'change' },
-        // ]
+        // 企业法人
+        legalPerson:[
+          { required: true, message: '请输入企业法人', trigger: 'change' },
+        ],
+        // 法人身份证号
+        idNum:[
+          { required: true, message: '请输入法人身份证号', trigger: 'change' },
+        ],
+        // 法人证照
+        PhotoList:[
+          { required: true,trigger: 'change', validator: validatePhotoList },
+          // { required: true, message: '请上传企业营业执照图片', trigger: 'change' }
+        ]
        
       },
       // 省级显示列表
@@ -790,6 +802,15 @@ export default {
   width:975px;
   margin: 0 auto;
   margin-top: 46px;
+  .imgBtnWrap {
+    overflow: hidden;
+    .el-form-item__label {vertical-align: top;}
+    .imgItem {
+      float: left;
+      text-align: center;
+      margin-right: 12px;
+    }
+  }
   .loginHeader {
     background-color: #2E74D1;
     color: #fff;
@@ -814,7 +835,7 @@ export default {
     width: 110px;
   }
   .el-form--inline .el-input.w30 {
-    width: calc(100% - 228px);
+    width: calc(100% - 230px);
   }
   .el-form--inline .el-input.w111 {
     width: 80px;

@@ -4,7 +4,7 @@
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <h2 class="title">上海装饰一网通系统 &nbsp;&nbsp; 
+        <h2 class="title">上海装饰一网通 &nbsp;&nbsp; 
           <span v-if="userType == 0">企业管理平台</span>
           <span v-else>后台管理</span>
         </h2>
@@ -76,13 +76,16 @@ export default {
   @import "~@/styles/mixin.scss";
   @import "~@/styles/variables.scss";
   .title {
-    // line-height: 56px;
     line-height: 50px;
     width: 100%;
     text-align: center;
     background-color: #f90;
     color: #fff;
-    }
+    font-size: 20px;
+    font-weight: 600;
+
+    
+  }
   .app-wrapper {
     @include clearfix;
     position: relative;

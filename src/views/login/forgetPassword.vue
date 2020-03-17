@@ -12,7 +12,7 @@
               <h3 class="title">忘记密码</h3>
             </div>
 
-            <div v-show="userType == 1">
+            <!-- <div v-show="userType == 1">
               <p class="pd60">企业名称</p>
               <el-form-item prop="customerName">
                 <el-input
@@ -24,7 +24,7 @@
                   tabindex="1"
                 />
               </el-form-item>
-            </div>
+            </div> -->
 
             <p class="pd60">手机号</p>
             <el-form-item prop="mobile">
@@ -132,9 +132,10 @@ export default {
   },
   computed: {},
   mounted() {
-    if (this.loginForm.customerName === '' && this.userType == 1) {
-      this.$refs.customerName.focus()
-    }else if (this.loginForm.mobile === '') {
+    // if (this.loginForm.customerName === '' && this.userType == 1) {
+    //   this.$refs.customerName.focus()
+    // }else 
+    if (this.loginForm.mobile === '') {
       this.$refs.mobile.focus()
     } else if (this.loginForm.verifyCode === '') {
       this.$refs.verifyCode.focus()
@@ -145,12 +146,12 @@ export default {
     handleTime(){
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          if(this.userType == 1 && !this.loginForm.customerName){
-            return this.$message({
-              message: '企业名称不能为空',
-              type: 'warning'
-            });
-          }
+          // if(this.userType == 1 && !this.loginForm.customerName){
+          //   return this.$message({
+          //     message: '企业名称不能为空',
+          //     type: 'warning'
+          //   });
+          // }
 
           this.isActive = true;
           // 获取验证码
@@ -177,11 +178,11 @@ export default {
         mobile:this.loginForm.mobile
       };
       // 平台用户带参数
-      let param1 ={customerName:''}
-      if(this.userType == 1){
-        param1.customerName = this.loginForm.customerName
-      }
-      Api.getSendVerifyCode(param,param1).then(res => {
+      // let param1 ={customerName:''}
+      // if(this.userType == 1){
+      //   param1.customerName = this.loginForm.customerName
+      // }
+      Api.getSendVerifyCode(param).then(res => {
         if(res.code == 200) {
           this.$message({
             message: '验证码已发送至'+ this.loginForm.mobile +'上请注意查收',
@@ -196,12 +197,12 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          if(this.userType == 1 && !this.loginForm.customerName){
-            return this.$message({
-              message: '企业名称不能为空',
-              type: 'warning'
-            });
-          }
+          // if(this.userType == 1 && !this.loginForm.customerName){
+          //   return this.$message({
+          //     message: '企业名称不能为空',
+          //     type: 'warning'
+          //   });
+          // }
           if(!this.loginForm.verifyCode){
             return this.$message({
               message: '验证码不能为空',
@@ -217,13 +218,16 @@ export default {
           Api.getVerifyCode(param).then(res => {
             this.loading = false;
             if(res.code == 200) {
-              let username = this.userType == 0 ? this.loginForm.mobile :
-                             this.userType == 1 ? this.loginForm.customerName : ''
+              // let username = this.userType == 0 ? this.loginForm.mobile :
+              //                this.userType == 1 ? this.loginForm.customerName : ''
               this.$router.push({
                 name:'changePassword',
                 // 用户名, 企业用户为手机号, 系统用户为用户名
                 query:{userType:this.userType,
-                      username:username}
+                       username:this.loginForm.mobile
+                      }
+                      // {userType:this.userType,
+                      // username:username}
               })
             }
 
