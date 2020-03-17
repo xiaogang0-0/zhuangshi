@@ -219,7 +219,7 @@
         </div>
 
         <div v-if="ruleForm.status == 1" class="borderbot1">
-          <el-form-item  label-width="150px" label=" ">
+          <el-form-item  label-width="150px" label="示范资格:">
             <el-checkbox-group v-model="form.isDemoSite">
               <el-checkbox label="1" name="isDemoSite">有示范工地资格</el-checkbox>
               <!-- <el-checkbox label="0" name="isDemoSite">无示范工地资格</el-checkbox> -->

@@ -155,7 +155,7 @@
         
 
         <el-form-item label-width="150px" label="上海市装饰装修行业协会会员证书号:" prop="certificateNum">
-          <el-input  v-if="editStatus.status9" v-model.trim="ruleForm.certificateNum" clearable placeholder="上海市装饰装修行业协会会员证书号"></el-input>
+          <el-input  v-if="editStatus.status9" v-model.trim="ruleForm.certificateNum" clearable placeholder="输入证书编号" class="w113"></el-input>
           <span v-else class="inlineBlock">{{ruleForm.certificateNum}}</span>
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status9')">编辑</span>
         </el-form-item>

@@ -61,7 +61,7 @@
         </el-form-item>
 
         <el-form-item label-width="150px" label="上海市装饰装修行业协会会员证书号:" prop="certificateNum">
-          <el-input v-model.trim="ruleForm.certificateNum" clearable placeholder="上海市装饰装修行业协会会员证书号"></el-input>
+          <el-input v-model.trim="ruleForm.certificateNum" clearable placeholder="输入证书编号" class="w113"></el-input>
         </el-form-item>
 
          <el-form-item label-width="150px" label="上传施工资质证书:" prop="qualificationPhoto" >
