@@ -133,9 +133,11 @@ export default {
       // 1是系统用户, 0是企业用户
       userType:'0',
       loginForm: {
-        phoneNumber:'17601001098',
+        // 17601001098
+        phoneNumber:'',
         customerName: '',
-        password: 'K1111111',
+        // K1111111
+        password: '',
         // verifyCode:''
       },
       // 企业列表

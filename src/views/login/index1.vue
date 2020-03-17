@@ -106,9 +106,11 @@ export default {
       // 1是系统用户, 0是企业用户
       userType:'1',
       loginForm: {
-        username:'admin',
+        // admin
+        username:'',
         customerName: '',
-        password: 'K1111111',
+        // K1111111
+        password: '',
         // verifyCode:''
       },
 

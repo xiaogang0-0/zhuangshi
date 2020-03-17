@@ -3,7 +3,7 @@
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    <!-- <h2 class="fl title">上海装饰一网通 &nbsp;&nbsp; 
+    <!-- <h2 class="fl title">上海住宅装饰一网通 &nbsp;&nbsp; 
       <span v-if="userType == 0">企业管理平台</span>
       <span v-else>后台管理</span>
     </h2> -->
@@ -101,7 +101,7 @@ export default {
       // console.log(JSON.parse(data),'22222')
       this.userType =JSON.parse(data).userType
       if(this.userType==1){
-        this.userName =JSON.parse(data).username
+        this.userName =JSON.parse(data).realName
       }else{
         this.userName =JSON.parse(data).customerName
       }

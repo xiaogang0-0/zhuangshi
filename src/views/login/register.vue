@@ -35,9 +35,9 @@
                 tabindex="2"
                 autocomplete="on"
               />
-              <span class="show-pwd" @click="showPwd">
+              <!-- <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
+              </span> -->
             </el-form-item>
 
             <p class="pd60">确认密码</p>

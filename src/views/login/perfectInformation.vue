@@ -107,7 +107,7 @@
         </el-form-item>
 
          <el-form-item label-width="150px" label="施工资质证书编号:" prop="qualificationNum">
-          <el-input v-model.trim="ruleForm.qualificationNum" clearable placeholder="施工资质证书编号"></el-input>
+          <el-input v-model.trim="ruleForm.qualificationNum" maxlength="15" clearable placeholder="施工资质证书编号"></el-input>
         </el-form-item>
 
          <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
@@ -288,6 +288,16 @@ export default {
         callback()
       }
     }
+    const validateCreditCode = (rule, value, callback) => {
+      let res = /^[A-Z0-9]{18}$/;
+      if(!value){
+         callback(new Error('统一社会信用代码不能为空'));
+      }else if(value && !res.test(value)){
+        callback(new Error('统一社会信用代码由18位数字或大写字母组成'));
+      }else{
+        callback()
+      }
+    }
 
     return {
       imgUrl:imgUrl,
@@ -368,7 +378,7 @@ export default {
         ],
         // 统一社会信用代码
         creditCode:[
-          { required: true, message: '请输入统一社会信用代码', trigger: 'change' },
+          { required: true,  trigger: 'change', validator: validateCreditCode},
         ],
         // 电话
         contactTel:[
@@ -392,7 +402,8 @@ export default {
 
          // 施工资质证书编号
         qualificationNum:[
-          { validator: validateQualificationNum, trigger: 'change'},
+          // { validator: validateQualificationNum, trigger: 'change'},
+          { min: 0, max: 15, message: '编号不能超过15个字符',}
         ],
 
         // 上传施工资质证书
@@ -661,11 +672,15 @@ export default {
         if(code == 200) {
           this.$message({
             message: '注册成功请耐心等待平台审核',
-            type: 'success'
+            type: 'success',
+            duration:5000
           });
-          // setTimeout(() => {
-          //   this.handleGoBack()
-          // }, 1500);
+          this.$alert('提交成功！请进入首页登录系统查看注册信息！！', '温馨提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.handleGoBack()
+              }
+          });
         }
       }).catch( error => {
         this.loading = false;

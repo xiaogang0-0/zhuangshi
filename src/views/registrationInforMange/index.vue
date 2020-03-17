@@ -178,7 +178,7 @@
         </el-form-item>
 
         <el-form-item label-width="150px" label="施工资质证书编号:" prop="qualificationNum">
-          <el-input v-if="editStatus.status11" v-model.trim="ruleForm.qualificationNum" clearable placeholder="输入证书编号"></el-input>
+          <el-input v-if="editStatus.status11" v-model.trim="ruleForm.qualificationNum"  maxlength="15" clearable placeholder="输入证书编号"></el-input>
           <span v-else class="inlineBlock">{{ruleForm.qualificationNum}}</span>
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status11')">编辑</span>
         </el-form-item>
@@ -354,6 +354,17 @@ export default {
       }
     }
 
+    const validateCreditCode = (rule, value, callback) => {
+      let res = /^[A-Z0-9]{18}$/;
+      if(!value){
+         callback(new Error('统一社会信用代码不能为空'));
+      }else if(value && !res.test(value)){
+        callback(new Error('统一社会信用代码由18位数字或大写字母组成'));
+      }else{
+        callback()
+      }
+    }
+
     return {
       imgUrl:imgUrl,
       // 上一页注册成功的信息
@@ -446,7 +457,8 @@ export default {
         // ],
         // // 统一社会信用代码
         // creditCode:[
-        //   { required: true, message: '请输入统一社会信用代码', trigger: 'change' },
+          // { required: true,  trigger: 'change', validator: validateCreditCode},
+
         // ],
         // // 电话
         // contactTel:[
@@ -468,7 +480,8 @@ export default {
         // ],
         //  // 施工资质证书编号
         // qualificationNum:[
-        //   { validator: validateQualificationNum, trigger: 'change'},
+        //  // { validator: validateQualificationNum, trigger: 'change'},
+          // { min: 0, max: 15, message: '编号不能超过15个字符',}
         // ],
 
 
@@ -801,20 +814,24 @@ export default {
       obj2.facePhoto = obj2.facePhoto.length ? obj2.facePhoto[0].url :''
       obj2.businessLicense = obj2.businessLicense.length ? obj2.businessLicense[0].url :''
       obj2.qualificationPhoto = obj2.qualificationPhoto.length ? obj2.qualificationPhoto[0].url :''
-      
+      // console.log(obj1,obj2,'22222222222')
       let param = {}
       Object.keys(obj1).forEach( key =>{
         if(obj1[key] != obj2[key]){
-          if(key == 'backPhoto' || key == 'businessLicense' || key == 'facePhoto' || key == 'qualificationPhoto'){
-            if(obj1[key][0].url == obj2[key][0].url){
-               param[key] = obj2[key]
-            }
-          }else{
-            param[key] = this.ruleForm[key]
-          }
+          param[key] = obj1[key]
+          // if(key == 'backPhoto' || key == 'businessLicense' || key == 'facePhoto' || key == 'qualificationPhoto'){
+          //   if(obj1[key] == obj2[key]){
+          //      param[key] = obj1[key]
+          //   }
+          // }
+          // else{
+          //   param[key] = this.ruleForm[key]
+          // }
         }
       });
       this.loading = true;
+      // console.log(param)
+      // return
       Api.subUserCustomerChange(param).then(res => {
         this.loading = false;
         this.dialogSubmitModal = false

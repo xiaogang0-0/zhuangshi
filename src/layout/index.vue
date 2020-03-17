@@ -4,7 +4,7 @@
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <h2 class="title">上海装饰一网通 &nbsp;&nbsp; 
+        <h2 class="title">上海住宅装饰一网通 &nbsp;&nbsp; 
           <span v-if="userType == 0">企业管理平台</span>
           <span v-else>后台管理</span>
         </h2>

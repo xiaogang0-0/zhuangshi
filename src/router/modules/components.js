@@ -17,7 +17,6 @@ const componentsRouter = [
       {
         path: '/registrationInforMange',
         component: () => import('@/views/registrationInforMange/index'),
-        // name: 'page',
         name: 'registrationInforMange',
         meta: { title: '编辑注册资料' },
         hidden: true,
@@ -68,7 +67,6 @@ const componentsRouter = [
         path: '/dataAuditManagement',
         component: () => import('@/views/dataAuditManagement/index'),
         name: 'dataAuditManagement',
-        // meta: { title: '编辑注册资料审核' },
         meta: { title: '注册资料审核' },
         hidden: true,
         // children: []
@@ -76,7 +74,6 @@ const componentsRouter = [
       {
         path: '/dataAuditManagement_auditDetails',
         component: () => import('@/views/dataAuditManagement/examineDetails'),
-        // name: 'page',
         name: 'dataAuditManagement_auditDetails',
         meta: { title: '编辑注册资料详情',},
         // meta: { title: '编辑注册资料详情', noCache: true, activeMenu: '/dataAuditManagementList' },

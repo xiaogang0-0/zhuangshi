@@ -1,7 +1,7 @@
 // 公用表头
 <template>
   <div class="loginHeader">
-    <h2 class="fl name">上海装饰一网通</h2>
+    <h2 class="fl name">上海住宅装饰一网通</h2>
     <nav class="fr navList">
       <!-- <a href="javascript:;">上海装饰首页</a> -->
       
