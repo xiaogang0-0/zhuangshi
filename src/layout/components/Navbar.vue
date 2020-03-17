@@ -1,12 +1,12 @@
 <template>
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    <!-- <h2 class="fl title">上海装饰一网通系统 &nbsp;&nbsp; 
-      <span>企业管理平台</span>
-      <span>后台管理</span>
-    </h2> -->
-    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+    <!-- <h2 class="fl title">上海装饰一网通系统 &nbsp;&nbsp; 
+      <span v-if="userType == 0">企业管理平台</span>
+      <span v-else>后台管理</span>
+    </h2> -->
     <div class="right-menu">
       
       <span class="userName el-breadcrumb app-breadcrumb breadcrumb-container">{{userName ? userName : ''}}</span>
@@ -85,7 +85,8 @@ export default {
       oldPassword:'',
       password:'',
       confirmPassword:'',
-      userName : ''
+      userName : '',
+      userType:''
     }
   },
   computed: {
@@ -95,7 +96,18 @@ export default {
     ])
   },
   created(){
-    this.userName = JSON.parse(localStorage.getItem('Siw_userInfo')) ? JSON.parse(localStorage.getItem('Siw_userInfo')).username : '';
+    let data = localStorage.getItem('Siw_userInfo');
+    if(data){
+      // console.log(JSON.parse(data),'22222')
+      this.userType =JSON.parse(data).userType
+      if(this.userType==1){
+        this.userName =JSON.parse(data).username
+      }else{
+        this.userName =JSON.parse(data).customerName
+      }
+      
+    }
+    // this.userName = JSON.parse(localStorage.getItem('Siw_userInfo')) ? JSON.parse(localStorage.getItem('Siw_userInfo')).username : '';
   },
   methods: {
     toggleSideBar() {
@@ -109,11 +121,9 @@ export default {
 
     // 退出登陆
     logout() {
-      let userType = JSON.parse(localStorage.getItem('Siw_userInfo')).userType
-
       removeToken();
       localStorage.removeItem('Siw_userInfo')
-      localStorage.removeItem('Siw_menuList')
+      localStorage.removeItem('Siw-menuList')
 
 
       if(this.userType == 0){
@@ -127,32 +137,27 @@ export default {
 
       if(this.userType == 1){
         setTimeout(()=>{
-          this.$router.push({path: '/llogin' })
+          this.$router.push({path: '/home' })
         },200)
         // this.$router.push({
-        //   name:'llogin'
+        //   name:'home'
         // })
-        // this.$router.push({path: '/llogin' })
+        // this.$router.push({path: '/home' })
       }
 
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       return
       
-      // sessionStorage.removeItem('Siw_menuList')
+      // sessionStorage.removeItem('Siw-menuList')
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       
-      
-
-
-      return
-
       Api.landingExit('').then(res=>{
         // console.log(res)
         if(res.code == 200){
         //   console.log(res.data.msg);
            removeToken();
            localStorage.removeItem('Siw_userInfo')
-           localStorage.removeItem('Siw_menuList')
+           localStorage.removeItem('Siw-menuList')
            // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
            this.$router.push({path: '/login' })
         }
@@ -160,8 +165,8 @@ export default {
         // console.log(err);
         removeToken();
         localStorage.removeItem('Siw_userInfo')
-        localStorage.removeItem('Siw_menuList')
-        // sessionStorage.removeItem('Siw_menuList')
+        localStorage.removeItem('Siw-menuList')
+        // sessionStorage.removeItem('Siw-menuList')
         // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
         this.$router.push({path: '/login' })
       })
@@ -238,6 +243,14 @@ export default {
 <style lang="scss" scoped>
 .title {
   line-height: 50px;
+  width: 50vw;
+  font-weight: 800;
+  color: #409eff;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
 }
 .userName{
   // margin-right: 30px;

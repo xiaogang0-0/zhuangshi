@@ -9,7 +9,7 @@ import getPageTitle from '@/utils/get-page-title'
 NProgress.configure({ showSpinner: false }) // 进程配置
 
 // 没有重定向白名单
-const whiteList = ['/login','/llogin', '/forgetPassword', '/changePassword','/register','/perfectInformation', '/auth-redirect', '/404'] 
+const whiteList = ['/login','/home', '/forgetPassword', '/changePassword','/register','/perfectInformation', '/auth-redirect', '/404'] 
 
 router.beforeEach(async(to, from, next) => {
   // console.log(to)
@@ -22,7 +22,7 @@ router.beforeEach(async(to, from, next) => {
 
   if (hasToken) {
     // console.log(to.path,'to.path')
-    if (to.path === '/login') {
+    if (to.path === '/login' || to.path === '/home') {
       // 如果已登录，请重定向到主页
       next({ path: '/' })
       NProgress.done()
@@ -43,60 +43,39 @@ router.beforeEach(async(to, from, next) => {
           // 基于角色生成可访问的路由映射
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
           // 动态添加可访问的路由
-          // console.log('动态添加可访问的路由')
-         
+          // console.log(accessRoutes,'本地的目录')
+          
+          let userType = JSON.parse(localStorage.getItem('Siw_userInfo')).userType
+          // console.log(userType,'本地的目录userType')
+        
           // 后台获取回來的路由
-          let menuList = JSON.parse(localStorage.getItem ('Siw_menuList'))
+          let menuList = JSON.parse(localStorage.getItem ('Siw-menuList'))
+          // console.log(menuList,'后台获取回來的路由')
           // 循环后台的权限
-          // menuList.forEach(item => {
-          //   // 循环本地的目录
-          //   accessRoutes.forEach(ele => {
-          //     // 一级导航选中项
-          //     if(item.name == ele.name ){
-          //       // 一级路由设定
-          //       ele.hidden = false;
-          //       // 循环权限设定二级导航
-          //       item.children.forEach(child => {
-          //         // 循环本地对比
-          //         ele.children.forEach(chd => {
-          //           if(child.name == chd.name ){
-          //             // console.log(child,'child.name ')
-          //             chd.hidden = false;
-          //           }
-          //         });
+          menuList.forEach(item => {
+            // 循环本地的目录
+            accessRoutes.forEach(ele => {
+              // 一级导航选中项
+              if(item.name == ele.name ){
+                // 一级路由设定
+                ele.hidden = false;
+                // 循环权限设定二级导航
+                item.children.forEach(child => {
+                  // 循环本地对比
+                  ele.children.forEach(chd => {
+                    if(child.name == chd.name ){
+                      // console.log(child,'child.name ')
+                      chd.hidden = false;
+                    }
+                  });
                   
-          //       });
-          //     }
-          //   });
-          // });
-
-
-          // let userInfo = JSON.parse(localStorage.getItem('Siw_userInfo'))
-          // console.log(userInfo.userType)
-          // // 循环本地的目录
-          // componentsRouter.forEach((ele,indexs) => {
-          //   // 一级导航选中项
-            
-  
-          //   // userType  0是企业用户 1是系统用户,
-          //   if(userInfo.userType == 0 && index < 1){
-          //     console.log(ele)
-          //     // 一级路由设定
-          //     // ele.hidden = false;
-          //   }
-
-
-            
-
-         
-            
-          // });
-
-
+                });
+              }
+            });
+          });
 
           store.commit('permission/SET_ROUTES', accessRoutes)
           router.addRoutes(accessRoutes)
-  
           // 确保addroutes完整的hack方法
           // 设置replace:true，这样导航就不会留下历史记录。
           next({ ...to, replace: true })

@@ -5,8 +5,8 @@
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <h2 class="title">上海装饰一网通系统 &nbsp;&nbsp; 
-          <span>企业管理平台</span>
-          <span>后台管理</span>
+          <span v-if="userType == 0">企业管理平台</span>
+          <span v-else>后台管理</span>
         </h2>
         <navbar />
         <!-- 显示历史窗口 -->
@@ -29,6 +29,11 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Layout',
+  data(){
+    return {
+      userType:'0',
+    }
+  },
   components: {
     AppMain,
     Navbar,
@@ -59,6 +64,10 @@ export default {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
     }
+  },
+  mounted(){
+    // 0是企业用户 1是系统用户,
+    this.userType = localStorage.getItem ('Siw_userInfo') ? JSON.parse(localStorage.getItem('Siw_userInfo')).userType : '0'
   }
 }
 </script>

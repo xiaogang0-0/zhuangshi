@@ -1,6 +1,9 @@
 // 完善注册信息 perfectInformation  
 <template>
   <div class="contentWrap perfectInformation">
+    <!-- 公用表头 -->
+    <loginHeader/>
+
     <div class="contWrap" >
       <div class="contHead">完善注册信息</div>
       <p class="center lineHeight30 padBot10 cRed">非上海市装饰装修行业协会会员的企业完善企业资料前，需要通过电话：021-52375377 办理入会成为会员，再在线提交完善企业资料信息。</p>
@@ -209,10 +212,13 @@ import OSS from 'ali-oss';
 import * as Api from '@/api/perfectInformation'
 import imgUrl from '@/assets/null.png'
 import { setTimeout } from 'timers';
+import LoginHeader from '@/components/loginHeader'
 
 
 export default {
+  name:'perfectInformation',
   components: {
+    LoginHeader,
   },
   data() {
     
@@ -783,6 +789,12 @@ export default {
   
   width:975px;
   margin: 0 auto;
+  margin-top: 46px;
+  .loginHeader {
+    background-color: #2E74D1;
+    color: #fff;
+    .navList>a{color: #fff;}
+  }
   .el-form--inline .el-form-item{width: 100%; min-width: 300px;}
   .el-autocomplete{
     width: 100%;

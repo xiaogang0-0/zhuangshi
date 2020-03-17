@@ -1,23 +1,8 @@
 // 后台登录
 <template>
   <div class="login-container logginWrapCss">
-
-    <div class="login-head">
-      <!-- <div class="head-wrap">
-        <img src="../../assets/login/logo.png">
-      </div> -->
-      <!-- <div>
-        <span>上海装饰首页</span>
-        <h3>上海装饰一网通系统</h3>
-        <nav>
-          <a href="">企业登录</a>
-          <a href="">帮助</a>
-          <a href="">帮助</a>
-        </nav>
-      </div> -->
-    </div>
-
-
+    <!-- 公用表头 -->
+    <loginHeader/>
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
@@ -31,7 +16,7 @@
             <el-form-item prop="username">
               <el-input
                 ref="username"
-                v-model.number="loginForm.username"
+                v-model.trim="loginForm.username"
                 placeholder="请输入用户名"
                 name="username"
                 type="text"
@@ -44,7 +29,7 @@
               <el-input
                 :key="passwordType"
                 ref="password"
-                v-model="loginForm.password"
+                v-model.trim="loginForm.password"
                 :type="passwordType"
                 placeholder="请输入密码"
                 name="password"
@@ -91,10 +76,14 @@ import componentsRouter from '@/router/modules/components.js'
 import routerIndex from '@/router/index.js'
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
+import LoginHeader from '@/components/loginHeader'
 
 
 export default {
   name: 'Login',
+  components: {
+    LoginHeader,
+  },
   data() {
     
     const validatePassword = (rule, value, callback) => {
@@ -119,7 +108,7 @@ export default {
       loginForm: {
         username:'admin',
         customerName: '',
-        password: 'admin123',
+        password: 'K1111111',
         // verifyCode:''
       },
 
@@ -135,6 +124,7 @@ export default {
   },
   watch: {},
   created() {
+    
   },
   computed: {
     ...mapGetters([
@@ -160,12 +150,73 @@ export default {
             if(res.code == 200) {
               // 本地存储token
               setToken(res.data.accessToken)
+              localStorage.removeItem ('Siw_userInfo')
+              localStorage.removeItem ('Siw-menuList')
+              
               localStorage.setItem ('Siw_userInfo',JSON.stringify(res.data))
-               this.$router.push({path: '/'})
+              // ++++++++模拟后端权限+++++++
+              let menuList=[]
+              if(res.data.userType == 1) {
+                // 后台登录 
+                menuList =[  
+                  // 首页 - 公司管理
+                  {
+                    path: '/companyManagementList',
+                    name: 'companyManagementList',
+                    meta: { title: '公司管理', icon: 'chart' },
+                    children: [
+                      {
+                        path: '/companyManagement',
+                        name: 'companyManagement',
+                        meta: { title: '公司管理' },
+                      },
+                    ]
+                  },
+                  // 注册资料审核
+                  {
+                    path: '/dataAuditManagementList',
+                    name: 'dataAuditManagementList',
+                    meta: { title: '注册资料审核', icon: 'chart' },
+                    children: [
+                      {
+                        path: '/dataAuditManagement',
+                        name: 'dataAuditManagement',
+                        meta: { title: '注册资料审核' },
+                      },
+                    ]
+                  },
+                ]
+              }else{
+                // 客户端
+                menuList =[
+                  // 编辑注册资料
+                  {
+                    path: '/registrationInforMangeList',
+                    name: 'registrationInforMangeList',
+                    meta: { title: '', icon: 'chart' },
+                    children: [
+                      {
+                        path: '/registrationInforMange',
+                        name: 'registrationInforMange',
+                        meta: { title: '编辑注册资料' },
+                        hidden: false,
+                      },
+                    ]
+                  },
+                ]
+              }
+              localStorage.setItem('Siw-menuList',JSON.stringify(menuList))
+              // this.$router.push({path: '/'})
+              window.location.reload()
+              
+              
+
+
+              // ++++++++模拟后端权限over+++++++
             }
           }).catch( error => {
             localStorage.removeItem('Siw_userInfo');
-            localStorage.removeItem('Siw_menuList')
+            localStorage.removeItem('Siw-menuList')
             this.loading = false
           })
         } else {

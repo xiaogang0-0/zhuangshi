@@ -570,7 +570,7 @@ export default {
           data.qualificationPhoto = data.qualificationPhoto ?  [{name:'', url:data.qualificationPhoto}] : []
           // 控制按钮 
           // 状态:0(新注册，等待完善资料),1(待审核),2(已审核通过),3(审核不通过),4(关闭),5(停用),6(冻结)
-          data.status = 3
+          // data.status = 3
           // console.log(data.status)
 
           if(data.status ==1){

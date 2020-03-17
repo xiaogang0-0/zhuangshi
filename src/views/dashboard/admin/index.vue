@@ -65,7 +65,7 @@ export default {
   mounted() {
     // 0是企业用户 1是系统用户,
     this.isShow = localStorage.getItem ('Siw_userInfo') ? JSON.parse(localStorage.getItem('Siw_userInfo')).userType : ''
-    console.log(this.isShow,'11' )
+    console.log(this.isShow,'userType' )
     // 显示哪个首页  0 为客户端   1 为后台登录
     if(this.isShow == '0'){
         // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
@@ -82,7 +82,7 @@ export default {
     // if(this.isShow == ''){
     //   removeToken();
     //   localStorage.removeItem('Siw_userInfo')
-    //   localStorage.removeItem('Siw_menuList')
+    //   localStorage.removeItem('Siw-menuList')
     //   // setTimeout(()=>{
     //   //   this.$router.push({path: '/login' })
     //   // },200)

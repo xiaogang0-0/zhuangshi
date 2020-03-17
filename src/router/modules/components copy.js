@@ -12,7 +12,7 @@ const componentsRouter = [
     redirect: '/registrationInforMange', // 重定向
     name: 'registrationInforMangeList',
     meta: { title: '', icon: 'chart' },
-    hidden: true,
+    hidden: false,
     children: [
       {
         path: '/registrationInforMange',
@@ -20,7 +20,7 @@ const componentsRouter = [
         // name: 'page',
         name: 'registrationInforMange',
         meta: { title: '编辑注册资料' },
-        hidden: true,
+        hidden: false,
         // children: []
       },
     ]
@@ -34,14 +34,14 @@ const componentsRouter = [
     redirect: '/companyManagement', // 重定向
     name: 'companyManagementList',
     meta: { title: '公司管理', icon: 'chart' },
-    hidden: true,
+    hidden: false,
     children: [
       {
         path: '/companyManagement',
         component: () => import('@/views/companyManagement/index'),
         name: 'companyManagement',
         meta: { title: '公司管理' },
-        hidden: true,
+        hidden: false,
         // children: []
       },
       {
@@ -62,7 +62,7 @@ const componentsRouter = [
     redirect: '/dataAuditManagement', // 重定向
     name: 'dataAuditManagementList',
     meta: { title: '注册资料审核', icon: 'chart' },
-    hidden: true,
+    hidden: false,
     children: [
       {
         path: '/dataAuditManagement',
@@ -70,7 +70,7 @@ const componentsRouter = [
         name: 'dataAuditManagement',
         // meta: { title: '编辑注册资料审核' },
         meta: { title: '注册资料审核' },
-        hidden: true,
+        hidden: false,
         // children: []
       },
       {

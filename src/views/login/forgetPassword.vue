@@ -1,6 +1,8 @@
 // 忘记密码
 <template>
   <div class="login-container logginWrapCss">
+    <!-- 公用表头 -->
+    <loginHeader/>
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
@@ -15,7 +17,7 @@
               <el-form-item prop="customerName">
                 <el-input
                   ref="customerName"
-                  v-model="loginForm.customerName"
+                  v-model.trim="loginForm.customerName"
                   placeholder="请输入企业名称"
                   name="customerName"
                   type="text"
@@ -28,7 +30,7 @@
             <el-form-item prop="mobile">
                <el-input
                 ref="mobile"
-                v-model="loginForm.mobile"
+                v-model.trim="loginForm.mobile"
                 placeholder="请输入手机号"
                 name="mobile"
                 type="text"
@@ -40,7 +42,7 @@
             <el-form-item prop="verifyCode" class="verificationCode">
              <el-input
                 ref="verifyCode"
-                v-model="loginForm.verifyCode"
+                v-model.trim="loginForm.verifyCode"
                 placeholder="请输入验证码"
                 name="verifyCode"
                 type="text"
@@ -76,9 +78,13 @@ import componentsRouter from '@/router/modules/components.js'
 import routerIndex from '@/router/index.js'
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
+import LoginHeader from '@/components/loginHeader'
 
 export default {
   name: 'Login',
+  components: {
+    LoginHeader,
+  },
   data() {
     const validatePhoneNumber = (rule, value, callback) => {
       let reg = /^1[3456789]\d{9}$/;

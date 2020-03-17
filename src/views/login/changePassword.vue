@@ -1,7 +1,8 @@
 // 修改密码
 <template>
   <div class="login-container">
-
+    <!-- 公用表头 -->
+    <loginHeader/>
     <div class="login-head">
       <!-- <div class="head-wrap">
         <img src="../../assets/login/logo.png">
@@ -30,7 +31,7 @@
               <el-input
                 :key="passwordType"
                 ref="password1"
-                v-model="loginForm.password1"
+                v-model.trim="loginForm.password1"
                 :type="passwordType"
                 placeholder="请输入新密码"
                 name="password"
@@ -47,7 +48,7 @@
               <el-input
                 :key="passwordType"
                 ref="password"
-                v-model="loginForm.password"
+                v-model.trim="loginForm.password"
                 :type="passwordType"
                 placeholder="再次输入新密码"
                 name="password"
@@ -80,10 +81,14 @@ import componentsRouter from '@/router/modules/components.js'
 import routerIndex from '@/router/index.js'
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
+import LoginHeader from '@/components/loginHeader'
 
 
 export default {
   name: 'Login',
+  components: {
+    LoginHeader,
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
       let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
@@ -168,7 +173,7 @@ export default {
 
                 if(this.userType == 1){
                   this.$router.push({
-                    name:'llogin'
+                    name:'home'
                   })
                 }
               },1000)

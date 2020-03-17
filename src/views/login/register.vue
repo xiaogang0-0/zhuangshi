@@ -1,7 +1,8 @@
 // 企业注册
 <template>
   <div class="login-container">
-    <div class="login-head"></div>
+    <!-- 公用表头 -->
+    <loginHeader/>
     <div class="content">
         <div class="wrap">
           <div class="wrap-bg"></div>
@@ -14,7 +15,7 @@
             <el-form-item prop="customerName">
               <el-input
                 ref="customerName"
-                v-model="loginForm.customerName"
+                v-model.trim="loginForm.customerName"
                 type="text"
                 placeholder="输入您公司全称"
                 name="customerName"
@@ -27,7 +28,7 @@
               <el-input
                 :key="passwordType"
                 ref="password1"
-                v-model="loginForm.password1"
+                v-model.trim="loginForm.password1"
                 :type="passwordType"
                 placeholder="输入新密码"
                 name="password1"
@@ -44,7 +45,7 @@
               <el-input
                 :key="passwordType"
                 ref="password"
-                v-model="loginForm.password"
+                v-model.trim="loginForm.password"
                 :type="passwordType"
                 placeholder="输入密码"
                 name="password"
@@ -72,7 +73,7 @@
             <el-form-item prop="verifyCode" class="verificationCode">
              <el-input
                 ref="verifyCode"
-                v-model="loginForm.verifyCode"
+                v-model.trim="loginForm.verifyCode"
                 placeholder="请输入验证码"
                 name="verifyCode"
                 type="text"
@@ -110,10 +111,15 @@ import routerIndex from '@/router/index.js'
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
 import { Settings } from '../../layout/components'
+import LoginHeader from '@/components/loginHeader'
+
 
 
 export default {
-  name: 'Login',
+  name: 'register',
+  components: {
+    LoginHeader,
+  },
   data() {
 
     const validateUsername = (rule, value, callback) => {

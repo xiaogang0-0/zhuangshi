@@ -11,7 +11,7 @@ const env = process.env.NODE_ENV === 'development'
       : 'production'
 
 console.log(env, '运行环境env{production:线上;test:测试;development:本地;}')
-const baseURL = env === 'production' ? 'http://baidu.hlwl.com:9300' : (env === 'test' ? 'http://47.111.9.187:8008/' : 'http://47.111.9.187:8008/')
+const baseURL = env === 'production' ? 'http://47.114.132.55:8008' : (env === 'test' ? 'http://47.111.9.187:8008/' : 'http://47.111.9.187:8008/')
 
 // 创建AXIOS实例
 const service = axios.create({

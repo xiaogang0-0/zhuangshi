@@ -56,9 +56,9 @@ export const constantRoutes = [
   },
   // 后台登录
   {
-    path: '/llogin',
+    path: '/home',
     component: () => import('@/views/login/index1'),
-    name:'llogin',
+    name:'home',
     hidden: true
   },
 
@@ -118,11 +118,11 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         // meta: { title: '', icon: 'dashboard', affix: true }
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { title: '', icon: 'dashboard', affix: true }
       }
     ],
-    // hidden:true
-    hidden:false
+    hidden:true
+    // hidden:false
   },
 
 ]
