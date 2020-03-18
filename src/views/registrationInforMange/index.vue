@@ -222,7 +222,7 @@
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status13')">编辑</span>
         </el-form-item>
 
-        <el-form-item label-width="150px" label="施工资质证书:" prop="qualificationPhoto" style="border:none">
+        <el-form-item label-width="150px" label="施工能力等级/资质证书:" prop="qualificationPhoto" style="border:none">
           <img 
             alt="" 
             class="imgWrap"
@@ -488,7 +488,7 @@ export default {
 
         // 上传施工资质证书
         // qualificationPhoto:[
-        //   { required: true, message: '请上传施工资质证书', trigger: 'change' },
+        //   { required: true, message: '请上传施工能力等级/资质证书', trigger: 'change' },
         // ],
         // // 施工资质发放单位
         // qualificationUnit:[

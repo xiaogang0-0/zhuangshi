@@ -24,7 +24,7 @@
         </el-form-item>
 
         <el-form-item label-width="150px" label="统一社会信用代码:" prop="creditCode">
-          <el-input v-model.trim="ruleForm.creditCode" clearable placeholder="请输入统一社会信用代码"></el-input>
+          <el-input v-model.trim="ruleForm.creditCode" clearable placeholder="请输入统一社会信用代码" class="w113"></el-input>
         </el-form-item>
 
         <el-form-item label-width="150px" label="企业联系电话:" prop="contactTel">
@@ -61,78 +61,12 @@
           <el-input v-model.trim="ruleForm.addr" clearable placeholder="请输入详细地址" class="w30"></el-input>
         </el-form-item>
 
-        <el-form-item label-width="150px" label="上海市装饰装修行业协会会员证书号:" prop="certificateNum">
-          <el-input v-model.trim="ruleForm.certificateNum" clearable placeholder="输入证书编号" class="w113"></el-input>
-        </el-form-item>
-        <h2 class="itemTitle">资质信息：</h2>
-
-        <el-form-item label-width="150px" label="上传施工资质证书:" prop="qualificationPhoto" >
-          <img 
-            alt="" 
-            class="imgWrap"
-            v-for="(ele, index2) in ruleForm.qualificationPhoto"
-            :key="index2+ele.url"
-            :src="ele.url" 
-            @click="handlePreviewImg(ele.url)">
-          <span 
-            class="btn"
-            @click="handleUploadModal(ruleForm.qualificationPhoto,1)">&nbsp;&nbsp;点击上传&nbsp;&nbsp;</span>
-          
-        </el-form-item>
-
-        <el-form-item label-width="150px" label="施工资质发放单位:" prop="qualificationUnit">
-          <el-select 
-            v-model="ruleForm.qualificationUnit" 
-            placeholder="请选择">
-            <el-option
-              v-for="item in qualificationUnitData"
-              :key="item.dictionaryId + item.name"
-              :label="item.name"
-              :value="item.name">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label-width="150px" label="施工资质或施工能力等级评价:" prop="qualificationGrade">
-          <el-select 
-            v-model="ruleForm.qualificationGrade" 
-            placeholder="请选择">
-            <el-option
-              v-for="item in qualificationGradeData"
-              :key="item.dictionaryId + item.name"
-              :label="item.name"
-              :value="item.name">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-         <el-form-item label-width="150px" label="施工资质证书编号:" prop="qualificationNum">
-          <el-input v-model.trim="ruleForm.qualificationNum" maxlength="15" clearable placeholder="施工资质证书编号"></el-input>
-        </el-form-item>
-
-         <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
-          <el-date-picker
-            v-model="ruleForm.qualificationEffectEnddate"
-            type="date"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择证书有效期">
-          </el-date-picker>
-          <!-- <el-date-picker
-            v-model="ruleForm.qualificationEffectEnddate"
-            type="month"
-            format="yyyy 年 MM 月"
-            value-format="yyyy-MM"
-            placeholder="请选择证书有效期">
-          </el-date-picker> -->
-        </el-form-item>
-
         <el-form-item label-width="150px" label="企业法人:" prop="legalPerson">
-          <el-input v-model.trim="ruleForm.legalPerson" clearable placeholder="请输入企业法人"></el-input>
+          <el-input v-model.trim="ruleForm.legalPerson" clearable placeholder="请输入企业法人" class="w113"></el-input>
         </el-form-item>
 
         <el-form-item label-width="150px" label="法人身份证号:" prop="idNum">
-          <el-input v-model.trim="ruleForm.idNum" clearable placeholder="请输入法人身份证号"></el-input>
+          <el-input v-model.trim="ruleForm.idNum" clearable placeholder="请输入法人身份证号" class="w113"></el-input>
         </el-form-item>
         
         <el-form-item label-width="150px" label="法人证照:" prop="PhotoList" class="w100 imgBtnWrap" style="border:none">
@@ -159,13 +93,83 @@
           </div>
           
         </el-form-item>
+
+        
+        <h2 class="itemTitle">资质信息：</h2>
+
+        <el-form-item label-width="150px" label="上海市装饰装修行业协会会员编号:" prop="certificateNum">
+          <el-input v-model.trim="ruleForm.certificateNum" clearable placeholder="输入会员编号" class="w113"></el-input>
+        </el-form-item>
+
+        <el-form-item label-width="150px" label="上传施工能力等级或施工资质证书:" prop="qualificationPhoto" class="lableWidth">
+          <img 
+            alt="" 
+            class="imgWrap"
+            v-for="(ele, index2) in ruleForm.qualificationPhoto"
+            :key="index2+ele.url"
+            :src="ele.url" 
+            @click="handlePreviewImg(ele.url)">
+          <span 
+            class="btn"
+            @click="handleUploadModal(ruleForm.qualificationPhoto,1)">&nbsp;&nbsp;点击上传&nbsp;&nbsp;</span>
+          
+        </el-form-item>
+
+        <el-form-item label-width="150px" label="证书发放单位:" prop="qualificationUnit">
+          <el-select 
+            v-model="ruleForm.qualificationUnit" 
+            placeholder="请选择">
+            <el-option
+              v-for="item in qualificationUnitData"
+              :key="item.dictionaryId + item.name"
+              :label="item.name"
+              :value="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label-width="150px" label="施工能力或施工资质等级:" prop="qualificationGrade">
+          <el-select 
+            v-model="ruleForm.qualificationGrade" 
+            placeholder="请选择">
+            <el-option
+              v-for="item in qualificationGradeData"
+              :key="item.dictionaryId + item.name"
+              :label="item.name"
+              :value="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+         <el-form-item label-width="150px" label="证书编号:" prop="qualificationNum">
+          <el-input v-model.trim="ruleForm.qualificationNum" maxlength="15" clearable placeholder="施工资质证书编号" class="w113"></el-input>
+        </el-form-item>
+
+         <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
+          <el-date-picker
+            v-model="ruleForm.qualificationEffectEnddate"
+            type="date"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择证书有效期">
+          </el-date-picker>
+          <!-- <el-date-picker
+            v-model="ruleForm.qualificationEffectEnddate"
+            type="month"
+            format="yyyy 年 MM 月"
+            value-format="yyyy-MM"
+            placeholder="请选择证书有效期">
+          </el-date-picker> -->
+        </el-form-item>
+
+        
       </el-form>
     </div>
 
     <div class="footerBtn">
       <!-- <span class="btn" style="margin-right:20px padding: 8px 26px;font-size: 16px;" @click="handleGoBack">返 回</span> -->
-      <span class="btn" style="padding: 8px 26px;font-size: 16px;" @click="handleConfirmButtonClick">注 册</span>
-      <p class="center lineHeight30 padTop22 cRed">审核通过后发送短信或电话通知，请留意信息与接听</p>
+      <span class="btn" style="padding: 8px 26px;font-size: 16px;" @click="handleConfirmButtonClick">提交信息</span>
+      <p class="center lineHeight30 padTop22 cRed">请留意接听协会的核实电话，审核通过时发送短信通知</p>
     </div>
 
     <!-- 图片预览弹窗 -->
@@ -408,7 +412,7 @@ export default {
 
         // 上传施工资质证书
         // qualificationPhoto:[
-        //   { required: true, message: '请上传施工资质证书', trigger: 'change' },
+        //   { required: true, message: '请上传施工能力等级或施工资质证书', trigger: 'change' },
         // ],
         // // 施工资质发放单位
         // qualificationUnit:[
@@ -818,7 +822,7 @@ export default {
   
   width:975px;
   margin: 0 auto;
-  margin-top: 46px;
+  margin-top: 70px;
   .imgBtnWrap {
     overflow: hidden;
     .el-form-item__label {vertical-align: top;}
@@ -835,6 +839,9 @@ export default {
     color: #000;
     color: #2E74D1;
 
+  }
+  .lableWidth{
+    label {padding-left:13px;}
   }
   .loginHeader {
     background-color: #2E74D1;

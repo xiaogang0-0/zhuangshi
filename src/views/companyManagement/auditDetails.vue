@@ -191,7 +191,7 @@
         </div>
 
         <div :class="(ruleForm.status == 3 || ruleForm.status == 1 )? 'borderbot1' : ''">
-          <el-form-item label-width="150px" label="施工资质证书:">
+          <el-form-item label-width="150px" label="施工能力等级/资质证书:">
             <img 
               alt="" 
               class="imgWrap"
@@ -199,7 +199,7 @@
               @click="handlePreviewImg(ruleForm.qualificationPhoto)">
           </el-form-item>
           <!-- 更新后的 -->
-          <el-form-item v-show="newForm.qualificationPhoto" label-width="150px" label="施工资质证书:">
+          <el-form-item v-show="newForm.qualificationPhoto" label-width="150px" label="施工能力等级/资质证书:">
             <img 
               v-show="newForm.qualificationPhoto"
               alt="" 
