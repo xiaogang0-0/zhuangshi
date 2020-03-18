@@ -166,7 +166,7 @@ export default {
   },
   watch: {},
   created() {
-    console.log(17601001098,'快1111111')
+    console.log('baidu111111-18600639069')
   },
   computed: {
     ...mapGetters([
