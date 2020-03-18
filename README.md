@@ -57,6 +57,13 @@ npm run lint -- --fix
 
 ## 本地存储搜索信息
   siw_registerInfor 注册通过本地存储
+
+## 账号
+  # 客户login端 #
+  # 账号：  18600639069   密码：  baidu111111
+
+  # 后台管理home端 #
+  # 账号：  admin   密码：  K1111111
  
 
 

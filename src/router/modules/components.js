@@ -36,18 +36,18 @@ const componentsRouter = [
     hidden: true,
     children: [
       {
-        path: '/companyManagement',
+        path: 'companyManagement',
         component: () => import('@/views/companyManagement/index'),
         name: 'companyManagement',
-        meta: { title: '公司管理' },
+        meta: { title: '公司管理'},
         hidden: true,
         // children: []
       },
       {
-        path: '/companyManagement_auditDetails',
+        path: 'companyManagement_auditDetails',
         component: () => import('@/views/companyManagement/auditDetails'),
         name: 'companyManagement_auditDetails',
-        meta: { title: '公司详情' },
+        meta: { title: '公司详情',activeMenu:'/companyManagementList/companyManagement'},
         hidden: true,
         // children: []
       },
@@ -64,7 +64,7 @@ const componentsRouter = [
     hidden: true,
     children: [
       {
-        path: '/dataAuditManagement',
+        path: 'dataAuditManagement',
         component: () => import('@/views/dataAuditManagement/index'),
         name: 'dataAuditManagement',
         meta: { title: '注册资料审核' },
@@ -72,10 +72,10 @@ const componentsRouter = [
         // children: []
       },
       {
-        path: '/dataAuditManagement_auditDetails',
+        path: 'dataAuditManagement_auditDetails',
         component: () => import('@/views/dataAuditManagement/examineDetails'),
         name: 'dataAuditManagement_auditDetails',
-        meta: { title: '编辑注册资料详情',},
+        meta: { title: '编辑注册资料详情',activeMenu:'/dataAuditManagementList/dataAuditManagement'},
         // meta: { title: '编辑注册资料详情', noCache: true, activeMenu: '/dataAuditManagementList' },
         hidden: true,
         // children: []

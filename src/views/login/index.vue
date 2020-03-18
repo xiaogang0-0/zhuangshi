@@ -167,7 +167,6 @@ export default {
   },
   watch: {},
   created() {
-    console.log('baidu111111-18600639069')
   },
   computed: {
     ...mapGetters([
