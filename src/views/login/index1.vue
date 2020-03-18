@@ -77,6 +77,8 @@ import routerIndex from '@/router/index.js'
 import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
 import LoginHeader from '@/components/loginHeader'
+// 权限目录
+import menuList from '@/api/menuList.json'
 
 
 export default {
@@ -153,67 +155,18 @@ export default {
               // 本地存储token
               setToken(res.data.accessToken)
               localStorage.removeItem ('Siw_userInfo')
-              localStorage.removeItem ('Siw-menuList')
               
               localStorage.setItem ('Siw_userInfo',JSON.stringify(res.data))
-              // ++++++++模拟后端权限+++++++
-              let menuList=[]
+               // ++++++++模拟后端权限+++++++
               if(res.data.userType == 1) {
                 // 后台登录 
-                menuList =[  
-                  // 首页 - 公司管理
-                  {
-                    path: '/companyManagementList',
-                    name: 'companyManagementList',
-                    meta: { title: '公司管理', icon: 'chart' },
-                    children: [
-                      {
-                        path: '/companyManagement',
-                        name: 'companyManagement',
-                        meta: { title: '公司管理' },
-                      },
-                    ]
-                  },
-                  // 注册资料审核
-                  {
-                    path: '/dataAuditManagementList',
-                    name: 'dataAuditManagementList',
-                    meta: { title: '注册资料审核', icon: 'chart' },
-                    children: [
-                      {
-                        path: '/dataAuditManagement',
-                        name: 'dataAuditManagement',
-                        meta: { title: '注册资料审核' },
-                      },
-                    ]
-                  },
-                ]
+                localStorage.setItem('Siw-menuList',JSON.stringify(menuList.home))
               }else{
                 // 客户端
-                menuList =[
-                  // 编辑注册资料
-                  {
-                    path: '/registrationInforMangeList',
-                    name: 'registrationInforMangeList',
-                    meta: { title: '', icon: 'chart' },
-                    children: [
-                      {
-                        path: '/registrationInforMange',
-                        name: 'registrationInforMange',
-                        meta: { title: '编辑注册资料' },
-                        hidden: false,
-                      },
-                    ]
-                  },
-                ]
+                localStorage.setItem('Siw-menuList',JSON.stringify(menuList.login))
               }
-              localStorage.setItem('Siw-menuList',JSON.stringify(menuList))
               // this.$router.push({path: '/'})
               window.location.reload()
-              
-              
-
-
               // ++++++++模拟后端权限over+++++++
             }
           }).catch( error => {

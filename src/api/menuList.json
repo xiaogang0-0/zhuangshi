@@ -1,0 +1,58 @@
+{
+    "login": [
+        {
+            "path": "/registrationInforMangeList",
+            "name": "registrationInforMangeList",
+            "meta": {
+                "title": "",
+                "icon": "chart"
+            },
+            "children": [
+                {
+                    "path": "/registrationInforMange",
+                    "name": "registrationInforMange",
+                    "meta": {
+                        "title": "编辑注册资料"
+                    },
+                    "hidden": false
+                }
+            ]
+        }
+    ],
+    "home": [
+        {
+            "path": "/companyManagementList",
+            "name": "companyManagementList",
+            "meta": {
+                "title": "公司管理",
+                "icon": "chart"
+            },
+            "children": [
+                {
+                    "path": "/companyManagement",
+                    "name": "companyManagement",
+                    "meta": {
+                        "title": "公司管理"
+                    }
+                }
+            ]
+        },
+        {
+            "path": "/dataAuditManagementList",
+            "name": "dataAuditManagementList",
+            "meta": {
+                "title": "注册资料审核",
+                "icon": "chart"
+            },
+            "children": [
+                {
+                    "path": "/dataAuditManagement",
+                    "name": "dataAuditManagement",
+                    "meta": {
+                        "title": "注册资料审核"
+                    }
+                }
+            ]
+        }
+    ]
+}
