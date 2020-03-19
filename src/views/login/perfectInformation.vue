@@ -483,7 +483,17 @@ export default {
   },
 
   mounted() {},
-  watch:{},
+  watch:{
+    // 省级id
+    // 'ruleForm.provinceId':{
+    //     handler(newName, oldName) {
+    //       console.log(newName, oldName)
+    //       this.ruleForm.cityName =""
+    //       this.ruleForm.cityId =""
+    //     },
+    //     immediate: true
+    // },
+  },
 
   created() {
     let date = sessionStorage.getItem('siw_registerInfor')
@@ -606,6 +616,9 @@ export default {
 
     // 按上级id获取下一级区域接口
     handleGetListByParentId(param){
+      // 清空区级选择
+      this.ruleForm.cityName =""
+      this.ruleForm.cityId =""
       Api.getListByParentId(param).then(res => {
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -617,7 +630,8 @@ export default {
 
     // 省份change事件
     handleProvinceChange(){
-      let item = this.provinceData.filter(item => item.id==this.ruleForm.provinceId)
+      let item = this.provinceData.filter(item => item.id==this.ruleForm.provinceId)[0]
+      // console.log(item)
       this.ruleForm.provinceName = item.name 
       // 获取市级 city
       this.handleGetListByParentId(this.ruleForm.provinceId)
@@ -625,8 +639,9 @@ export default {
 
     // 市级选中事件
     handleCityChange(){
-      let item = this.cityData.filter(item => item.id==this.ruleForm.cityId)
+      let item = this.cityData.filter(item => item.id==this.ruleForm.cityId)[0]
       this.ruleForm.cityName = item.name 
+      // console.log(item)
     },
 
     // 确定注册点击事件 

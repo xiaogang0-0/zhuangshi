@@ -1,4 +1,4 @@
-// 编辑注册资料 registrationInforMange
+// 人员列表 registrationInforMange
 <template>
   <div class="contentWrap registrationInforMange">
     <div class="contWrap" >
@@ -241,8 +241,7 @@
       </el-form>
     </div>
  
-    <div class="footerBtn" v-if="ruleForm.isUpdate ==1 ? false :
-                                 ruleForm.status == 2 || ruleForm.status == 3 ? true : false">
+    <div class="footerBtn" v-if="ruleForm.status == 2 || ruleForm.status == 3">
       <!-- <span class="btn" style="margin-right:20px" @click="handleGoBack">返 回</span> -->
       <span class="btns btn10" @click="handleConfirmButtonClick">提 交</span>
       <!-- <p class="center lineHeight30 padTop22 cRed">审核通过后发送短信或电话通知，请留意信息与接听</p> -->
@@ -576,10 +575,7 @@ export default {
       this.handleGetDictionaryList1()
       // 施工资质证书等级接口 
       this.handleGetDictionaryList2()
-      
     },
-
-   
 
     // 获取企业信息, 登录时
     handeGetCustomerDetailByLoginUser(){
@@ -596,21 +592,9 @@ export default {
           data.qualificationPhoto = data.qualificationPhoto ?  [{name:'', url:data.qualificationPhoto}] : []
           // 控制按钮 
           // 状态:0(新注册，等待完善资料),1(待审核),2(已审核通过),3(审核不通过),4(关闭),5(停用),6(冻结)
-          // data.status = 1
-          // data.isUpdate = 1
+          // data.status = 3
           // console.log(data.status)
 
-           this.details = Object.assign({},JSON.parse(JSON.stringify(data)))
-          this.ruleForm = data
-       
-       
-          // 获取市级 列表 参数（1:区级id  2:是否清空区级id ）
-          this.handleGetListByParentId(this.ruleForm.provinceId,1)
-
-          if(data.isUpdate ==1){
-            this.isHideBtn = false
-            return
-          }
           if(data.status ==1){
             this.isHideBtn = false
           }else if(data.status ==2){
@@ -629,7 +613,8 @@ export default {
               this.editStatus[key]= false
             });
           }
-         
+          this.details = Object.assign({},JSON.parse(JSON.stringify(data)))
+          this.ruleForm = data
           // console.log(data)
         }
       }).catch( error => { 
@@ -717,13 +702,8 @@ export default {
       })
     },
 
-    // 按上级id获取下一级区域接口  参数（1:区级id  2:是否清空区级id ）
-    handleGetListByParentId(param,onOff){
-       let isClear = onOff ? false : true;
-      if(isClear){
-        this.ruleForm.cityName =""
-        this.ruleForm.cityId =""
-      }
+    // 按上级id获取下一级区域接口
+    handleGetListByParentId(param){
       Api.getListByParentId(param).then(res => {
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -735,7 +715,7 @@ export default {
 
     // 省份change事件
     handleProvinceChange(){
-      let item = this.provinceData.filter(item => item.id==this.ruleForm.provinceId)[0]
+      let item = this.provinceData.filter(item => item.id==this.ruleForm.provinceId)
       this.ruleForm.provinceName = item.name 
       // 获取市级 city
       this.handleGetListByParentId(this.ruleForm.provinceId)
@@ -743,7 +723,7 @@ export default {
 
     // 市级选中事件
     handleCityChange(){
-      let item = this.cityData.filter(item => item.id==this.ruleForm.cityId)[0]
+      let item = this.cityData.filter(item => item.id==this.ruleForm.cityId)
       this.ruleForm.cityName = item.name 
     },
 
@@ -775,6 +755,7 @@ export default {
       return onOff
     },
 
+
     // 弹窗确定点击提交
     handleSubmit(){
       // 状态:0(新注册，等待完善资料),1(待审核),2(已审核通过),3(审核不通过),4(关闭),5(停用),6(冻结)
@@ -804,15 +785,10 @@ export default {
         this.dialogSubmitModal = false
         let  {code, data , msg, total} = res
         if(code == 200) {
-
           this.$message({
             message: '注册成功请耐心等待平台审核',
             type: 'success'
           });
-          setTimeout(()=>{
-            // 刷新页面
-              this.$router.go(0)
-          },1000)
           // setTimeout(() => {
           //   this.handleGoBack()
           // }, 1500);
@@ -861,15 +837,13 @@ export default {
         this.dialogSubmitModal = false
         let  {code, data , msg, total} = res
         if(code == 200) {
-          
           this.$message({
             message: '注册成功请耐心等待平台审核',
             type: 'success'
           });
-           setTimeout(()=>{
-            // 刷新页面
-              this.$router.go(0)
-          },1000)
+          // setTimeout(() => {
+          //   this.handleGoBack()
+          // }, 1500);
         }
       }).catch( error => {
         this.loading = false;
