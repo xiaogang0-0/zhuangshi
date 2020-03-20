@@ -363,7 +363,7 @@ export default {
         ],
         // 主联系电话
         phone: [
-          { required: true, trigger: 'change', validator: validateContactTel },
+          { required: true, trigger: 'blur', validator: validateContactTel },
         ],
         // 副联系电话
         phone2: [
@@ -803,8 +803,10 @@ export default {
       })
       // this.$router.back(-1)
     },
+
+    // 重置
     handleRefresh(){
-      
+      this.$refs['ruleForm'].resetFields();
       this.isEdit = true
       this.ruleForm = {
         // 公司id
