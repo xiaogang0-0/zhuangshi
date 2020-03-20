@@ -758,7 +758,7 @@ export default {
         // 人员副表id
         empOrtherId:this.ruleForm.empOrtherId,
         // 人员状态：0历史人员，1在岗
-        isWork:this.ruleForm.isWork
+        isWork:this.ruleForm.isWork == 1 ? 0 : 1 
       }
       Api.subEmpUdpateIsWork(param).then(res => {
         this.loading = false;

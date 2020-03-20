@@ -282,7 +282,7 @@ export default {
         // 人员副表id
         empOrtherId:item.empOrtherId,
         // 人员状态：0历史人员，1在岗
-        isWork:item.isWork
+        isWork:item.isWork == 1 ? 0 :'1'
       }
       Api.subEmpUdpateIsWork(param).then(res => {
         this.loading = false;
