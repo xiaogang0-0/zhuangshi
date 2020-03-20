@@ -448,8 +448,9 @@ export default {
         let  {code, data , msg, total} = res
         if(code == 200) {
            // 数据类型转换
-          this.ruleForm = Object.assign({}, this.handleConversionType(data,1))
-          console.log(this.ruleForm )
+          this.ruleForm = this.handleConversionType(data,1)
+          // this.ruleForm = Object.assign({}, this.handleConversionType(data,1))
+          // console.log(this.ruleForm )
         }
       }).catch( error => {
         
@@ -529,7 +530,7 @@ export default {
       }).catch( error => {
       })
     },
-
+    
     // 身份信息列表
     handleGetDictionaryListTypeid9(){
       Api.getDictionaryListTypeid9().then(res => {

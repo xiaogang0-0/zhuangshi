@@ -134,11 +134,11 @@ export default {
       // 1是系统用户, 0是企业用户
       userType:'0',
       loginForm: {
-        // 17601001098
-        phoneNumber:'18600639069',
+        // 18600639069
+        phoneNumber:'',
         customerName: '',
-        // K1111111
-        password: 'baidu111111',
+        // baidu111111
+        password: '',
         // verifyCode:''
       },
       // 企业列表
