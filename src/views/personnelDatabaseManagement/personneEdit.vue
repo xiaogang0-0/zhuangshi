@@ -86,11 +86,13 @@
       <div class="titleWrap" v-if="ruleForm.station =='项目经理'">
         <h2 class="title">资质信息</h2>
          
-        <el-form-item label="人员资质证书号:" prop="certificateNum">
+        <el-form-item prop="certificateNum">
+          <span slot="label"><i class="cRed">*</i> 人员资质证书号:</span>
           <el-input v-model="ruleForm.certificateNum"></el-input>
         </el-form-item>
 
-        <el-form-item label="人员资质证书照片:" prop="certificatePhoto" class="w100">
+        <el-form-item label="" prop="certificatePhoto" class="w100">
+          <span slot="label"><i class="cRed">*</i> 人员资质证书照片:</span>
           <!-- 正面照片 -->
           <div class="imgItem">
             <img 
@@ -104,7 +106,8 @@
           </div>
         </el-form-item>
 
-        <el-form-item label="有效期至:" prop="certificateEffectEnddate">
+        <el-form-item label="" prop="certificateEffectEnddate">
+          <span slot="label"><i class="cRed">*</i> 有效期至:</span>
           <el-date-picker
             v-model="ruleForm.certificateEffectEnddate"
             type="date"
@@ -121,7 +124,8 @@
           </el-date-picker> -->
         </el-form-item>
 
-        <el-form-item label="发证机构:" prop="certificateUnit">
+        <el-form-item label="" prop="certificateUnit">
+          <span slot="label"><i class="cRed">*</i> 发证机构:</span>
           <el-select v-model="ruleForm.certificateUnit" placeholder="请选择机构">
             <el-option 
               v-for="item in certificateUnitData"
@@ -131,7 +135,8 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="人员资质等级:" prop="certificateGrade">
+        <el-form-item label="" prop="certificateGrade">
+          <span slot="label"><i class="cRed">*</i> 人员资质等级:</span>
           <el-select v-model="ruleForm.certificateGrade" placeholder="请选择等级">
              <el-option 
               v-for="item in certificateGradeData"
@@ -537,6 +542,8 @@ export default {
         let  {code, data , msg, total} = res
         if(code == 200) {
           this.stationData = data
+          // 增加默认选中（成为必选项）
+          this.ruleForm.station = data[0].name
         }
       }).catch( error => {
       })
@@ -880,6 +887,7 @@ export default {
 .personneEdit{
   min-width:900px;
   margin: 0 auto;
+  .cRed {color: #ff4949;}
   .overflow{overflow: hidden;}
   .footerBtn {text-align: center; padding:10px;}
   .previewImg {
