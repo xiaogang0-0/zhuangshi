@@ -63,7 +63,7 @@
           </div>
         </el-form-item>
         <el-form-item label="主联系电话:" prop="phone">
-          <el-input v-model="ruleForm.phone" :disabled="!isEdit"></el-input>
+          <el-input v-model="ruleForm.phone"></el-input>
         </el-form-item>
         <el-form-item label="副联系电话:" prop="phone2">
           <el-input v-model="ruleForm.phone2"></el-input>
@@ -300,6 +300,7 @@ export default {
 
     return {
       imgUrl:imgUrl,
+      
       loading:false,
       // 人员主信息id
       empId:'',
@@ -438,9 +439,10 @@ export default {
         // 获取详情
         this.handleGetDetail()
         // 清空主表验证
-        this.rules={}
+        // this.rules={}
       }
       
+
     },
 
     // 获取详情
@@ -504,7 +506,7 @@ export default {
               // 不允许编辑
               this.isEdit = false;
               // 清空主表验证
-              this.rules={}
+              // this.rules={}
             }).catch(() => {
               this.$refs.idNumClass.focus()
             });
@@ -618,7 +620,7 @@ export default {
 
     },
 
-    // 确定注册点击事件 
+    // 确定提交点击事件 
     handleConfirmButtonClick(){
       // 提交验证函数
       if(!this.handleSubmitValidation()){
@@ -691,7 +693,7 @@ export default {
       this.loading = true;
       // 数据类型转换
       param = this.handleConversionType(param,2)
-      console.log(param)
+      // console.log(param)
       // return  
       if(this.empOrtherId || this.empId){
         // 编辑提交
@@ -712,10 +714,21 @@ export default {
             message: '人员添加成功',
             type: 'success'
           });
-          setTimeout(()=>{
-            // 清空操作
+
+          this.$confirm('添加成功！！', '提示', {
+            confirmButtonText: '继续添加', // 成功
+            cancelButtonText: '查看人员信息', //取消
+          }).then(() => {
+            // 继续添加 清空操作
             this.handleRefresh()
-          },1000)
+          }).catch(() => {
+            // 查看人员信息
+            this.$router.push({
+              name:'personnelSearch'
+            })
+          });
+
+
           
         }
       }).catch( error => {
@@ -723,6 +736,7 @@ export default {
         this.dialogSubmitModal = false
       })
     },
+
     // 编辑接口
     handleEditSubMit(param){
       Api.subUserEmpUdpateEmpOrther(param).then(res => {
@@ -771,11 +785,12 @@ export default {
         this.loading = false;
         let  {code, data , msg, total} = res
         if(code == 200) {
+          this.ruleForm.isWork = param.isWork
+          
           this.$message({
             type: 'success',
             message: msg
           });
-          this.handleRefresh();
         }
       }).catch( error => {
       })
@@ -783,10 +798,48 @@ export default {
    
     // 返回
     handleGoBack(){
-      this.$router.back(-1)
+      this.$router.push({
+        name:'personnelSearch'
+      })
+      // this.$router.back(-1)
     },
     handleRefresh(){
-      this.$router.go(0)
+      
+      this.isEdit = true
+      this.ruleForm = {
+        // 公司id
+        customerId:'',
+        // 人员主信息id
+        empId:'',
+        // 名称
+        ename:'',
+        // 身份证号
+        idNum:'',
+        // 性别
+        sex:'',
+        // 主联系电话
+        phone:'',
+        // 副联系电话
+        phone2:'',
+        // 身份信息
+        station:'',
+        // 分配工种
+        workTypeArray:[],
+        // 分配身份
+        stationDetailArray:[],
+        // ++++++++++++   数据类型转换的++++++++++
+        // 头像
+        headPhoto:[],
+        // 身份证正面照url
+        facePhoto:[],
+        // 身份证背面照url
+        backPhoto:[],
+        // 人员资质证书照片
+        certificatePhoto:[],
+      };
+      this.ruleForm.station = this.stationData[0].name
+
+      // this.$router.go(0)
     },
 
     // 图片预览
