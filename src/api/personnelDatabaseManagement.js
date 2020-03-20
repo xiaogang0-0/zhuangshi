@@ -1,115 +1,75 @@
-// 人员列表
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 编辑注册资料
+// 人员数据库
 import request from '@/utils/request'
-// 公司管理列表  
-export function getUserCustomerSearch(data) {
+// 人员列表    /admin/a/manager/emp/search   
+export function getPersonnelSearch(data) {
   return request({
-    url: '/admin/a/user/customer/search',
+    url: '/admin/a/user/emp/search',
     method: 'post',
     data
   })
 }
 
-
-// 修改示范工地接口 /admin/a/user/customer/updateCustomerDemoSite
-export function setUpdateCustomerDemoSite(data) {
+// 移到历史  /admin/a/manager/emp/udpateIsWork
+export function subEmpUdpateIsWork(data) {
   return request({
-    url: '/admin/a/user/customer/updateCustomerDemoSite',
+    url: '/admin/a/user/emp/udpateIsWork',
     method: 'post',
     data
   })
 }
 
-// 注册资料审核列表 /admin/a/manager/customer_update_record/search
-export function getCustomerUpdateRecordSearch(data) {
+// 获取人员详细信息接口  /admin/a/manager/emp/getDetail
+export function getEmpDetail(data) {
   return request({
-    url: '/admin/a/manager/customer_update_record/search',
+    url: '/admin/a/user/emp/getDetail',
     method: 'post',
     data
   })
 }
 
-
-// 公司管理-获取基本信息   /admin/a/manager/customer/get-by-id/{customerId}
-export function getCustomerGetById(data) {
+// 人员资质发证机构接口  /admin/a/user/dictionary/list/typeid/5
+export function getDictionaryListTypeid5() {
   return request({
-    url: '/admin/a/manager/customer/get-by-id/'+data,
+    url: '/admin/a/user/dictionary/list/typeid/5',
     method: 'get',
     // params: data
   })
 }
 
-// 注册信息审核不通过原因接口  /admin/a/user/dictionary/list/typeid/4
-export function getListTypeid4() {
+// 人员资质等级接口  
+export function getDictionaryListTypeid6() {
   return request({
-    url: '/admin/a/user/dictionary/list/typeid/4',
+    url: '/admin/a/user/dictionary/list/typeid/6',
     method: 'get',
     // params: data
   })
 }
 
-// 公司信息审核接口 
-export function subCustomerAudit(data) {
+// 身份信息列表  /admin/a/user/dictionary/list/typeid/9
+export function getDictionaryListTypeid9(data) {
   return request({
-    url: '/admin/a/user/customer/audit',
-    method: 'post',
-    data
+    url: '/admin/a/user/dictionary/list/typeid/9',
+    method: 'get',
+    // params: data
   })
 }
 
-
-// 注册资料审核-获取详情页接口  /admin/a/manager/customer_update_record/detail
-export function getCustomerUpdateRecordDetail(data) {
+// 工种接口
+export function getDictionaryListTypeid7(data) {
   return request({
-    url: '/admin/a/manager/customer_update_record/detail',
-    method: 'post',
-    data
+    url: '/admin/a/user/dictionary/list/typeid/7',
+    method: 'get',
+    // params: data
   })
 }
-
-// 注册资料审核接口  /admin/a/manager/customer_update_record/audit
-export function subCustomerUpdateRecordAudit(data) {
+// 分配身份接口
+export function getDictionaryListTypeid8(data) {
   return request({
-    url: '/admin/a/manager/customer_update_record/audit',
-    method: 'post',
-    data
+    url: '/admin/a/user/dictionary/list/typeid/8',
+    method: 'get',
+    // params: data
   })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // 阿里云上传服务端签名接口  
 export function getAliyunOssSign(data) {
@@ -121,78 +81,28 @@ export function getAliyunOssSign(data) {
   })
 }
 
-
-
-
-// 按层级获取行政区域省市接口 /admin/a/user/area/list-by-level/{level}
-// 根据层级获取行政区域, 0为省级, 1为市级
-export function getListByLevel(data) {
+// 根据身份证号码获取人员主信息   /admin/a/user/emp/{idNum}
+export function getUserEmp(data) {
   return request({
-    url: '/admin/a/user/area/list-by-level/'+ data,
-    method: 'get'
-    // ,params: data
+    url: '/admin/a/user/emp/'+ data,
+    method: 'get',
+    // params: data
   })
 }
 
-// 按上级id获取下一级区域接口  /admin/a/user/area/list-by-parent-id/{parentId}
-export function getListByParentId(data) {
+// 新增人员  /admin/a/user/emp/addEmp
+export function subUserEmpAddEmp(data) {
   return request({
-    url: '/admin/a/user/area/list-by-parent-id/'+ data,
-    method: 'get'
-    // ,params: data
-  })
-}
-
-// 施工资质发放单位接口  localhost:8008/admin/a/user/dictionary/list/typeid/1
-export function getDictionaryList1(data) {
-  return request({
-    url: '/admin/a/user/dictionary/list/typeid/'+ 1,
-    method: 'get'
-    // ,params: data
-  })
-}
-
-// 施工资质证书等级接口  localhost:8008/admin/a/user/dictionary/list/typeid/2
-export function getDictionaryList2(data) {
-  return request({
-    url: '/admin/a/user/dictionary/list/typeid/'+ 2,
-    method: 'get'
-    // ,params: data
-  })
-}
-
-// 施工能力等级评价证书接口  localhost:8008/admin/a/user/dictionary/list/typeid/3
-export function getDictionaryList3(data) {
-  return request({
-    url: '/admin/a/user/dictionary/list/typeid/'+ 3,
-    method: 'get'
-    // ,params: data
-  })
-}
-
-// 注册信息审核不通过原因接口  localhost:8008/admin/a/user/dictionary/list/typeid/4
-export function getDictionaryList4(data) {
-  return request({
-    url: '/admin/a/user/dictionary/list/typeid/'+ 4,
-    method: 'get'
-    // ,params: data
-  })
-}
-
-
-// 完善资料-提交  
-export function subUserCustomerComplete(data) {
-  return request({
-    url: '/admin/a/user/customer/complete',
+    url: '/admin/a/user/emp/addEmp',
     method: 'post',
     data
   })
 }
 
-// 我的账户首页-审核通过-提交  /admin/a/user/customer/change
-export function subUserCustomerChange(data) {
+// 人员库修改接口 /admin/a/user/emp/udpateEmpOrther
+export function subUserEmpUdpateEmpOrther(data) {
   return request({
-    url: '/admin/a/user/customer/change',
+    url: '/admin/a/user/emp/udpateEmpOrther',
     method: 'post',
     data
   })

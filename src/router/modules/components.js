@@ -26,42 +26,42 @@ const componentsRouter = [
   },
 
   // 人员数据库 personnelDatabaseManagement
-  // {
-  //   path: '/personnelDatabaseManagement',
-  //   component: Layout,
-  //   redirect: '/personnelAdd', // 重定向
-  //   name: 'personnelDatabaseManagement',
-  //   meta: { title: '人员数据库', icon: 'chart' },
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: 'personnelAdd',
-  //       component: () => import('@/views/personnelDatabaseManagement/examineDetails'),
-  //       name: 'personnelAdd',
-  //       meta: { title: '人员添加' },
-  //       hidden: false,
-  //       // children: []
-  //     },
-  //     {
-  //       path: 'personnelLis',
-  //       component: () => import('@/views/personnelDatabaseManagement/index'),
-  //       name: 'personnelLis',
-  //       meta: { title: '人员列表',},
-  //       hidden: false,
-  //       // children: []
-  //     },
-  //     // activeMenu:'/personnelDatabaseManagement/dataAuditManagement'
-  //     // {
-  //     //   path: 'personnelLis',
-  //     //   component: () => import('@/views/personnelDatabaseManagement/examineDetails'),
-  //     //   name: 'personnelLis',
-  //     //   meta: { title: '修改资料',},
-  //     //   hidden: true,
-  //     //   // children: []
-  //     // },
+  {
+    path: '/personnelDatabaseManagement',
+    component: Layout,
+    redirect: '/personnelAdd', // 重定向
+    name: 'personnelDatabaseManagement',
+    meta: { title: '人员数据库', icon: 'chart' },
+    hidden: true,
+    children: [
+      {
+        path: 'personnelAdd',
+        component: () => import('@/views/personnelDatabaseManagement/personneEdit'),
+        name: 'personnelAdd',
+        meta: { title: '人员添加' },
+        hidden: true,
+        // children: []
+      },
+      {
+        path: 'personnelSearch',
+        component: () => import('@/views/personnelDatabaseManagement/index'),
+        name: 'personnelSearch',
+        meta: { title: '人员列表',},
+        hidden: true,
+        // children: []
+      },
+      // activeMenu:'/personnelDatabaseManagement/dataAuditManagement'
+      {
+        path: 'personneEdit',
+        component: () => import('@/views/personnelDatabaseManagement/personneEdit'),
+        name: 'personneEdit',
+        meta: { title: '修改资料', activeMenu:'/personnelDatabaseManagement/personnelSearch'},
+        hidden: true,
+        // children: []
+      },
      
-  //   ]
-  // },
+    ]
+  },
 
   // ++++++++++++++++++++++++   后台登录  +++++++++++++++++++++++++++++//
   // 首页 - 公司管理

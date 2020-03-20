@@ -17,6 +17,30 @@
                     "hidden": false
                 }
             ]
+        },
+        {
+            "path": "/personnelDatabaseManagement",
+            "name": "personnelDatabaseManagement",
+            "meta": {
+                "title": "人员数据库",
+                "icon": "chart"
+            },
+            "children": [
+                {
+                    "path": "personnelAdd",
+                    "name": "personnelAdd",
+                    "meta": {
+                        "title": "人员添加"
+                    }
+              },
+                {
+                    "path": "personnelSearch",
+                    "name": "personnelSearch",
+                    "meta": {
+                        "title": "人员列表"
+                    }
+              }
+            ]
         }
     ],
     "home": [

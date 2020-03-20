@@ -135,10 +135,10 @@ export default {
       userType:'0',
       loginForm: {
         // 17601001098
-        phoneNumber:'',
+        phoneNumber:'18600639069',
         customerName: '',
         // K1111111
-        password: '',
+        password: 'baidu111111',
         // verifyCode:''
       },
       // 企业列表

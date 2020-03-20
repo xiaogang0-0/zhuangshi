@@ -5,7 +5,7 @@
       <el-form-item label="身份信息:" style="margin-bottom:0;" class="orderStatus">
           <el-checkbox-group 
             v-model="ruleForm.stationArray">
-            <el-checkbox v-for="city in stationArrayData" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
+            <el-checkbox v-for="city in stationData" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
           </el-checkbox-group>
       </el-form-item>
       
@@ -48,15 +48,7 @@
         prop="ename"
         label="姓名"
         align="center"
-        min-width="150">
-        <!-- <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="handeLookDetails(scope.row)"
-            type="text"
-            size="small">
-            {{scope.row.name}}
-          </el-button>
-        </template> -->
+        min-width="90">
       </el-table-column>
 
       <el-table-column
@@ -76,21 +68,21 @@
       <el-table-column
         align="center"
         prop="phone"
-        min-width="120"
+        min-width="100"
         label="主联系电话">
       </el-table-column>
 
       <el-table-column
         align="center"
         prop="phone2"
-        min-width="120"
+        min-width="100"
         label="辅联系电话">
       </el-table-column>
 
       <el-table-column
         align="center"
         prop="station"
-        min-width="120"
+        min-width="100"
         label="身份信息">
       </el-table-column>
 
@@ -114,14 +106,29 @@
         align="center"
         width="120">
         <template slot-scope="scope">
-          <el-button
-            @click="handeLookDetails(scope.row)"
-            type="text"
-            size="small">修改资料</el-button>
-          <el-button
-            @click="handeLookDetails(scope.row)"
-            type="text"
-            size="small">移到历史</el-button>
+          <div>
+            <el-button
+              @click="handeEdit(scope.row)"
+              type="text"
+              size="small">修改资料
+            </el-button>
+            
+          </div>
+          <div v-if="scope.row.isWork == 1">
+            <el-button
+              @click="handeMove(scope.row)"
+              type="text"
+              size="small">移到历史
+            </el-button>
+          </div>
+          <div v-if="scope.row.isWork == 0">
+            <el-button
+              @click="handeMove(scope.row)"
+              type="text"
+              size="small">移出历史
+            </el-button>
+          </div>
+            
         </template>
       </el-table-column>
      
@@ -161,23 +168,7 @@ export default {
         ename:'',
       },
       // 身份信息
-      stationArrayData:[{
-          name:'工程人员',
-          id:1
-        },{
-          name:'项目经理',
-          id:2
-        },{
-          name:'施工队长',
-          id:3
-        },{
-          name:'施工人员',
-          id:4
-        },{
-          name:'临时人员',
-          id:5
-        }
-      ],
+      stationData:[],
       // 状态数据
       isWorkArrayData:[{
           name:'在岗人员',
@@ -188,17 +179,7 @@ export default {
         }
       ],
       tableList: [],
-      form:{
-        // 记录id
-        customerId:'', 
-        // 示范工地资格：1是，0否
-        isDemoSite:[]
-      },
-      
-      
       oldForm:{},
-      // 示范资格-弹窗
-      dialogQualifications:false,
       // 页码
       paging: {
         pageNum: 1,
@@ -209,8 +190,9 @@ export default {
   },
   watch:{},
 
-  mounted() {},
-
+  mounted() {
+    this.handleGetDictionaryListTypeid9()
+  },
 
   created(){
       this.handleSearch()
@@ -242,10 +224,20 @@ export default {
       this.handleSearch();
     },
 
+    // 身份信息列表
+    handleGetDictionaryListTypeid9(){
+      Api.getDictionaryListTypeid9().then(res => {
+        let  {code, data , msg, total} = res
+        if(code == 200) {
+          this.stationData = data
+        }
+      }).catch( error => {
+      })
+    },
     // 请求数据列表
     handleGetlist(param){
       this.loading = true;
-      Api.getCustomerUpdateRecordSearch(param).then(res => {
+      Api.getPersonnelSearch(param).then(res => {
         this.loading = false;
         let  {code, data , msg, total} = res
         if(code == 200) {
@@ -258,15 +250,51 @@ export default {
       })
     },
 
-   
-    // 审核点击
-    handeLookDetails(item){
+    // 编辑点击
+    handeEdit(item){
       this.$router.push({
-        name:'dataAuditManagement_auditDetails',
+        name:'personneEdit',
         query:{
-          customerId:item.customerId,
-          id:item.id,
+          // 人员主信息id
+          empId:item.empId,
+          // 人员副信息id
+          empOrtherId:item.empOrtherId
         }
+      })
+    },
+
+    // 移入、移出到历史
+    handeMove(item){
+      this.$confirm('此操作会改变人员状态请谨慎操作！！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        // type: 'warning'
+      }).then(() => {
+        // 移动到历史请求
+        this.handleMoveSub(item)
+      }).catch(() => { });
+     
+    },
+    
+    // 移动到历史请求
+    handleMoveSub(item){
+      let param = {
+        // 人员副表id
+        empOrtherId:item.empOrtherId,
+        // 人员状态：0历史人员，1在岗
+        isWork:item.isWork
+      }
+      Api.subEmpUdpateIsWork(param).then(res => {
+        this.loading = false;
+        let  {code, data , msg, total} = res
+        if(code == 200) {
+          this.$message({
+            type: 'success',
+            message: msg
+          });
+          this.handleGetlist(this.oldForm);
+        }
+      }).catch( error => {
       })
     },
 
@@ -277,8 +305,6 @@ export default {
       this.oldForm = Object.assign({}, this.oldForm, this.paging);
       this.handleGetlist(this.oldForm);
     },
-
-    
   },
   
   computed: {
@@ -287,33 +313,17 @@ export default {
 </script>
 
 <style lang="scss" >
-.personnelDatabaseManagement {
-  .el-date-editor .el-range-separator{
-    width: auto;
-  }
-}
+
 </style>
 <style lang="scss" scoped>
 .personnelDatabaseManagement {
   padding: 20px;
-
-  .w100.el-select{width:100px;}
-  .w110.el-select{width:110px;}
-  .w120.el-input--medium {width:110px;}
-  .orderStatus {
-  //  .el-form-item__content {width: 90% !important;}
-   .el-form-item__content {width: calc(100% - 100px)}; 
-  }
   .el-form{
     padding: 15px;
     padding-bottom:0; 
     margin-bottom: 10px;
     background: #f7f7f7;
     border-radius:5px;
-  }
-  .btnWrap{
-    padding: 5px 0;
-    // background: #ddd;
   }
 }
 </style>
