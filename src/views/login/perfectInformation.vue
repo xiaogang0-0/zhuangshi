@@ -117,6 +117,7 @@
 
         <el-form-item label-width="150px" label="证书发放单位:" prop="qualificationUnit">
           <el-select 
+            clearable
             v-model="ruleForm.qualificationUnit" 
             placeholder="请选择">
             <el-option
@@ -130,6 +131,7 @@
 
         <el-form-item label-width="150px" label="施工能力或施工资质等级:" prop="qualificationGrade">
           <el-select 
+            clearable
             v-model="ruleForm.qualificationGrade" 
             placeholder="请选择">
             <el-option

@@ -4,6 +4,7 @@
 
     <div class="dashboard-text">
       <!-- <img class="welcomeImg" :src='img'/> -->
+      <h2 class="title">欢迎使用住宅装饰一网通平台</h2>
     </div>
     
    
@@ -57,28 +58,30 @@ export default {
   data() {
     return {
       // 显示哪个首页  user 为客户端   admin 为后台登录
-      isShow:'user',
+      // isShow:'user',
       img:welcomell,
       lineChartData: lineChartData.newVisitis
     }
   },
   mounted() {
     // 0是企业用户 1是系统用户,
-    this.isShow = localStorage.getItem ('Siw_userInfo') ? JSON.parse(localStorage.getItem('Siw_userInfo')).userType : ''
-    console.log(this.isShow,'userType' )
-    // 显示哪个首页  0 为客户端   1 为后台登录
-    if(this.isShow == '0'){
-        // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
-        this.$router.push({
-        name:'registrationInforMange'
-      })
-    }
-    if(this.isShow == '1'){
-        // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
-        this.$router.push({
-        name:'companyManagement'
-      })
-    }
+    // this.isShow = localStorage.getItem ('Siw_userInfo') ? JSON.parse(localStorage.getItem('Siw_userInfo')).userType : ''
+    // console.log(this.isShow,'userType' )
+    // // 显示哪个首页  0 为客户端   1 为后台登录
+    // if(this.isShow == '0'){
+    //     // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
+    //     this.$router.push({
+    //     name:'registrationInforMange'
+    //   })
+    // }
+    // if(this.isShow == '1'){
+    //     // console.log( JSON.parse(localStorage.getItem('Siw_userInfo')).userType)
+    //     this.$router.push({
+    //     name:'companyManagement'
+    //   })
+    // }
+
+
     // if(this.isShow == ''){
     //   removeToken();
     //   localStorage.removeItem('Siw_userInfo')
@@ -109,6 +112,12 @@ export default {
     align-items:Center;
     min-height: calc(100vh - 152px);
     // min-height: calc(100vh - 115px);
+    .title {
+      position: absolute;
+      top: 160px;
+      font-size: 30px;
+      font-weight: 600;
+    }
     
   }
   .welcomeImg {

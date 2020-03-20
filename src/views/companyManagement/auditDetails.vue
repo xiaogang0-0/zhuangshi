@@ -140,15 +140,15 @@
           </el-form-item>
         </div>
 
-        <!-- <div class="borderbot1">
+        <div class="borderbot1">
           <el-form-item label-width="150px" label="上海市装饰装修行业协会会员证书号:">
             <span class="inlineBlock">{{ruleForm.certificateNum}}</span>
           </el-form-item>
-          // 更新后的 
-          <el-form-item label-width="150px" :label="newForm.certificateNum ? '上海市装饰装修行业协会会员证书号:' : ''">
+          <!--  更新后的  -->
+          <el-form-item v-show="newForm.certificateNum" label-width="150px" label="上海市装饰装修行业协会会员证书号">
             <span class="inlineBlock cRed">{{newForm.certificateNum}}</span>
           </el-form-item>
-        </div> -->
+        </div>
 
         <div class="borderbot1">
           <el-form-item label-width="150px" label="施工资质发放单位:">

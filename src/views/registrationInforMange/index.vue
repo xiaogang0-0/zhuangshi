@@ -162,6 +162,7 @@
 
         <el-form-item label-width="150px" label="施工资质发放单位:" prop="qualificationUnit">
           <el-select 
+            clearable
             v-if="editStatus.status10"
             v-model="ruleForm.qualificationUnit" 
             placeholder="请选择">
@@ -205,8 +206,9 @@
           <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status12')">编辑</span>
         </el-form-item>
 
-        <el-form-item label-width="150px" label="施工资质或施工能力等级评价:" prop="qualificationGrade">
+        <el-form-item label-width="150px" label="施工能力或施工资质等级:" prop="qualificationGrade">
           <el-select 
+            clearable
             v-if="editStatus.status13"
             v-model="ruleForm.qualificationGrade" 
             placeholder="请选择">
