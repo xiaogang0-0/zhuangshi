@@ -52,7 +52,7 @@
               alt="" 
               class="imgWrap"
               :src="ruleForm.businessLicense" 
-              @click="handlePreviewImg(ruleForm.businessLicense)">
+              @click="handlePreviewImg(ruleForm.businessLicense,{ name:'统一社会信用代码', target:'ruleForm',tit:'creditCode'})">
           </el-form-item>
           <!-- 更新后的 -->
           <el-form-item v-show="newForm.businessLicense" label-width="150px" label="企业营业执照:">
@@ -61,7 +61,7 @@
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.businessLicense" 
-              @click="handlePreviewImg(newForm.businessLicense)">
+              @click="handlePreviewImg(newForm.businessLicense, { name:'统一社会信用代码', target:'newForm',tit:'creditCode'})">
           </el-form-item>
         </div>
 
@@ -91,12 +91,12 @@
               alt="" 
               class="imgWrap"
               :src="ruleForm.facePhoto" 
-              @click="handlePreviewImg(ruleForm.facePhoto)">
+              @click="handlePreviewImg(ruleForm.facePhoto, { name:'法人身份证号', target:'ruleForm',tit:'idNum'})">
             <img 
               alt="" 
               class="imgWrap"
               :src="ruleForm.backPhoto" 
-              @click="handlePreviewImg(ruleForm.backPhoto)">
+              @click="handlePreviewImg(ruleForm.backPhoto,{ name:'法人身份证号', target:'ruleForm',tit:'idNum'})">
           </el-form-item>
           <!-- 更新后的 -->
           <el-form-item v-show="(newForm.facePhoto || newForm.backPhoto )" label-width="150px" label="企业法人证照:">
@@ -105,13 +105,13 @@
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.facePhoto" 
-              @click="handlePreviewImg(newForm.facePhoto)">
+              @click="handlePreviewImg(newForm.facePhoto,{ name:'法人身份证号', target:'newForm',tit:'idNum'})">
             <img 
               v-show="newForm.backPhoto"
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.backPhoto" 
-              @click="handlePreviewImg(newForm.backPhoto)">
+              @click="handlePreviewImg(newForm.backPhoto,{ name:'法人身份证号', target:'newForm',tit:'idNum'})">
           </el-form-item>
         </div>
 
@@ -198,7 +198,7 @@
               alt="" 
               class="imgWrap"
               :src="ruleForm.qualificationPhoto" 
-              @click="handlePreviewImg(ruleForm.qualificationPhoto)">
+              @click="handlePreviewImg(ruleForm.qualificationPhoto,{ name:'施工资质证书编号', target:'ruleForm',tit:'qualificationNum'})">
           </el-form-item>
           <!-- 更新后的 -->
           <el-form-item v-show="newForm.qualificationPhoto" label-width="150px" label="施工能力等级/资质证书:">
@@ -207,7 +207,7 @@
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.qualificationPhoto" 
-              @click="handlePreviewImg(newForm.qualificationPhoto)">
+              @click="handlePreviewImg(newForm.qualificationPhoto,{ name:'施工资质证书编号', target:'newForm',tit:'qualificationNum'})">
           </el-form-item>
         </div>
 
@@ -231,8 +231,14 @@
       <!-- <p class="center lineHeight30 padTop22 cRed">审核通过后发送短信或电话通知，请留意信息与接听</p> -->
     </div>
 
-    <!-- 图片预览弹窗 -->
+    <!-- 图片预览弹窗  图片预览-->
     <el-dialog title="图片预览" :visible.sync="dialogTablePreview" class="previewImg">
+      <p 
+        class="previewImgTit"
+        v-show="PreviewData.isShow">
+        {{PreviewData.name}}：{{PreviewData.numbe}}
+      </p>
+        
       <img :src="PreviewImgUrl" alt="">
     </el-dialog>
 
@@ -326,12 +332,22 @@ export default {
      
       // 预览弹窗
       dialogTablePreview: false,
+      // 图片预览地址
+      PreviewImgUrl:'',
+      // 预览数据
+      PreviewData:{
+        // 是否显示
+        isShow:false,
+        // 显示名字
+        name:'',
+        // 显示码
+        numbe:''
+      },
       // 确定注册弹窗
       dialogSubmitModal:false,
       // 拒绝弹窗
       dialogRefuseToPassModal:false,
-      // 图片预览地址
-      PreviewImgUrl:'',
+      
       num:0,
     };
   },
@@ -482,10 +498,33 @@ export default {
       this.$router.back(-1)
     },
 
-    // 图片预览
-    handlePreviewImg(imgUrl){
+    // 图片预览 data { name:'统一社会信用代码', target:ruleForm,(对应数据) tit:'creditCode'(对应字段)}   
+    handlePreviewImg(imgUrl,data){
+      // console.log(data)
+      // console.log(this[data.target][data.tit])
+      // { "name":'统一社会信用代码',tit:'creditCode', target:'old'}
+      // 重置状态
+      this.PreviewData={
+        // 是否显示 默认不显示
+        isShow:false,
+        // 显示名字
+        name:'',
+        // 显示码
+        numbe:'',
+      }
+      
+      if(data){
+          this.PreviewData.name = data.name
+          this.PreviewData.numbe = this[data.target][data.tit] ? this[data.target][data.tit] : this.ruleForm[data.tit]
+          this.PreviewData.isShow = this.PreviewData.numbe ? true : false 
+      }
+
       this.PreviewImgUrl = imgUrl.url || imgUrl ;
+      // 显示弹窗
       this.dialogTablePreview = true
+
+      // console.log(this.PreviewData)
+
     },
     
     
@@ -514,6 +553,9 @@ export default {
       // max-width: 600px;
       line-height: 36px;
       // vertical-align: bottom;
+  }
+  .previewImg {
+    .el-dialog__body{padding-top: 0;}
   }
 }
 

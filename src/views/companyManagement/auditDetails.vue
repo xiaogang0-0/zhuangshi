@@ -52,7 +52,8 @@
               alt="" 
               class="imgWrap"
               :src="ruleForm.businessLicense" 
-              @click="handlePreviewImg(ruleForm.businessLicense)">
+              @click="handlePreviewImg(ruleForm.businessLicense,{ name:'统一社会信用代码', target:'ruleForm',tit:'creditCode'})">
+
           </el-form-item>
           <!-- 更新后的 -->
           <el-form-item v-show="newForm.businessLicense" label-width="150px" label="企业营业执照:">
@@ -61,7 +62,7 @@
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.businessLicense" 
-              @click="handlePreviewImg(newForm.businessLicense)">
+              @click="handlePreviewImg(newForm.businessLicense, { name:'统一社会信用代码', target:'newForm',tit:'creditCode'})">
           </el-form-item>
         </div>
 
@@ -91,12 +92,12 @@
               alt="" 
               class="imgWrap"
               :src="ruleForm.facePhoto" 
-              @click="handlePreviewImg(ruleForm.facePhoto)">
+              @click="handlePreviewImg(ruleForm.facePhoto, { name:'法人身份证号', target:'ruleForm',tit:'idNum'})">
             <img 
               alt="" 
               class="imgWrap"
               :src="ruleForm.backPhoto" 
-              @click="handlePreviewImg(ruleForm.backPhoto)">
+              @click="handlePreviewImg(ruleForm.backPhoto,{ name:'法人身份证号', target:'ruleForm',tit:'idNum'})">
           </el-form-item>
           <!-- 更新后的 -->
           <el-form-item v-show="(newForm.facePhoto || newForm.backPhoto )" label-width="150px" label="企业法人证照:">
@@ -105,13 +106,13 @@
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.facePhoto" 
-              @click="handlePreviewImg(newForm.facePhoto)">
+              @click="handlePreviewImg(newForm.facePhoto,{ name:'法人身份证号', target:'newForm',tit:'idNum'})">
             <img 
               v-show="newForm.backPhoto"
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.backPhoto" 
-              @click="handlePreviewImg(newForm.backPhoto)">
+              @click="handlePreviewImg(newForm.backPhoto,{ name:'法人身份证号', target:'newForm',tit:'idNum'})">
           </el-form-item>
         </div>
 
@@ -196,7 +197,7 @@
               alt="" 
               class="imgWrap"
               :src="ruleForm.qualificationPhoto" 
-              @click="handlePreviewImg(ruleForm.qualificationPhoto)">
+              @click="handlePreviewImg(ruleForm.qualificationPhoto,{ name:'施工资质证书编号', target:'ruleForm',tit:'qualificationNum'})">
           </el-form-item>
           <!-- 更新后的 -->
           <el-form-item v-show="newForm.qualificationPhoto" label-width="150px" label="施工能力等级/资质证书:">
@@ -205,7 +206,7 @@
               alt="" 
               class="imgWrap borderRed"
               :src="newForm.qualificationPhoto" 
-              @click="handlePreviewImg(newForm.qualificationPhoto)">
+              @click="handlePreviewImg(newForm.qualificationPhoto,{ name:'施工资质证书编号', target:'newForm',tit:'qualificationNum'})">
           </el-form-item>
         </div>
 
@@ -239,6 +240,12 @@
 
     <!-- 图片预览弹窗 -->
     <el-dialog title="图片预览" :visible.sync="dialogTablePreview" class="previewImg">
+      <p 
+        class="previewImgTit"
+        v-show="PreviewData.isShow">
+        {{PreviewData.name}}：{{PreviewData.numbe}}
+      </p>
+
       <img :src="PreviewImgUrl" alt="">
     </el-dialog>
 
@@ -338,6 +345,15 @@ export default {
       dialogRefuseToPassModal:false,
       // 图片预览地址
       PreviewImgUrl:'',
+      // 预览数据
+      PreviewData:{
+        // 是否显示
+        isShow:false,
+        // 显示名字
+        name:'',
+        // 显示码
+        numbe:''
+      },
       num:0,
     };
   },
@@ -367,6 +383,16 @@ export default {
         let  {code, data , msg, total} = res
         if(code == 200) {
           this.ruleForm = data
+
+          // 模拟数据
+          // this.ruleForm.businessLicense = "https://ywt-oss-files.oss-cn-hangzhou.aliyuncs.com/ywt/images/1584427321288.png"
+          // this.ruleForm.facePhoto = "https://ywt-oss-files.oss-cn-hangzhou.aliyuncs.com/ywt/images/1584427321288.png"
+          // this.ruleForm.qualificationPhoto = "https://ywt-oss-files.oss-cn-hangzhou.aliyuncs.com/ywt/images/1584427321288.png"
+          // this.ruleForm.backPhoto = "https://ywt-oss-files.oss-cn-hangzhou.aliyuncs.com/ywt/images/1584427321288.png"
+          // this.ruleForm.qualificationNum = "11111"
+          // this.ruleForm.idNum = "1122222111"
+
+          
           // this.newForm = Object.assign({},JSON.parse(JSON.stringify(data)))
         }
       }).catch( error => {
@@ -475,9 +501,37 @@ export default {
     },
 
     // 图片预览
-    handlePreviewImg(imgUrl){
+    // handlePreviewImg(imgUrl){
+    //   this.PreviewImgUrl = imgUrl.url || imgUrl ;
+    //   this.dialogTablePreview = true
+    // },
+    // 图片预览 data { name:'统一社会信用代码', target:ruleForm,(对应数据) tit:'creditCode'(对应字段)}   
+    handlePreviewImg(imgUrl,data){
+      // console.log(data)
+      // console.log(this[data.target][data.tit])
+      // { "name":'统一社会信用代码',tit:'creditCode', target:'old'}
+      // 重置状态
+      this.PreviewData={
+        // 是否显示 默认不显示
+        isShow:false,
+        // 显示名字
+        name:'',
+        // 显示码
+        numbe:'',
+      }
+      
+      if(data){
+          this.PreviewData.name = data.name
+          this.PreviewData.numbe = this[data.target][data.tit] ? this[data.target][data.tit] : this.ruleForm[data.tit]
+          this.PreviewData.isShow = this.PreviewData.numbe ? true : false 
+      }
+
       this.PreviewImgUrl = imgUrl.url || imgUrl ;
+      // 显示弹窗
       this.dialogTablePreview = true
+
+      // console.log(this.PreviewData)
+
     },
   },
   computed: {}
@@ -507,6 +561,10 @@ export default {
       // max-width: 600px;
       line-height: 36px;
       // vertical-align: bottom;
+  }
+
+  .previewImg {
+    .el-dialog__body{padding-top: 0;}
   }
  
   

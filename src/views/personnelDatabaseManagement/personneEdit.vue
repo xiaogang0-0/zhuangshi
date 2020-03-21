@@ -503,6 +503,7 @@ export default {
             }).then(() => {
               // 数据类型转换
               this.ruleForm = this.handleConversionType(data,1)
+              this.$refs['ruleForm'].resetFields();
               // 不允许编辑
               this.isEdit = false;
               // 清空主表验证
@@ -716,16 +717,17 @@ export default {
           });
 
           this.$confirm('添加成功！！', '提示', {
-            confirmButtonText: '继续添加', // 成功
-            cancelButtonText: '查看人员信息', //取消
+            confirmButtonText: '查看人员信息', // 成功
+            cancelButtonText: '继续添加', //取消
           }).then(() => {
-            // 继续添加 清空操作
-            this.handleRefresh()
-          }).catch(() => {
             // 查看人员信息
             this.$router.push({
               name:'personnelSearch'
             })
+          
+          }).catch(() => {
+            // 继续添加 清空操作
+            this.handleRefresh()
           });
 
 
