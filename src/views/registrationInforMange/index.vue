@@ -162,7 +162,7 @@
 
         <el-form-item label-width="150px" label="会员有效期:" prop="certificateNumEffectEnddate">
           <el-date-picker
-            v-if="editStatus.status12"
+            v-if="editStatus.status15"
             v-model="ruleForm.certificateNumEffectEnddate"
             type="date"
             format="yyyy 年 MM 月 dd 日"
@@ -170,7 +170,7 @@
             placeholder="请选择证会员有效期">
           </el-date-picker>
           <!-- <el-date-picker
-            v-if="editStatus.status12"
+            v-if="editStatus.status15"
             v-model="ruleForm.certificateNumEffectEnddate"
             type="month"
             format="yyyy 年 MM 月"
@@ -179,7 +179,7 @@
           </el-date-picker> -->
 
           <span v-else class="inlineBlock">{{ruleForm.certificateNumEffectEnddate}}</span>
-          <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status12')">编辑</span>
+          <span v-show="isHideBtn" class="btns right" @click="handleIsShou('status15')">编辑</span>
         </el-form-item>
 
         <el-form-item label-width="150px" label="施工资质发放单位:" prop="qualificationUnit">
@@ -412,8 +412,8 @@ export default {
         status12:false,
         status13:false,
         status14:false,
-
         status15:false,
+
         status16:false,
         status17:false,
         status18:false,
