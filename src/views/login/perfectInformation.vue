@@ -101,6 +101,24 @@
           <el-input v-model.trim="ruleForm.certificateNum" clearable placeholder="输入会员编号" class="w113"></el-input>
         </el-form-item>
 
+        <el-form-item label-width="150px" label="会员有效期:" prop="certificateNumEffectEnddate">
+          <el-date-picker
+            v-model="ruleForm.certificateNumEffectEnddate"
+            type="date"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择会员有效期">
+          </el-date-picker>
+          <!-- <el-date-picker
+            v-model="ruleForm.certificateNumEffectEnddate"
+            type="month"
+            format="yyyy 年 MM 月"
+            value-format="yyyy-MM"
+            placeholder="请选择证书有效期">
+          </el-date-picker> -->
+        </el-form-item>
+
+
         <el-form-item label-width="150px" label="上传施工能力等级或施工资质证书:" prop="qualificationPhoto" class="lableWidth">
           <img 
             alt="" 
@@ -143,18 +161,18 @@
           </el-select>
         </el-form-item>
 
-         <el-form-item label-width="150px" label="证书编号:" prop="qualificationNum">
+        <el-form-item label-width="150px" label="证书编号:" prop="qualificationNum">
           <el-input v-model.trim="ruleForm.qualificationNum" maxlength="15" clearable placeholder="施工资质证书编号" class="w113"></el-input>
         </el-form-item>
 
-         <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
-          <el-date-picker
-            v-model="ruleForm.qualificationEffectEnddate"
-            type="date"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择证书有效期">
-          </el-date-picker>
+        <el-form-item label-width="150px" label="证书有效期:" prop="qualificationEffectEnddate">
+        <el-date-picker
+          v-model="ruleForm.qualificationEffectEnddate"
+          type="date"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择证书有效期">
+        </el-date-picker>
           <!-- <el-date-picker
             v-model="ruleForm.qualificationEffectEnddate"
             type="month"
@@ -230,6 +248,18 @@ export default {
     LoginHeader,
   },
   data() {
+    // 身份证号验证
+    const validateIdNum = (rule, value, callback) => {
+      // 正则  
+      let idNumReg = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+      if (!value) {
+        callback(new Error('请输入法人身份证号'));
+      } else if(!idNumReg.test(value)){
+        callback(new Error('身份证格式有误,请重新填写...'));
+      }else{
+        callback()
+      }
+    }
     
     const validateAddress = (rule, value, callback) => {
       if(!this.ruleForm.provinceId || !this.ruleForm.cityId){
@@ -341,6 +371,8 @@ export default {
         qualificationNum:'',
         // 施工资质有效期
         qualificationEffectEnddate:'',
+        // 会员有效期
+        certificateNumEffectEnddate:'',
         // 法人
         legalPerson:'',
         // 法人身份证号
@@ -405,6 +437,10 @@ export default {
         certificateNum: [
           { required: true, trigger: 'change', validator: validateCertificateNum },
         ],
+        // 上海市装饰装修行业协会会有效期
+        certificateNumEffectEnddate: [
+          { required: true, message: '请选择有效期', trigger: 'change' },
+        ],
 
          // 施工资质证书编号
         qualificationNum:[
@@ -435,8 +471,8 @@ export default {
           { required: true, message: '请输入企业法人', trigger: 'change' },
         ],
         // 法人身份证号
-        idNum:[
-          { required: true, message: '请输入法人身份证号', trigger: 'change' },
+        idNum: [
+          { required: true, trigger: 'blur', validator: validateIdNum },
         ],
         // 法人证照
         PhotoList:[

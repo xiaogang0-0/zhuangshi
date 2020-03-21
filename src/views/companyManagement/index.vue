@@ -9,6 +9,19 @@
           placeholder="公司全称"
         ></el-input>
       </el-form-item>
+
+      <el-form-item label="创建时间:">
+        <el-date-picker
+          v-model="establishDate"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
+     
+ 
       
       <el-form-item>
         <el-button type="primary" @click="handleSearch('ruleForm')">查询</el-button>
@@ -36,6 +49,7 @@
       <el-table-column
         type="index"
         label="序号"
+        fixed="left"
         align="center"
         width="50">
       </el-table-column>
@@ -44,7 +58,7 @@
         prop="name"
         label="公司全称"
         align="center"
-        min-width="150">
+        min-width="140">
         <!-- <template slot-scope="scope">
           <el-button
             @click.native.prevent="handeLookDetails(scope.row)"
@@ -58,7 +72,7 @@
       <el-table-column
         align="center"
         prop="registerPhone"
-        min-width="120"
+        min-width="95"
         label="注册手机号">
       </el-table-column>
 
@@ -79,14 +93,28 @@
       <el-table-column
         align="center"
         prop="contactTel"
-        min-width="115"
+        min-width="95"
         label="企业联系电话">
       </el-table-column>
 
       <el-table-column
         align="center"
+        prop="certificateNum"
+        min-width="95"
+        label="会员证书号">
+      </el-table-column>
+
+      <el-table-column
+        align="center"
+        prop="certificateNumEffectEnddate"
+        min-width="95"
+        label="会员有效期">
+      </el-table-column>
+
+      <el-table-column
+        align="center"
         prop="status"
-        min-width="100"
+        min-width="80"
         label="状态">
         <template slot-scope="scope">
           <!-- / 状态：1(待审核),2(已审核通过),3(审核不通过) -->
@@ -103,11 +131,33 @@
         label="创建时间"
         min-width="120">
         <template slot-scope="scope">
-          <!-- / 状态：1(待审核),2(已审核通过),3(审核不通过) -->
           <span>{{scope.row.createTime.substring(0,16)}}
           </span>
         </template>
       </el-table-column>
+
+      <el-table-column
+        align="center"
+        prop="updateTime"
+        label="修改时间"
+        min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.updateTime.substring(0,16)}}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        align="center"
+        prop="auditTime"
+        label="审核时间"
+        min-width="120">
+        <template slot-scope="scope">
+          <span>{{scope.row.auditTime.substring(0,16)}}
+          </span>
+        </template>
+      </el-table-column>
+      
 
       <el-table-column
         align="center"
@@ -194,6 +244,10 @@ export default {
       ruleForm: {
         // 公司全称
         name:'',
+        // 开始日期
+        startTime:'',
+        // 结束日期
+        endTime:'',
         // 状态：1(待审核),2(已审核通过),3(审核不通过)
         statusArray: [],
       },
@@ -207,7 +261,9 @@ export default {
         },{
           name:'审核不通过',
           id:3
-        }],
+      }],
+      // 创建时间
+      establishDate:'',
       tableList: [],
       form:{
         // 记录id
@@ -228,7 +284,15 @@ export default {
       total: 0,
     };
   },
-  watch:{},
+  watch:{
+    // 时间变化的时候重置 记录数组
+    'establishDate':{
+        handler(newName, oldName) {
+          this.handleSelectionTime()
+        },
+        immediate: true
+    },
+  },
 
   mounted() {},
 
@@ -250,12 +314,18 @@ export default {
 
     // 重置
     resetForm(formName) {
+
       this.ruleForm = {
         // 公司全称
         name:'',
+        // 开始日期
+        startTime:'',
+        // 结束日期
+        endTime:'',
         // 状态：0待审核，1审核通过，2审核不通过
         statusArray: [],
       },
+      this.establishDate= '';
       this.handleSearch();
     },
 
@@ -325,6 +395,20 @@ export default {
       })
     },
 
+    // 时间选中事件
+    handleSelectionTime(){
+      // console.log(this.establishDate,'22222')
+      if(this.establishDate && this.establishDate.length){
+        // this.ruleForm.startTime = this.establishDate[0].substring(0,10) + ' 00:00:00';
+        // this.ruleForm.endTime = this.establishDate[1].substring(0,10) + ' 23:59:59';
+        this.ruleForm.startTime = this.establishDate[0].substring(0,10);
+        this.ruleForm.endTime = this.establishDate[1].substring(0,10);
+      }else{
+        this.ruleForm.startTime = '';
+        this.ruleForm.endTime = '';
+      }
+    },
+
     // 页码
     changePage({ type, page, size }) {
       this.paging.pageNum = page;
@@ -352,6 +436,9 @@ export default {
 .companyManagementList {
   padding: 20px;
 
+  .el-range-editor.el-input__inner {
+    width: 240px;
+  }
   .w100.el-select{width:100px;}
   .w110.el-select{width:110px;}
   .w120.el-input--medium {width:110px;}

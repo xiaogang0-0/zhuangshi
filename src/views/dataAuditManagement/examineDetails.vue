@@ -151,6 +151,16 @@
         </div>
 
         <div class="borderbot1">
+          <el-form-item label-width="150px" label="会员有效期:">
+            <span class="inlineBlock">{{ruleForm.certificateNumEffectEnddate}}</span>
+          </el-form-item>
+          <!-- 更新后的  -->
+          <el-form-item v-show="newForm.certificateNumEffectEnddate" label-width="150px" label="会员有效期:">
+            <span class="inlineBlock cRed">{{newForm.certificateNumEffectEnddate}}</span>
+          </el-form-item>
+        </div>
+
+        <div class="borderbot1">
           <el-form-item label-width="150px" label="施工资质发放单位:">
             <span class="inlineBlock">{{ruleForm.qualificationUnit}}</span>
           </el-form-item>
