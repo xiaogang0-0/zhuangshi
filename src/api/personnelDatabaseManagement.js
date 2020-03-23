@@ -1,6 +1,6 @@
 // 人员数据库
 import request from '@/utils/request'
-// 人员列表    /admin/a/manager/emp/search   
+// 人员列表    /admin/a/manager/emp/search
 export function getPersonnelSearch(data) {
   return request({
     url: '/admin/a/user/emp/search',
@@ -31,16 +31,16 @@ export function getEmpDetail(data) {
 export function getDictionaryListTypeid5() {
   return request({
     url: '/admin/a/user/dictionary/list/typeid/5',
-    method: 'get',
+    method: 'get'
     // params: data
   })
 }
 
-// 人员资质等级接口  
+// 人员资质等级接口
 export function getDictionaryListTypeid6() {
   return request({
     url: '/admin/a/user/dictionary/list/typeid/6',
-    method: 'get',
+    method: 'get'
     // params: data
   })
 }
@@ -49,7 +49,7 @@ export function getDictionaryListTypeid6() {
 export function getDictionaryListTypeid9(data) {
   return request({
     url: '/admin/a/user/dictionary/list/typeid/9',
-    method: 'get',
+    method: 'get'
     // params: data
   })
 }
@@ -58,7 +58,7 @@ export function getDictionaryListTypeid9(data) {
 export function getDictionaryListTypeid7(data) {
   return request({
     url: '/admin/a/user/dictionary/list/typeid/7',
-    method: 'get',
+    method: 'get'
     // params: data
   })
 }
@@ -66,12 +66,12 @@ export function getDictionaryListTypeid7(data) {
 export function getDictionaryListTypeid8(data) {
   return request({
     url: '/admin/a/user/dictionary/list/typeid/8',
-    method: 'get',
+    method: 'get'
     // params: data
   })
 }
 
-// 阿里云上传服务端签名接口  
+// 阿里云上传服务端签名接口
 export function getAliyunOssSign(data) {
   return request({
     // url: '/admin/a/user/aliyun/oss/sign',
@@ -84,8 +84,8 @@ export function getAliyunOssSign(data) {
 // 根据身份证号码获取人员主信息   /admin/a/user/emp/{idNum}
 export function getUserEmp(data) {
   return request({
-    url: '/admin/a/user/emp/'+ data,
-    method: 'get',
+    url: '/admin/a/user/emp/' + data,
+    method: 'get'
     // params: data
   })
 }

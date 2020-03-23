@@ -2,17 +2,17 @@
 <template>
   <div class="login-container logginWrapCss">
     <!-- 公用表头 -->
-    <loginHeader/>
+    <loginHeader />
     <div class="content">
-        <div class="wrap">
-          <div class="wrap-bg"></div>
-          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+      <div class="wrap">
+        <div class="wrap-bg" />
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
-            <div class="title-container">
-              <h3 class="title">忘记密码</h3>
-            </div>
+          <div class="title-container">
+            <h3 class="title">忘记密码</h3>
+          </div>
 
-            <!-- <div v-show="userType == 1">
+          <!-- <div v-show="userType == 1">
               <p class="pd60">企业名称</p>
               <el-form-item prop="customerName">
                 <el-input
@@ -26,47 +26,52 @@
               </el-form-item>
             </div> -->
 
-            <p class="pd60">手机号</p>
-            <el-form-item prop="mobile">
-               <el-input
-                ref="mobile"
-                v-model.trim="loginForm.mobile"
-                placeholder="请输入手机号"
-                name="mobile"
-                type="text"
-                tabindex="1"
-              />
-            </el-form-item>
+          <p class="pd60">手机号</p>
+          <el-form-item prop="mobile">
+            <el-input
+              ref="mobile"
+              v-model.trim="loginForm.mobile"
+              placeholder="请输入手机号"
+              name="mobile"
+              type="text"
+              tabindex="1"
+            />
+          </el-form-item>
 
-            <p class="pd60">验证码</p>
-            <el-form-item prop="verifyCode" class="verificationCode">
-             <el-input
-                ref="verifyCode"
-                v-model.trim="loginForm.verifyCode"
-                placeholder="请输入验证码"
-                name="verifyCode"
-                type="text"
-              />
-              
-              <span 
-                v-show="!isActive"
-                class="cblue cursor"
-                @click="handleTime">获取验证码</span>
-              <span 
-                v-show="isActive"
-                class="cblue">{{num ? num + 's': ''}}</span>
-            </el-form-item>
+          <p class="pd60">验证码</p>
+          <el-form-item prop="verifyCode" class="verificationCode">
+            <el-input
+              ref="verifyCode"
+              v-model.trim="loginForm.verifyCode"
+              placeholder="请输入验证码"
+              name="verifyCode"
+              type="text"
+            />
 
-            <el-button :loading="loading" type="primary" 
-              style="
+            <span
+              v-show="!isActive"
+              class="cblue cursor"
+              @click="handleTime"
+            >获取验证码</span>
+            <span
+              v-show="isActive"
+              class="cblue"
+            >{{ num ? num + 's': '' }}</span>
+          </el-form-item>
+
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="
                 display:block;
                 margin:50px 60px 50px;
-                width:72%;background:#2E74D1; 
-                border-color:#2E74D1;" 
-                @click.native.prevent="handleLogin">登 录</el-button>
+                width:72%;background:#2E74D1;
+                border-color:#2E74D1;"
+            @click.native.prevent="handleLogin"
+          >登 录</el-button>
 
-          </el-form>
-        </div>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -83,11 +88,11 @@ import LoginHeader from '@/components/loginHeader'
 export default {
   name: 'Login',
   components: {
-    LoginHeader,
+    LoginHeader
   },
   data() {
     const validatePhoneNumber = (rule, value, callback) => {
-      let reg = /^1[3456789]\d{9}$/;
+      const reg = /^1[3456789]\d{9}$/
       if (!reg.test(value)) {
         callback(new Error('手机号码有误，请重填'))
       } else {
@@ -96,7 +101,7 @@ export default {
     }
 
     const validateVerifyCode = (rule, value, callback) => {
-      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
+      const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/
       if (!value) {
         callback(new Error('验证码不能为空'))
       } else {
@@ -105,36 +110,36 @@ export default {
     }
     return {
       // 1是系统用户, 0是企业用户
-      userType:'0',
+      userType: '0',
       // 是否进行了点击操作
-      isActive:false,
-      num:59,
+      isActive: false,
+      num: 59,
       loginForm: {
         // 注册时(register), 登录时(login), 找回密码时(update-password), 修改资料时(update-customer)
-        sendType:'update-password',
-        //企业名称
-        customerName:'',
+        sendType: 'update-password',
+        // 企业名称
+        customerName: '',
         mobile: '',
         // 验证码
-        verifyCode:'',
+        verifyCode: ''
       },
-      loginRules: { 
-        mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber}],
+      loginRules: {
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }]
         // verifyCode: [{ required: true, trigger: 'blur', validator: validateVerifyCode }]
       },
       loading: false,
-      passwordType: 'password',
+      passwordType: 'password'
     }
   },
+  computed: {},
   watch: {},
   created() {
-    this.userType = this.$route.query.userType;
+    this.userType = this.$route.query.userType
   },
-  computed: {},
   mounted() {
     // if (this.loginForm.customerName === '' && this.userType == 1) {
     //   this.$refs.customerName.focus()
-    // }else 
+    // }else
     if (this.loginForm.mobile === '') {
       this.$refs.mobile.focus()
     } else if (this.loginForm.verifyCode === '') {
@@ -143,7 +148,7 @@ export default {
   },
   methods: {
     // 倒计时
-    handleTime(){
+    handleTime() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // if(this.userType == 1 && !this.loginForm.customerName){
@@ -153,17 +158,17 @@ export default {
           //   });
           // }
 
-          this.isActive = true;
+          this.isActive = true
           // 获取验证码
-          this.handeleGetVerifyCode();
-          let timer = setInterval(()=>{
-            if(this.num < 1){
-              this.isActive = false;
-              this.num =59
+          this.handeleGetVerifyCode()
+          const timer = setInterval(() => {
+            if (this.num < 1) {
+              this.isActive = false
+              this.num = 59
               clearInterval(timer)
             }
             this.num--
-          },1000)
+          }, 1000)
         } else {
           // console.log('请输入账号密码')
           return false
@@ -172,24 +177,24 @@ export default {
     },
 
     // 获取验证码
-    handeleGetVerifyCode(){
-      let param = {
-        sendType:this.loginForm.sendType,
-        mobile:this.loginForm.mobile
-      };
+    handeleGetVerifyCode() {
+      const param = {
+        sendType: this.loginForm.sendType,
+        mobile: this.loginForm.mobile
+      }
       // 平台用户带参数
       // let param1 ={customerName:''}
       // if(this.userType == 1){
       //   param1.customerName = this.loginForm.customerName
       // }
       Api.getSendVerifyCode(param).then(res => {
-        if(res.code == 200) {
+        if (res.code == 200) {
           this.$message({
-            message: '验证码已发送至'+ this.loginForm.mobile +'上请注意查收',
+            message: '验证码已发送至' + this.loginForm.mobile + '上请注意查收',
             type: 'success'
-          });
+          })
         }
-      }).catch( error => {
+      }).catch(error => {
       })
     },
 
@@ -203,45 +208,42 @@ export default {
           //     type: 'warning'
           //   });
           // }
-          if(!this.loginForm.verifyCode){
+          if (!this.loginForm.verifyCode) {
             return this.$message({
               message: '验证码不能为空',
               type: 'warning'
-            });
+            })
           }
-          
-          let param = {
-            mobile:this.loginForm.mobile,
-            verifyCode:this.loginForm.verifyCode
-          };
+
+          const param = {
+            mobile: this.loginForm.mobile,
+            verifyCode: this.loginForm.verifyCode
+          }
           this.loading = true
           Api.getVerifyCode(param).then(res => {
-            this.loading = false;
-            if(res.code == 200) {
+            this.loading = false
+            if (res.code == 200) {
               // let username = this.userType == 0 ? this.loginForm.mobile :
               //                this.userType == 1 ? this.loginForm.customerName : ''
               this.$router.push({
-                name:'changePassword',
+                name: 'changePassword',
                 // 用户名, 企业用户为手机号, 系统用户为用户名
-                query:{userType:this.userType,
-                       username:this.loginForm.mobile
-                      }
-                      // {userType:this.userType,
-                      // username:username}
+                query: { userType: this.userType,
+                  username: this.loginForm.mobile
+                }
+                // {userType:this.userType,
+                // username:username}
               })
             }
-
-          }).catch( error => {
+          }).catch(error => {
             this.loading = false
           })
         } else {
           return false
         }
       })
-    },
+    }
 
-    
-    
   }
 }
 </script>
@@ -270,7 +272,7 @@ $cursor: #fff;
       border-radius: 0px;
       // padding: 12px 5px 12px 15px;
       color: #000;
-      
+
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
@@ -293,7 +295,6 @@ $cursor: #fff;
 $bg:#2E74D1;
 $dark_gray:#889aa4;
 $light_gray:#eee;
-
 
 .verificationCode .el-input{
   width: 190px;
@@ -326,22 +327,22 @@ $light_gray:#eee;
   }
   .wrap {
     // width: 1200px;
-    min-width: 1200px; 
+    min-width: 1200px;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
     padding: 11vh 0 0 0;
 }
-  .content { 
-   
+  .content {
+
     margin: 0 auto;
     height: 100vh;
     background-color: #2E74D1;
     // background-image: linear-gradient(to top, #2E74D1, #2E74D1);
     overflow: hidden;
-    
+
   }
- 
+
   .wrap-bg {
     width: 742px;
     height: 508px;

@@ -19,11 +19,6 @@ import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
 
-import iView from 'iview'
-import 'iview/dist/styles/iview.css'
-
-Vue.use(iView)
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

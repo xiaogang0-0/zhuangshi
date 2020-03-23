@@ -2,47 +2,47 @@
 <template>
   <div class="login-container logginWrapCss">
     <!-- 公用表头 -->
-    <loginHeader/>
+    <loginHeader />
     <div class="content">
-        <div class="wrap">
-          <div class="wrap-bg"></div>
-          <el-form ref="loginForm"  :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+      <div class="wrap">
+        <div class="wrap-bg" />
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
-            <div class="title-container">
-              <h3 class="title">登录系统</h3>
-            </div>
+          <div class="title-container">
+            <h3 class="title">登录系统</h3>
+          </div>
 
-            <p class="pd60">用户名</p>
-            <el-form-item prop="username">
-              <el-input
-                ref="username"
-                v-model.trim="loginForm.username"
-                placeholder="请输入用户名"
-                name="username"
-                type="text"
-                tabindex="1"
-              />
-            </el-form-item>
+          <p class="pd60">用户名</p>
+          <el-form-item prop="username">
+            <el-input
+              ref="username"
+              v-model.trim="loginForm.username"
+              placeholder="请输入用户名"
+              name="username"
+              type="text"
+              tabindex="1"
+            />
+          </el-form-item>
 
-            <p class="pd60">登录密码</p>
-            <el-form-item prop="password">
-              <el-input
-                :key="passwordType"
-                ref="password"
-                v-model.trim="loginForm.password"
-                :type="passwordType"
-                placeholder="请输入密码"
-                name="password"
-                tabindex="2"
-                autocomplete="on"
-                @keyup.enter.native="handleLogin"
-              />
-              <span class="show-pwd" @click="showPwd">
-                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
-            </el-form-item>
+          <p class="pd60">登录密码</p>
+          <el-form-item prop="password">
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model.trim="loginForm.password"
+              :type="passwordType"
+              placeholder="请输入密码"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+              @keyup.enter.native="handleLogin"
+            />
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
 
-            <!-- <p class="pd60">验证码</p>
+          <!-- <p class="pd60">验证码</p>
             <el-form-item prop="verifyCode" class="verificationCode">
              <el-input
                 ref="verificationCode"
@@ -54,16 +54,19 @@
               <span class="cblue cursor">获取验证码</span>
             </el-form-item> -->
 
-            <p class="pd60"> <el-button type="text" @click="handleForgetPassword">忘记密码</el-button></p>
-            <el-button :loading="loading" type="primary" 
-              style="
+          <p class="pd60"> <el-button type="text" @click="handleForgetPassword">忘记密码</el-button></p>
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="
                 display:block;
                 margin:10px 60px 50px;
-                width:72%;background:#2E74D1; 
-                border-color:#2E74D1;" 
-                @click.native.prevent="handleLogin">登 录</el-button>
-          </el-form>
-        </div>
+                width:72%;background:#2E74D1;
+                border-color:#2E74D1;"
+            @click.native.prevent="handleLogin"
+          >登 录</el-button>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -80,19 +83,16 @@ import LoginHeader from '@/components/loginHeader'
 // 权限目录
 import menuList from '@/api/menuList.json'
 
-
 export default {
   name: 'Login',
   components: {
-    LoginHeader,
+    LoginHeader
   },
   data() {
-    
     const validatePassword = (rule, value, callback) => {
-      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
+      const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/
       if (value.length < 8 || !reg.test(value)) {
         callback(new Error('使用大小写英文字母与数字组合，不低于8位数'))
-
       } else {
         callback()
       }
@@ -106,13 +106,13 @@ export default {
     }
     return {
       // 1是系统用户, 0是企业用户
-      userType:'1',
+      userType: '1',
       loginForm: {
         // admin
-        username:'',
+        username: '',
         customerName: '',
         // K1111111
-        password: '',
+        password: ''
         // verifyCode:''
       },
 
@@ -123,7 +123,7 @@ export default {
         // verifyCode: [{ required: true, trigger: 'blur', message: '请输入验证码'}],
       },
       loading: false,
-      passwordType: 'password',
+      passwordType: 'password'
     }
   },
   watch: {},
@@ -131,8 +131,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'permission_routes',
-    ]),
+      'permission_routes'
+    ])
   },
   mounted() {
     if (this.loginForm.username === '') {
@@ -147,29 +147,29 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          let param = Object.assign({},this.loginForm)
+          const param = Object.assign({}, this.loginForm)
           Api.loginInit(param).then(res => {
-            this.loading = false;
-            if(res.code == 200) {
+            this.loading = false
+            if (res.code == 200) {
               // 本地存储token
               setToken(res.data.accessToken)
-              localStorage.removeItem ('Siw_userInfo')
-              
-              localStorage.setItem ('Siw_userInfo',JSON.stringify(res.data))
-               // ++++++++模拟后端权限+++++++
-              if(res.data.userType == 1) {
-                // 后台登录 
-                localStorage.setItem('Siw-menuList',JSON.stringify(menuList.home))
-              }else{
+              localStorage.removeItem('Siw_userInfo')
+
+              localStorage.setItem('Siw_userInfo', JSON.stringify(res.data))
+              // ++++++++模拟后端权限+++++++
+              if (res.data.userType == 1) {
+                // 后台登录
+                localStorage.setItem('Siw-menuList', JSON.stringify(menuList.home))
+              } else {
                 // 客户端
-                localStorage.setItem('Siw-menuList',JSON.stringify(menuList.login))
+                localStorage.setItem('Siw-menuList', JSON.stringify(menuList.login))
               }
               // this.$router.push({path: '/'})
               window.location.reload()
               // ++++++++模拟后端权限over+++++++
             }
-          }).catch( error => {
-            localStorage.removeItem('Siw_userInfo');
+          }).catch(error => {
+            localStorage.removeItem('Siw_userInfo')
             localStorage.removeItem('Siw-menuList')
             this.loading = false
           })
@@ -192,17 +192,13 @@ export default {
     },
 
     // 忘记密码
-    handleForgetPassword(){
+    handleForgetPassword() {
       this.$router.push({
-        name:'forgetPassword',
-        query:{userType:this.userType}
+        name: 'forgetPassword',
+        query: { userType: this.userType }
       })
-    },
-   
-    
-    
-    
-    
+    }
+
   }
 }
 </script>
@@ -227,9 +223,7 @@ $cursor: #fff;
     display: inline-block;
     // height: 47px;
     width: 85%;
-    
-   
-    
+
     input {
       background: transparent;
       border: 0px;
@@ -238,7 +232,7 @@ $cursor: #fff;
       // padding: 12px 5px 12px 15px;
       color: #000;
       // height: 47px;
-      
+
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
@@ -295,21 +289,21 @@ $light_gray:#eee;
     }
   }
   .wrap {
-    min-width: 1200px; 
+    min-width: 1200px;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
     padding: 11vh 0 0 0;
 }
-  .content { 
-   
+  .content {
+
     margin: 0 auto;
     height: 100vh;
     background-color: #2E74D1;
     overflow: hidden;
-    
+
   }
- 
+
   .wrap-bg {
     width: 742px;
     height: 508px;
@@ -318,8 +312,7 @@ $light_gray:#eee;
     background-image: url('../../assets/login/login-bg1.png');
     background-size: 100% 100%;
   }
-  
-  
+
   .login-form {
     position: relative;
     width: 400px;
@@ -331,7 +324,6 @@ $light_gray:#eee;
     box-shadow: 0 0 8px  rgba(0,0,0,0.3);
   }
   .svg-container[data-v-37dfd6fc]{display: none;}
-  
 
   .tips {
     font-size: 14px;

@@ -19,9 +19,9 @@ const componentsRouter = [
         component: () => import('@/views/registrationInforMange/index'),
         name: 'registrationInforMange',
         meta: { title: '编辑注册资料' },
-        hidden: true,
+        hidden: true
         // children: []
-      },
+      }
     ]
   },
 
@@ -39,15 +39,15 @@ const componentsRouter = [
         component: () => import('@/views/personnelDatabaseManagement/personneEdit'),
         name: 'personnelAdd',
         meta: { title: '人员添加' },
-        hidden: true,
+        hidden: true
         // children: []
       },
       {
         path: 'personnelSearch',
         component: () => import('@/views/personnelDatabaseManagement/index'),
         name: 'personnelSearch',
-        meta: { title: '人员列表',},
-        hidden: true,
+        meta: { title: '人员列表' },
+        hidden: true
         // children: []
       },
       // activeMenu:'/personnelDatabaseManagement/dataAuditManagement'
@@ -55,11 +55,11 @@ const componentsRouter = [
         path: 'personneEdit',
         component: () => import('@/views/personnelDatabaseManagement/personneEdit'),
         name: 'personneEdit',
-        meta: { title: '修改资料', activeMenu:'/personnelDatabaseManagement/personnelSearch'},
-        hidden: true,
+        meta: { title: '修改资料', activeMenu: '/personnelDatabaseManagement/personnelSearch' },
+        hidden: true
         // children: []
-      },
-     
+      }
+
     ]
   },
 
@@ -77,19 +77,19 @@ const componentsRouter = [
         path: 'companyManagement',
         component: () => import('@/views/companyManagement/index'),
         name: 'companyManagement',
-        meta: { title: '公司管理'},
-        hidden: true,
+        meta: { title: '公司管理' },
+        hidden: true
         // children: []
       },
       {
         path: 'companyManagement_auditDetails',
         component: () => import('@/views/companyManagement/auditDetails'),
         name: 'companyManagement_auditDetails',
-        meta: { title: '公司详情',activeMenu:'/companyManagementList/companyManagement'},
-        hidden: true,
+        meta: { title: '公司详情', activeMenu: '/companyManagementList/companyManagement' },
+        hidden: true
         // children: []
-      },
-      
+      }
+
     ]
   },
   // 注册资料审核 dataAuditManagement
@@ -106,25 +106,21 @@ const componentsRouter = [
         component: () => import('@/views/dataAuditManagement/index'),
         name: 'dataAuditManagement',
         meta: { title: '注册资料审核' },
-        hidden: true,
+        hidden: true
         // children: []
       },
       {
         path: 'dataAuditManagement_auditDetails',
         component: () => import('@/views/dataAuditManagement/examineDetails'),
         name: 'dataAuditManagement_auditDetails',
-        meta: { title: '编辑注册资料详情',activeMenu:'/dataAuditManagementList/dataAuditManagement'},
+        meta: { title: '编辑注册资料详情', activeMenu: '/dataAuditManagementList/dataAuditManagement' },
         // meta: { title: '编辑注册资料详情', noCache: true, activeMenu: '/dataAuditManagementList' },
-        hidden: true,
+        hidden: true
         // children: []
-      },
-     
-    ]
-  },
-  
-  
+      }
 
-  
+    ]
+  }
 
 ]
 

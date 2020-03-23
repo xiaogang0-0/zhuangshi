@@ -22,7 +22,7 @@ import PanThumb from '@/components/PanThumb'
 
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb,  },
+  components: { PanThumb },
   data() {
     return {
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'

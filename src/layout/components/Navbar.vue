@@ -1,15 +1,15 @@
 <template>
   <div class="navbar">
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-    
+
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
-    <!-- <h2 class="fl title">上海住宅装饰一网通 &nbsp;&nbsp; 
+    <!-- <h2 class="fl title">上海住宅装饰一网通 &nbsp;&nbsp;
       <span v-if="userType == 0">企业管理平台</span>
       <span v-else>后台管理</span>
     </h2> -->
     <div class="right-menu">
-      
-      <span class="userName el-breadcrumb app-breadcrumb breadcrumb-container">{{userName ? userName : ''}}</span>
+
+      <span class="userName el-breadcrumb app-breadcrumb breadcrumb-container">{{ userName ? userName : '' }}</span>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -33,27 +33,28 @@
       title="修改密码"
       :visible.sync="centerDialogVisible"
       width="430px"
-      center>
+      center
+    >
       <div class="password">
         <span>旧 &nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：</span>
-        <el-input @blur="changeInput" minlength="6" v-model="oldPassword" placeholder="请输入旧密码"></el-input>
+        <el-input v-model="oldPassword" minlength="6" placeholder="请输入旧密码" @blur="changeInput" />
       </div>
       <div class="password">
         <span>新 &nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码：</span>
-        <el-input @blur="changeInput" minlength="6" v-model="password" placeholder="请输入新密码" show-password></el-input>
+        <el-input v-model="password" minlength="6" placeholder="请输入新密码" show-password @blur="changeInput" />
       </div>
       <div class="password">
         <span>确认新密码：</span>
-        <el-input @blur="changeInput" minlength="6" v-model="confirmPassword" placeholder="请再次输入新密码" show-password></el-input>
+        <el-input v-model="confirmPassword" minlength="6" placeholder="请再次输入新密码" show-password @blur="changeInput" />
       </div>
       <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submit">确 定</el-button>
-          <el-button @click="close">取 消</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
+        <el-button @click="close">取 消</el-button>
       </div>
     </el-dialog>
 
   </div>
-  
+
 </template>
 
 <script>
@@ -78,34 +79,33 @@ export default {
     // SizeSelect,
     Search
   },
-  data(){
+  data() {
     return {
       centerDialogVisible: false,
-      usImg:usImg,
-      oldPassword:'',
-      password:'',
-      confirmPassword:'',
-      userName : '',
-      userType:''
+      usImg: usImg,
+      oldPassword: '',
+      password: '',
+      confirmPassword: '',
+      userName: '',
+      userType: ''
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar',
+      'avatar'
     ])
   },
-  created(){
-    let data = localStorage.getItem('Siw_userInfo');
-    if(data){
+  created() {
+    const data = localStorage.getItem('Siw_userInfo')
+    if (data) {
       // console.log(JSON.parse(data),'22222')
-      this.userType =JSON.parse(data).userType
-      if(this.userType==1){
-        this.userName =JSON.parse(data).realName
-      }else{
-        this.userName =JSON.parse(data).customerName
+      this.userType = JSON.parse(data).userType
+      if (this.userType == 1) {
+        this.userName = JSON.parse(data).realName
+      } else {
+        this.userName = JSON.parse(data).customerName
       }
-      
     }
     // this.userName = JSON.parse(localStorage.getItem('Siw_userInfo')) ? JSON.parse(localStorage.getItem('Siw_userInfo')).username : '';
   },
@@ -113,7 +113,7 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-  
+
     // async logout() {
     //   await this.$store.dispatch('user/logout')
     //   this.$router.push(`/login?redirect=${this.$route.fullPath}`)
@@ -121,24 +121,23 @@ export default {
 
     // 退出登陆
     logout() {
-      removeToken();
+      removeToken()
       localStorage.removeItem('Siw_userInfo')
       localStorage.removeItem('Siw-menuList')
 
-
-      if(this.userType == 0){
-        setTimeout(()=>{
-          this.$router.push({path: '/login' })
-        },200)
+      if (this.userType == 0) {
+        setTimeout(() => {
+          this.$router.push({ path: '/login' })
+        }, 200)
         // this.$router.push({
         //   name:'login'
         // })
       }
 
-      if(this.userType == 1){
-        setTimeout(()=>{
-          this.$router.push({path: '/home' })
-        },200)
+      if (this.userType == 1) {
+        setTimeout(() => {
+          this.$router.push({ path: '/home' })
+        }, 200)
         // this.$router.push({
         //   name:'home'
         // })
@@ -147,94 +146,87 @@ export default {
 
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       return
-      
+
       // sessionStorage.removeItem('Siw-menuList')
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-      
-      Api.landingExit('').then(res=>{
+
+      Api.landingExit('').then(res => {
         // console.log(res)
-        if(res.code == 200){
+        if (res.code == 200) {
         //   console.log(res.data.msg);
-           removeToken();
-           localStorage.removeItem('Siw_userInfo')
-           localStorage.removeItem('Siw-menuList')
-           // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-           this.$router.push({path: '/login' })
+          removeToken()
+          localStorage.removeItem('Siw_userInfo')
+          localStorage.removeItem('Siw-menuList')
+          // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+          this.$router.push({ path: '/login' })
         }
       }).catch(err => {
         // console.log(err);
-        removeToken();
+        removeToken()
         localStorage.removeItem('Siw_userInfo')
         localStorage.removeItem('Siw-menuList')
         // sessionStorage.removeItem('Siw-menuList')
         // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-        this.$router.push({path: '/login' })
+        this.$router.push({ path: '/login' })
       })
-     
     },
 
-    changeInput(){
+    changeInput() {
       // console.log(this.oldPassword.length);
     },
     // 打开弹窗
-    handleOpen(){
-      this.centerDialogVisible = true;
+    handleOpen() {
+      this.centerDialogVisible = true
       // console.log(this.centerDialogVisible)
-
     },
     // 关闭弹窗
-    close(){
-      this.centerDialogVisible = false;
+    close() {
+      this.centerDialogVisible = false
     },
 
-    submit(){
+    submit() {
       if (this.oldPassword.length < 6 || this.password.length < 6 || this.confirmPassword.length < 6) {
-        this.centerDialogVisible = true;
+        this.centerDialogVisible = true
         this.$message({
           message: '密码大于六位',
           type: 'warning'
-        });
-      }else{
+        })
+      } else {
         // console.log('调接口');
         var param = {
-          "oldPassword": this.oldPassword,
-          "password": this.password
+          'oldPassword': this.oldPassword,
+          'password': this.password
         }
         if (this.password == this.confirmPassword) {
-          Api.changePassword(param).then(res=>{
-            if(res.code == 200){
+          Api.changePassword(param).then(res => {
+            if (res.code == 200) {
               this.$message({
                 message: '密码修改成功',
                 type: 'success'
-              });
+              })
               // console.log(456);
-              
-            }else{
+            } else {
               // console.log(123);
-              
+
               this.$message({
-              message: res.msg,
-              type: 'warning'
-            });
+                message: res.msg,
+                type: 'warning'
+              })
             }
             // console.log(res);
-            
           }).catch(err => {
             // console.log(err);
-            
-          })
-          this.centerDialogVisible = false;
-        }else{
-          this.$message({
-          message: '密码不正确  请检查',
-          type: 'warning'
-        });
-        }
-        
-        
-      } 
-    }
 
+          })
+          this.centerDialogVisible = false
+        } else {
+          this.$message({
+            message: '密码不正确  请检查',
+            type: 'warning'
+          })
+        }
+      }
+    }
 
   }
 }
@@ -279,8 +271,6 @@ export default {
   .breadcrumb-container {
     float: left;
   }
-
-  
 
   .right-menu {
     float: right;

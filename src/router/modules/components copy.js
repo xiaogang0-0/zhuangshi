@@ -20,9 +20,9 @@ const componentsRouter = [
         // name: 'page',
         name: 'registrationInforMange',
         meta: { title: '编辑注册资料' },
-        hidden: false,
+        hidden: false
         // children: []
-      },
+      }
     ]
   },
 
@@ -41,7 +41,7 @@ const componentsRouter = [
         component: () => import('@/views/companyManagement/index'),
         name: 'companyManagement',
         meta: { title: '公司管理' },
-        hidden: false,
+        hidden: false
         // children: []
       },
       {
@@ -49,10 +49,10 @@ const componentsRouter = [
         component: () => import('@/views/companyManagement/auditDetails'),
         name: 'companyManagement_auditDetails',
         meta: { title: '公司详情' },
-        hidden: true,
+        hidden: true
         // children: []
-      },
-      
+      }
+
     ]
   },
   // 注册资料审核 dataAuditManagement
@@ -70,7 +70,7 @@ const componentsRouter = [
         name: 'dataAuditManagement',
         // meta: { title: '编辑注册资料审核' },
         meta: { title: '注册资料审核' },
-        hidden: false,
+        hidden: false
         // children: []
       },
       {
@@ -78,18 +78,14 @@ const componentsRouter = [
         component: () => import('@/views/dataAuditManagement/examineDetails'),
         // name: 'page',
         name: 'dataAuditManagement_auditDetails',
-        meta: { title: '编辑注册资料详情',},
+        meta: { title: '编辑注册资料详情' },
         // meta: { title: '编辑注册资料详情', noCache: true, activeMenu: '/dataAuditManagementList' },
-        hidden: true,
+        hidden: true
         // children: []
-      },
-     
-    ]
-  },
-  
-  
+      }
 
-  
+    ]
+  }
 
 ]
 

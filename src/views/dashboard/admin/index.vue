@@ -6,13 +6,12 @@
       <!-- <img class="welcomeImg" :src='img'/> -->
       <h2 class="title">欢迎使用住宅装饰一网通平台</h2>
     </div>
-    
-   
+
   </div>
 </template>
 
 <script>
-import welcomell from "@/assets/welcome.png";
+import welcomell from '@/assets/welcome.png'
 
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
@@ -59,7 +58,7 @@ export default {
     return {
       // 显示哪个首页  user 为客户端   admin 为后台登录
       // isShow:'user',
-      img:welcomell,
+      img: welcomell,
       lineChartData: lineChartData.newVisitis
     }
   },
@@ -81,7 +80,6 @@ export default {
     //   })
     // }
 
-
     // if(this.isShow == ''){
     //   removeToken();
     //   localStorage.removeItem('Siw_userInfo')
@@ -95,7 +93,7 @@ export default {
     // handleSetLineChartData(type) {
     //   this.lineChartData = lineChartData[type]
     // }
-    
+
   }
 }
 </script>
@@ -118,7 +116,7 @@ export default {
       font-size: 30px;
       font-weight: 600;
     }
-    
+
   }
   .welcomeImg {
     width:450px;

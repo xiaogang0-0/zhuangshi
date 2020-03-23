@@ -6,7 +6,7 @@
       <a href="javascript:;" @click="handleGoLogin">企业登录</a>
       <a href="javascript:;" @click="handleGoRegister">企业注册</a>
     </nav>
-    
+
   </div>
 </template>
 
@@ -14,31 +14,29 @@
 export default {
   name: 'LoginHeader',
   data() {
-    
     return {
-      loading: false,
+      loading: false
     }
   },
+  computed: {},
   watch: {},
   created() {},
-  computed: {},
   mounted() {},
   methods: {
 
     // 企业注册
-    handleGoRegister(){
+    handleGoRegister() {
       this.$router.push({
-        name:'register'
+        name: 'register'
       })
     },
     // 企业登录
     handleGoLogin() {
       this.$router.push({
-        name:'login'
+        name: 'login'
       })
-    },
-    
-    
+    }
+
   }
 }
 </script>
@@ -61,8 +59,8 @@ export default {
     .fr{float: right;}
 
     .navList{
-      &>a{ 
-        float: left; 
+      &>a{
+        float: left;
         color: #2E74D1;
         padding: 0 10px;
         margin: 0 5px;
@@ -73,8 +71,7 @@ export default {
       font-size: 18px;
     }
     .overflow{ overflow: hidden; }
-    
-   
+
 }
 
 .loginHeader.is-active {

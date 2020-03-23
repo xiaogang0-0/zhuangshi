@@ -51,45 +51,45 @@ export const constantRoutes = [
   {
     path: '/login',
     component: () => import('@/views/login/index'),
-    name:'login',
+    name: 'login',
     hidden: true
   },
   // 后台登录
   {
     path: '/home',
     component: () => import('@/views/login/index1'),
-    name:'home',
+    name: 'home',
     hidden: true
   },
 
   // 忘记密码 未登录状态可查看
   {
     path: '/forgetPassword',
-    name:'forgetPassword',
+    name: 'forgetPassword',
     component: () => import('@/views/login/forgetPassword'),
     hidden: true
   },
   // 修改密码 未登录状态可查看
   {
     path: '/changePassword',
-    name:'changePassword',
+    name: 'changePassword',
     component: () => import('@/views/login/changePassword'),
     hidden: true
   },
   // 企业注册 未登录状态可查看
   {
     path: '/register',
-    name:'register',
+    name: 'register',
     component: () => import('@/views/login/register'),
     hidden: true
   },
   // 完善资料 未登录状态可查看
   {
     path: '/perfectInformation',
-    name:'perfectInformation',
+    name: 'perfectInformation',
     component: () => import('@/views/login/perfectInformation'),
     meta: {
-      title: '完善注册信息',
+      title: '完善注册信息'
     },
     hidden: true
   },
@@ -120,10 +120,10 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard', affix: true }
         // meta: { title: '', icon: 'dashboard', affix: true }
       }
-    ],
+    ]
     // hidden:true
     // hidden:false
-  },
+  }
 
 ]
 

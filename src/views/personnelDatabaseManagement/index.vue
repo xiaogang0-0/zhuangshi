@@ -1,28 +1,30 @@
 // 人员列表 personnelDatabaseManagement
 <template>
   <div class="contentWrap personnelDatabaseManagement">
-    <el-form size="mini" :inline="true" :model="ruleForm" ref="ruleForm" class="demo-ruleForm">
+    <el-form ref="ruleForm" size="mini" :inline="true" :model="ruleForm" class="demo-ruleForm">
       <el-form-item label="身份信息:" style="margin-bottom:0;" class="orderStatus">
-          <el-checkbox-group 
-            v-model="ruleForm.stationArray">
-            <el-checkbox v-for="city in stationData" :label="city.name" :key="city.id">{{city.name}}</el-checkbox>
-          </el-checkbox-group>
+        <el-checkbox-group
+          v-model="ruleForm.stationArray"
+        >
+          <el-checkbox v-for="city in stationData" :key="city.id" :label="city.name">{{ city.name }}</el-checkbox>
+        </el-checkbox-group>
       </el-form-item>
-      
+
       <el-form-item label="人员状态:" style="margin-bottom:0;" class="orderStatus">
-          <el-checkbox-group 
-            v-model="ruleForm.isWorkArray">
-            <el-checkbox v-for="city in isWorkArrayData" :label="city.id" :key="city.id">{{city.name}}</el-checkbox>
-          </el-checkbox-group>
+        <el-checkbox-group
+          v-model="ruleForm.isWorkArray"
+        >
+          <el-checkbox v-for="city in isWorkArrayData" :key="city.id" :label="city.id">{{ city.name }}</el-checkbox>
+        </el-checkbox-group>
       </el-form-item>
-      
+
       <el-form-item label="人员姓名:">
-        <el-input 
+        <el-input
           v-model="ruleForm.ename"
           placeholder="输入人员姓名"
-        ></el-input>
+        />
       </el-form-item>
-      
+
       <el-form-item>
         <el-button type="primary" @click="handleSearch('ruleForm')">查询</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -30,67 +32,69 @@
     </el-form>
 
     <el-table
-      size="mini" 
       v-loading="loading"
+      size="mini"
       style="width:100%;"
       border
       max-height="450"
-      :data="tableList">
+      :data="tableList"
+    >
 
       <el-table-column
         type="index"
         label="序号"
         align="center"
-        width="50">
-      </el-table-column>
+        width="50"
+      />
 
       <el-table-column
         prop="ename"
         label="姓名"
         align="center"
-        min-width="90">
-      </el-table-column>
+        min-width="90"
+      />
 
       <el-table-column
         align="center"
         prop="sex"
         min-width="50"
-        label="性别">
-      </el-table-column>
+        label="性别"
+      />
 
       <el-table-column
         align="center"
         prop="idNum"
         min-width="150"
-        label="身份证号">
-      </el-table-column>
+        label="身份证号"
+      />
 
       <el-table-column
         align="center"
         prop="phone"
         min-width="100"
-        label="主联系电话">
-      </el-table-column>
+        label="主联系电话"
+      />
 
       <el-table-column
         align="center"
         prop="phone2"
         min-width="100"
-        label="辅联系电话">
-      </el-table-column>
+        label="辅联系电话"
+      />
 
       <el-table-column
         align="center"
         prop="station"
         min-width="100"
-        label="身份信息">
-      </el-table-column>
+        label="身份信息"
+      />
 
       <el-table-column
         align="center"
         prop="isWork"
         min-width="70"
-        label="人员状态">
+        label="人员状态"
+      >
         <template slot-scope="scope">
           {{
             scope.row.isWork == 0 ? "历史人员" :
@@ -104,34 +108,38 @@
         fixed="right"
         label="操作"
         align="center"
-        width="120">
+        width="120"
+      >
         <template slot-scope="scope">
           <div>
             <el-button
-              @click="handeEdit(scope.row)"
               type="text"
-              size="small">修改资料
+              size="small"
+              @click="handeEdit(scope.row)"
+            >修改资料
             </el-button>
-            
+
           </div>
           <div v-if="scope.row.isWork == 1">
             <el-button
-              @click="handeMove(scope.row)"
               type="text"
-              size="small">移到历史
+              size="small"
+              @click="handeMove(scope.row)"
+            >移到历史
             </el-button>
           </div>
           <div v-if="scope.row.isWork == 0">
             <el-button
-              @click="handeMove(scope.row)"
               type="text"
-              size="small">移出历史
+              size="small"
+              @click="handeMove(scope.row)"
+            >移出历史
             </el-button>
           </div>
-            
+
         </template>
       </el-table-column>
-     
+
     </el-table>
 
     <paging
@@ -140,174 +148,173 @@
       :size="paging.pageSize"
       :count="total"
       @change="changePage"
-    ></paging>
-   
+    />
+
   </div>
 </template>
 
 <script>
-import paging from "@/components/pages/pagination.vue";
+import paging from '@/components/pages/pagination.vue'
 import * as Api from '@/api/personnelDatabaseManagement'
 import { setToken } from '@/utils/auth'
 
 export default {
   components: {
-    paging //分页
+    paging // 分页
   },
   data() {
     return {
-      loading:false,
+      loading: false,
       ruleForm: {
         // 企业id
-        customerId:'',
+        customerId: '',
         // 身份信息
-        stationArray:[],
+        stationArray: [],
         // 人员状态：0历史人员，1在岗
-        isWorkArray:[],
+        isWorkArray: [],
         // 姓名 模糊查询
-        ename:'',
+        ename: ''
       },
       // 身份信息
-      stationData:[],
+      stationData: [],
       // 状态数据
-      isWorkArrayData:[{
-          name:'在岗人员',
-          id:1
-        },{
-          name:'历史人员',
-          id:0
-        }
+      isWorkArrayData: [{
+        name: '在岗人员',
+        id: 1
+      }, {
+        name: '历史人员',
+        id: 0
+      }
       ],
       tableList: [],
-      oldForm:{},
+      oldForm: {},
       // 页码
       paging: {
         pageNum: 1,
         pageSize: 20
       },
-      total: 0,
-    };
+      total: 0
+    }
   },
-  watch:{},
+
+  computed: {
+  },
+  watch: {},
 
   mounted() {
     this.handleGetDictionaryListTypeid9()
   },
 
-  created(){
-      this.handleSearch()
+  created() {
+    this.handleSearch()
   },
 
   methods: {
-    
+
     // 搜索
     handleSearch(formName) {
-      this.paging.pageNum =1;
-      let param =Object.assign({},this.ruleForm, this.paging);
+      this.paging.pageNum = 1
+      const param = Object.assign({}, this.ruleForm, this.paging)
       // let param =Object.assign({},this.ruleForm,);
-      this.oldForm = Object.assign({}, param);
-      this.handleGetlist(this.oldForm);
+      this.oldForm = Object.assign({}, param)
+      this.handleGetlist(this.oldForm)
     },
 
     // 重置
     resetForm(formName) {
       this.ruleForm = {
         // 企业id
-        customerId:'',
+        customerId: '',
         // 身份信息
-        stationArray:[],
+        stationArray: [],
         // 人员状态：0历史人员，1在岗
-        isWorkArray:[],
+        isWorkArray: [],
         // 姓名 模糊查询
-        ename:'',
+        ename: ''
       },
-      this.handleSearch();
+      this.handleSearch()
     },
 
     // 身份信息列表
-    handleGetDictionaryListTypeid9(){
+    handleGetDictionaryListTypeid9() {
       Api.getDictionaryListTypeid9().then(res => {
-        let  {code, data , msg, total} = res
-        if(code == 200) {
+        const { code, data, msg, total } = res
+        if (code == 200) {
           this.stationData = data
         }
-      }).catch( error => {
+      }).catch(error => {
       })
     },
     // 请求数据列表
-    handleGetlist(param){
-      this.loading = true;
+    handleGetlist(param) {
+      this.loading = true
       Api.getPersonnelSearch(param).then(res => {
-        this.loading = false;
-        let  {code, data , msg, total} = res
-        if(code == 200) {
-          this.tableList = data;
-          this.total = total;
+        this.loading = false
+        const { code, data, msg, total } = res
+        if (code == 200) {
+          this.tableList = data
+          this.total = total
         }
-      }).catch( error => {
-        this.loading = false;
-        this.tableList=[];
+      }).catch(error => {
+        this.loading = false
+        this.tableList = []
       })
     },
 
     // 编辑点击
-    handeEdit(item){
+    handeEdit(item) {
       this.$router.push({
-        name:'personneEdit',
-        query:{
+        name: 'personneEdit',
+        query: {
           // 人员主信息id
-          empId:item.empId,
+          empId: item.empId,
           // 人员副信息id
-          empOrtherId:item.empOrtherId
+          empOrtherId: item.empOrtherId
         }
       })
     },
 
     // 移入、移出到历史
-    handeMove(item){
+    handeMove(item) {
       this.$confirm('此操作会改变人员状态请谨慎操作！！', '提示', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        cancelButtonText: '取消'
         // type: 'warning'
       }).then(() => {
         // 移动到历史请求
         this.handleMoveSub(item)
-      }).catch(() => { });
-     
+      }).catch(() => { })
     },
-    
+
     // 移动到历史请求
-    handleMoveSub(item){
-      let param = {
+    handleMoveSub(item) {
+      const param = {
         // 人员副表id
-        empOrtherId:item.empOrtherId,
+        empOrtherId: item.empOrtherId,
         // 人员状态：0历史人员，1在岗
-        isWork:item.isWork == 1 ? 0 :'1'
+        isWork: item.isWork == 1 ? 0 : '1'
       }
       Api.subEmpUdpateIsWork(param).then(res => {
-        this.loading = false;
-        let  {code, data , msg, total} = res
-        if(code == 200) {
+        this.loading = false
+        const { code, data, msg, total } = res
+        if (code == 200) {
           this.$message({
             type: 'success',
             message: msg
-          });
-          this.handleGetlist(this.oldForm);
+          })
+          this.handleGetlist(this.oldForm)
         }
-      }).catch( error => {
+      }).catch(error => {
       })
     },
 
     // 页码
     changePage({ type, page, size }) {
-      this.paging.pageNum = page;
-      this.paging.pageSize = size;
-      this.oldForm = Object.assign({}, this.oldForm, this.paging);
-      this.handleGetlist(this.oldForm);
-    },
-  },
-  
-  computed: {
+      this.paging.pageNum = page
+      this.paging.pageSize = size
+      this.oldForm = Object.assign({}, this.oldForm, this.paging)
+      this.handleGetlist(this.oldForm)
+    }
   }
 }
 </script>
@@ -320,7 +327,7 @@ export default {
   padding: 20px;
   .el-form{
     padding: 15px;
-    padding-bottom:0; 
+    padding-bottom:0;
     margin-bottom: 10px;
     background: #f7f7f7;
     border-radius:5px;

@@ -33,7 +33,7 @@ service.interceptors.request.use(
     // }
     // 统一携带tooken
 
-    // 本地备用admin token  
+    // 本地备用admin token
     // let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY3Nzk2MjksInVzZXJfbmFtZSI6ImFkbWlufCIsImF1dGhvcml0aWVzIjpbIlJPTEVfTUFOQUdFUiJdLCJqdGkiOiJjYjQ2MDBiYS05OGYyLTQ1ZDQtYmZiYy03ZmM0MDQ2YjBkZTIiLCJjbGllbnRfaWQiOiJobGwtcGxhdGZvcm0tYWRtaW4iLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.gRSUGdu53ctIvt2Ogx6KOPsENQgFjQwbloMvovsRRVc'
     // if (token) {
     //   config.headers = {
@@ -103,10 +103,10 @@ service.interceptors.response.use(
     }
   },
   error => {
-    let res = error.response.data;
+    const res = error.response.data
 
     Message({
-      message: res.message || res.msg || "请求超时",
+      message: res.message || res.msg || '请求超时',
       type: 'error',
       duration: 3 * 1000
     })

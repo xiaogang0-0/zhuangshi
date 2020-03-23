@@ -2,103 +2,107 @@
 <template>
   <div class="login-container">
     <!-- 公用表头 -->
-    <loginHeader/>
+    <loginHeader />
     <div class="content">
-        <div class="wrap">
-          <div class="wrap-bg"></div>
-          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+      <div class="wrap">
+        <div class="wrap-bg" />
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
-            <div class="title-container">
-              <h3 class="title">仅限住宅装饰企业注册</h3>
-            </div>
-            <p class="pd60">企业全称</p>
-            <el-form-item prop="customerName">
-              <el-input
-                ref="customerName"
-                v-model.trim="loginForm.customerName"
-                type="text"
-                placeholder="输入您公司全称"
-                name="customerName"
-                tabindex="2"
-              />
-            </el-form-item>
+          <div class="title-container">
+            <h3 class="title">仅限住宅装饰企业注册</h3>
+          </div>
+          <p class="pd60">企业全称</p>
+          <el-form-item prop="customerName">
+            <el-input
+              ref="customerName"
+              v-model.trim="loginForm.customerName"
+              type="text"
+              placeholder="输入您公司全称"
+              name="customerName"
+              tabindex="2"
+            />
+          </el-form-item>
 
-            <p class="pd60">设置密码</p>
-            <el-form-item prop="password1">
-              <el-input
-                :key="passwordType"
-                ref="password1"
-                v-model.trim="loginForm.password1"
-                :type="passwordType"
-                placeholder="输入新密码"
-                name="password1"
-                tabindex="2"
-                autocomplete="on"
-              />
-              <!-- <span class="show-pwd" @click="showPwd">
+          <p class="pd60">设置密码</p>
+          <el-form-item prop="password1">
+            <el-input
+              :key="passwordType"
+              ref="password1"
+              v-model.trim="loginForm.password1"
+              :type="passwordType"
+              placeholder="输入新密码"
+              name="password1"
+              tabindex="2"
+              autocomplete="on"
+            />
+            <!-- <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span> -->
-            </el-form-item>
+          </el-form-item>
 
-            <p class="pd60">确认密码</p>
-            <el-form-item prop="password">
-              <el-input
-                :key="passwordType"
-                ref="password"
-                v-model.trim="loginForm.password"
-                :type="passwordType"
-                placeholder="输入密码"
-                name="password"
-                tabindex="2"
-                autocomplete="on"
-              />
-              <span class="show-pwd" @click="showPwd">
-                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
-            </el-form-item>
-            
-            <p class="pd60">手机号</p>
-            <el-form-item prop="mobile">
-               <el-input
-                ref="mobile"
-                v-model.number="loginForm.mobile"
-                placeholder="请输入手机号"
-                name="mobile"
-                type="text"
-                tabindex="1"
-              />
-            </el-form-item>
+          <p class="pd60">确认密码</p>
+          <el-form-item prop="password">
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model.trim="loginForm.password"
+              :type="passwordType"
+              placeholder="输入密码"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+            />
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
 
-            <p class="pd60">验证码</p>
-            <el-form-item prop="verifyCode" class="verificationCode">
-             <el-input
-                ref="verifyCode"
-                v-model.trim="loginForm.verifyCode"
-                placeholder="请输入验证码"
-                name="verifyCode"
-                type="text"
-              />
-              
-              <span 
-                v-show="!isActive"
-                class="cblue cursor"
-                @click="handleTime">获取验证码</span>
-              <span 
-                v-show="isActive"
-                class="cblue">{{num ? num + 's': ''}}</span>
-            </el-form-item>
+          <p class="pd60">手机号</p>
+          <el-form-item prop="mobile">
+            <el-input
+              ref="mobile"
+              v-model.number="loginForm.mobile"
+              placeholder="请输入手机号"
+              name="mobile"
+              type="text"
+              tabindex="1"
+            />
+          </el-form-item>
 
-            <el-button :loading="loading" type="primary" 
-              style="
+          <p class="pd60">验证码</p>
+          <el-form-item prop="verifyCode" class="verificationCode">
+            <el-input
+              ref="verifyCode"
+              v-model.trim="loginForm.verifyCode"
+              placeholder="请输入验证码"
+              name="verifyCode"
+              type="text"
+            />
+
+            <span
+              v-show="!isActive"
+              class="cblue cursor"
+              @click="handleTime"
+            >获取验证码</span>
+            <span
+              v-show="isActive"
+              class="cblue"
+            >{{ num ? num + 's': '' }}</span>
+          </el-form-item>
+
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="
                 display:block;
                 margin:50px 60px 50px;
-                width:72%;background:#2E74D1; 
-                border-color:#2E74D1;" 
-                @click.native.prevent="handleLogin">注 册</el-button>
+                width:72%;background:#2E74D1;
+                border-color:#2E74D1;"
+            @click.native.prevent="handleLogin"
+          >注 册</el-button>
 
-           
-          </el-form>
-        </div>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -113,17 +117,14 @@ import * as Api from '@/api/login'
 import { Settings } from '../../layout/components'
 import LoginHeader from '@/components/loginHeader'
 
-
-
 export default {
-  name: 'register',
+  name: 'Register',
   components: {
-    LoginHeader,
+    LoginHeader
   },
   data() {
-
     const validateUsername = (rule, value, callback) => {
-      if (!value.length ){
+      if (!value.length) {
         callback(new Error('企业全称不能为空'))
       } else {
         callback()
@@ -131,7 +132,7 @@ export default {
     }
 
     const validatePhoneNumber = (rule, value, callback) => {
-      let reg = /^1[3456789]\d{9}$/;
+      const reg = /^1[3456789]\d{9}$/
       if (!reg.test(value)) {
         callback(new Error('手机号码有误，请重填'))
       } else {
@@ -140,8 +141,8 @@ export default {
     }
 
     const validatePassword1 = (rule, value, callback) => {
-      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
-      if (value.length < 8 || !reg.test(value) ){
+      const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/
+      if (value.length < 8 || !reg.test(value)) {
         callback(new Error('使用大小写英文字母与数字组合，不低于8位数'))
       } else {
         callback()
@@ -149,43 +150,43 @@ export default {
     }
 
     const validatePassword = (rule, value, callback) => {
-      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
-      if (this.loginForm.password1 != this.loginForm.password ){
+      const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/
+      if (this.loginForm.password1 != this.loginForm.password) {
         callback(new Error('两次密码不一致'))
       } else {
         callback()
       }
     }
-    
+
     return {
       // 是否进行了点击操作
-      isActive:false,
-      num:59,
+      isActive: false,
+      num: 59,
       loginForm: {
         // 注册时(register), 登录时(login), 找回密码时(update-password), 修改资料时(update-customer)
-        sendType:'register',
+        sendType: 'register',
         // 企业id
-        customerId:'',
+        customerId: '',
         // 企业名称
-        customerName:'',
+        customerName: '',
         // 第一次输入的密码
-        password1:'',
+        password1: '',
         // 密码, 已清空
-        password:'',
+        password: '',
         // 手机号
-        mobile:'',
+        mobile: '',
         // 验证码
-        verifyCode:'',
+        verifyCode: ''
       },
       loginRules: {
-        customerName: [{ required: true, trigger: 'blur', validator: validateUsername}],
+        customerName: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password1: [{ required: true, trigger: 'blur', validator: validatePassword1 }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword}],
-        mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber}],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }]
         // verifyCode: [{ required: true, trigger: 'blur', message: '验证码不能为空'}]
       },
       loading: false,
-      passwordType: 'password',
+      passwordType: 'password'
     }
   },
   watch: {},
@@ -193,38 +194,38 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'permission_routes',
-    ]),
+      'permission_routes'
+    ])
   },
   mounted() {
     if (this.loginForm.customerName == '') {
       this.$refs.customerName.focus()
     } else if (this.loginForm.password1 === '') {
       this.$refs.password1.focus()
-    }else if (this.loginForm.password === '') {
+    } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
-    }else if (this.loginForm.mobile === '') {
+    } else if (this.loginForm.mobile === '') {
       this.$refs.mobile.focus()
-    }else if (this.loginForm.verifyCode === '') {
+    } else if (this.loginForm.verifyCode === '') {
       this.$refs.verifyCode.focus()
     }
   },
   methods: {
     // 倒计时
-    handleTime(){
+    handleTime() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.isActive = true;
+          this.isActive = true
           // 获取验证码
-          this.handeleGetVerifyCode();
-          let timer = setInterval(()=>{
-            if(this.num < 1){
-              this.isActive = false;
-              this.num =59
+          this.handeleGetVerifyCode()
+          const timer = setInterval(() => {
+            if (this.num < 1) {
+              this.isActive = false
+              this.num = 59
               clearInterval(timer)
             }
             this.num--
-          },1000)
+          }, 1000)
         } else {
           // console.log('请输入账号密码')
           return false
@@ -233,24 +234,24 @@ export default {
     },
 
     // 获取验证码
-    handeleGetVerifyCode(){
-      let param = {
-        sendType:this.loginForm.sendType,
-        mobile:this.loginForm.mobile
-      };
+    handeleGetVerifyCode() {
+      const param = {
+        sendType: this.loginForm.sendType,
+        mobile: this.loginForm.mobile
+      }
       // 平台用户带参数
       // let param1 ={customerName:''}
       // if(this.userType == 1){
       //   param1.customerName = this.loginForm.customerName
       // }
       Api.getSendVerifyCode(param,).then(res => {
-        if(res.code == 200) {
+        if (res.code == 200) {
           this.$message({
-            message: '验证码已发送至'+ this.loginForm.mobile +'上请注意查收',
+            message: '验证码已发送至' + this.loginForm.mobile + '上请注意查收',
             type: 'success'
-          });
+          })
         }
-      }).catch( error => {
+      }).catch(error => {
       })
     },
 
@@ -268,36 +269,35 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          if(!this.loginForm.verifyCode){
+          if (!this.loginForm.verifyCode) {
             return this.$message({
               message: '验证码不能为空!',
               type: 'warning'
-            });
+            })
           }
           this.loading = true
-          var param = Object.assign({},this.loginForm) 
+          var param = Object.assign({}, this.loginForm)
           delete param.password1
           delete param.sendType
           // delete param.verifyCode
-          
+
           Api.registerSub(param).then(res => {
-            this.loading = false;
-            if(res.code == 200) {
-              sessionStorage.setItem('siw_registerInfor',JSON.stringify(res.data))
+            this.loading = false
+            if (res.code == 200) {
+              sessionStorage.setItem('siw_registerInfor', JSON.stringify(res.data))
               // 跳转完善页面
               this.$router.push({
-                name:'perfectInformation',
+                name: 'perfectInformation'
               })
             }
-
-          }).catch( error => {
+          }).catch(error => {
             this.loading = false
           })
         } else {
           return false
         }
       })
-    },
+    }
   }
 }
 </script>
@@ -327,7 +327,7 @@ $cursor: #fff;
       border-radius: 0px;
       // padding: 12px 5px 12px 15px;
       color: #000;
-      
+
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
@@ -383,22 +383,22 @@ $light_gray:#eee;
   }
   .wrap {
     // width: 1200px;
-    min-width: 1200px; 
+    min-width: 1200px;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
     padding: 11vh 0 0 0;
 }
-  .content { 
-   
+  .content {
+
     margin: 0 auto;
     height: 100vh;
     background-color: #2E74D1;
     // background-image: linear-gradient(to top, #2E74D1, #2E74D1);
     overflow: hidden;
-    
+
   }
- 
+
   .wrap-bg {
     width: 742px;
     height: 508px;

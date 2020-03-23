@@ -2,60 +2,63 @@
 <template>
   <div class="login-container">
     <!-- 公用表头 -->
-    <loginHeader/>
-    
-    <div class="content">
-        <div class="wrap">
-          <div class="wrap-bg"></div>
-          <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
-            <div class="title-container">
-              <h3 class="title">修改密码</h3>
-            </div>
+    <loginHeader />
 
-            <p class="pd60">新密码</p>
-            <el-form-item prop="password1">
-              <el-input
-                :key="passwordType"
-                ref="password1"
-                v-model.trim="loginForm.password1"
-                :type="passwordType"
-                placeholder="请输入新密码"
-                name="password"
-                tabindex="2"
-                autocomplete="on"
-              />
-              <!-- <span class="show-pwd" @click="showPwd">
+    <div class="content">
+      <div class="wrap">
+        <div class="wrap-bg" />
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+          <div class="title-container">
+            <h3 class="title">修改密码</h3>
+          </div>
+
+          <p class="pd60">新密码</p>
+          <el-form-item prop="password1">
+            <el-input
+              :key="passwordType"
+              ref="password1"
+              v-model.trim="loginForm.password1"
+              :type="passwordType"
+              placeholder="请输入新密码"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+            />
+            <!-- <span class="show-pwd" @click="showPwd">
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span> -->
-            </el-form-item>
+          </el-form-item>
 
-            <p class="pd60">再次输入</p>
-            <el-form-item prop="password">
-              <el-input
-                :key="passwordType"
-                ref="password"
-                v-model.trim="loginForm.password"
-                :type="passwordType"
-                placeholder="再次输入新密码"
-                name="password"
-                tabindex="2"
-                autocomplete="on"
-              />
-              <span class="show-pwd" @click="showPwd">
-                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
-            </el-form-item>
+          <p class="pd60">再次输入</p>
+          <el-form-item prop="password">
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model.trim="loginForm.password"
+              :type="passwordType"
+              placeholder="再次输入新密码"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+            />
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
 
-            <el-button :loading="loading" type="primary" 
-              style="
+          <el-button
+            :loading="loading"
+            type="primary"
+            style="
                 display:block;
                 margin:50px 60px 50px;
-                width:72%;background:#2E74D1; 
-                border-color:#2E74D1;" 
-                @click.native.prevent="handleLogin">完 成</el-button>
+                width:72%;background:#2E74D1;
+                border-color:#2E74D1;"
+            @click.native.prevent="handleLogin"
+          >完 成</el-button>
 
-          </el-form>
-        </div>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -69,16 +72,15 @@ import { setToken } from '@/utils/auth'
 import * as Api from '@/api/login'
 import LoginHeader from '@/components/loginHeader'
 
-
 export default {
   name: 'Login',
   components: {
-    LoginHeader,
+    LoginHeader
   },
   data() {
     const validateUsername = (rule, value, callback) => {
-      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/;
-      if (value.length < 8 || !reg.test(value) ){
+      const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,30}$/
+      if (value.length < 8 || !reg.test(value)) {
         callback(new Error('使用大小写英文字母与数字组合，不低于8位数'))
       } else {
         callback()
@@ -88,36 +90,35 @@ export default {
     const validatePassword = (rule, value, callback) => {
       if (this.loginForm.password != this.loginForm.password1) {
         callback(new Error('两次输入的不一致'))
-
       } else {
         callback()
       }
     }
     return {
       // 1是系统用户, 0是企业用户
-      userType:'',
+      userType: '',
       loginForm: {
         // 用户名, 企业用户为手机号, 系统用户为用户名
-        username:'',
+        username: '',
         // 新密码
-        password:'',
+        password: '',
 
-        password1: '',
+        password1: ''
       },
       loginRules: {
-        password1: [{ required: true, trigger: 'blur', validator: validateUsername}],
+        password1: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
-      passwordType: 'password',
+      passwordType: 'password'
     }
   },
+  computed: {},
   watch: {},
   created() {
-    this.userType = this.$route.query.userType;
-    this.loginForm.username = this.$route.query.username;
+    this.userType = this.$route.query.userType
+    this.loginForm.username = this.$route.query.username
   },
-  computed: {},
   mounted() {
     if (this.loginForm.password1 == '') {
       this.$refs.password1.focus()
@@ -136,44 +137,43 @@ export default {
         this.$refs.password.focus()
       })
     },
-   
+
     // 修改密码
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           var param = {
-            "username": this.loginForm.username,
-            "password": this.loginForm.password,
-          };
+            'username': this.loginForm.username,
+            'password': this.loginForm.password
+          }
           console.log(param)
           Api.changePassword(param).then(res => {
-            this.loading = false;
-            if(res.code == 200) {
-              setTimeout(()=>{
-                if(this.userType == 0){
+            this.loading = false
+            if (res.code == 200) {
+              setTimeout(() => {
+                if (this.userType == 0) {
                   this.$router.push({
-                    name:'login'
+                    name: 'login'
                   })
                 }
 
-                if(this.userType == 1){
+                if (this.userType == 1) {
                   this.$router.push({
-                    name:'home'
+                    name: 'home'
                   })
                 }
-              },1000)
+              }, 1000)
             }
-          }).catch( error => {
+          }).catch(error => {
             this.loading = false
           })
-            
         } else {
           // console.log('请输入账号密码')
           return false
         }
       })
-    },
+    }
   }
 }
 </script>
@@ -253,22 +253,22 @@ $light_gray:#eee;
   }
   .wrap {
     // width: 1200px;
-    min-width: 1200px; 
+    min-width: 1200px;
     max-width: 1350px;
     margin: 0 auto;
     overflow: hidden;
     padding: 11vh 0 0 0;
 }
-  .content { 
-   
+  .content {
+
     margin: 0 auto;
     height: 100vh;
     background-color: #2E74D1;
     // background-image: linear-gradient(to top, #2E74D1, #2E74D1);
     overflow: hidden;
-    
+
   }
- 
+
   .wrap-bg {
     width: 742px;
     height: 508px;
